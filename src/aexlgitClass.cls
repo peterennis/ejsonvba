@@ -266,14 +266,14 @@ Public Sub OutputListOfExcelProperties(Optional ByVal varDebug As Variant)
 
     ' Ref: http://stackoverflow.com/questions/16642362/how-to-get-the-following-code-to-continue-on-error
     For Each docProp In wbk.CustomDocumentProperties
-        If Not IsMissing(varDebug) Then Debug.Print , docProp.Name & ": " & docProp.Value
-        Print #fle, docProp.Name & ": " & docProp.Value
+        If Not IsMissing(varDebug) Then Debug.Print , docProp.Name & ": " & docProp.value
+        Print #fle, docProp.Name & ": " & docProp.value
     Next
 
     If Not ThisIsAnAddIn("DirTree.xla", varDebug) Then
         For Each docProp In ActiveWorkbook.BuiltinDocumentProperties
-            If Not IsMissing(varDebug) Then Debug.Print , docProp.Name & ": " & docProp.Value
-            Print #fle, docProp.Name & ": " & docProp.Value
+            If Not IsMissing(varDebug) Then Debug.Print , docProp.Name & ": " & docProp.value
+            Print #fle, docProp.Name & ": " & docProp.value
         Next
     End If
 
