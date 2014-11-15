@@ -8,7 +8,7 @@ VBA code will use [late binding](http://excelmatters.com/2013/09/23/vba-referenc
 
 This is synonomous to the question [How do I write my own parser?](http://techblog.procurios.nl/k/n618/news/view/14605/14863/how-do-i-write-my-own-parser-(for-json).html?pageNr=3#thread_339) and credit goes to Patrick van Bergen for his work in that area.
 
-Kudos also to the dormant [vba-json](https://code.google.com/p/vba-json/) project. Initial steps in eJsonVBA development will build on that foundation.
+Kudos also to the dormant [vba-json](https://code.google.com/p/vba-json/) project. Initial steps in eJsonVBA development will build on that foundation. It has open [issues](http://code.google.com/p/vba-json/issues/list) and other [problems](http://stackoverflow.com/questions/5773683/excel-vba-parsed-json-object-loop/19359035#19359035) that will be addressed here in a systematic way.
 
 In addition there is the [VB-JSON](http://www.ediy.co.nz/vbjson-json-parser-library-in-vb6-xidc55680.html) work that has some roots in vba-json.
 
