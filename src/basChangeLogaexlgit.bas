@@ -19,12 +19,17 @@ Public Const MODULE_NOT_EMPTY_DUMMY As String = vbNullString
 ' #006 -
 ' #005 -
 ' #004 -
-' #003 -
-' #002 -
+' #003 - "Be careful! Parts of your document may include personal information that can't be removed by the Document Inspector."
+' #002 - User-defined type not defined error at objFSO As Scripting.FileSystemObject
 ' #001 - xla fix in v009 kills workbook properties output
 '=============================================================================================================================
 '
 '
+'20141114 - v010 -
+    ' #002 - User-defined type not defined caused by missing reference
+    ' #003 - "Be careful! Parts of your document... - comes from creating a new file and importing code.
+    ' Here: http://answers.microsoft.com/en-us/office/forum/office_2013_release-excel/be-careful-parts-of-your-document-may-include/fae98705-d078-4fc5-843a-908dda5be559
+    ' Goto File in the upper left hand corner, then Options > Trust Center > Trust Center Settings > Privacy Options > then un-check the check box that says "Remove personal information from file properties on save", then hit OK.
 '20140416 - v009 - Add code to deal with xla file
     ' Add simple tasks and issues tracker to change log
 '20140415 - v008 - Ignore zzz* object names
