@@ -1,10 +1,31 @@
 Attribute VB_Name = "basTESTeJsonVBA"
 Option Explicit
 
+Public Sub RunAllTests()
+
+    toString_test1
+    Debug.Print "=> toString_test1 Finished!"
+    toString_test2
+    Debug.Print "=> toString_test2 Finished!"
+    parse_test1
+    Debug.Print "=> parse_test1 Finished!"
+    parse_test2
+    Debug.Print "=> parse_test2 Finished!"
+    parse_test3
+    Debug.Print "=> parse_test3 Finished!"
+    parse_test4
+    Debug.Print "=> parse_test4 Finished!"
+    parse_test5
+    Debug.Print "=> parse_test5 Finished!"
+    skip_test
+    Debug.Print "=> skip_test Finished!"
+
+End Sub
+
 '
 '   jsonlib.toString tests
 '
-Public Sub toString_test1()
+Private Sub toString_test1()
 
     Dim a As String
     Dim b As Date
@@ -20,7 +41,7 @@ Public Sub toString_test1()
 
 End Sub
 
-Public Sub toString_test2()
+Private Sub toString_test2()
 
     Dim a As Object
     Dim b As Object
@@ -50,7 +71,7 @@ End Sub
 '
 '   jsonlib.parse tests
 '
-Public Sub parse_test1()
+Private Sub parse_test1()
 
     Dim lib As New jsonlib
     Dim json As Object
@@ -74,7 +95,7 @@ Public Sub parse_test1()
 
 End Sub
 
-Public Sub parse_test2()
+Private Sub parse_test2()
 
     Dim lib As New jsonlib
     Dim json As Object
@@ -89,7 +110,7 @@ Public Sub parse_test2()
 
 End Sub
 
-Public Sub parse_test3()
+Private Sub parse_test3()
 
     Dim lib As New jsonlib
     Dim json As Object
@@ -104,7 +125,7 @@ Public Sub parse_test3()
 
 End Sub
 
-Public Sub parse_test4()
+Private Sub parse_test4()
 
     Dim lib As New jsonlib
     Dim json As Object
@@ -119,7 +140,7 @@ Public Sub parse_test4()
 
 End Sub
 
-Public Sub parse_test5()
+Private Sub parse_test5()
 
     Dim lib As New jsonlib
     Dim json As Object
@@ -130,7 +151,7 @@ Public Sub parse_test5()
     With CreateObject("ADODB.Stream")
         .Open
         .Charset = "UTF-8"
-        .LoadFromFile ActiveWorkbook.Path & "\\test.json"
+        .LoadFromFile ActiveWorkbook.Path & "\\test\test1.json"
         text = .ReadText(-1)
         .Close
     End With
@@ -160,7 +181,7 @@ End Sub
 '
 '       before executing this test, modify jsonlib.skipChar to 'Friend' or 'Public'
 '
-Public Sub skip_test()
+Private Sub skip_test()
 
     Dim lib As New jsonlib
     Dim str As String
