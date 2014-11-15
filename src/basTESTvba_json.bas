@@ -2,7 +2,7 @@ Attribute VB_Name = "basTESTvba_json"
 Option Explicit
 
 '"ID","Type","Status","Priority","Milestone","Owner","Summary","AllLabels","Link"
-'"vbajson1","Defect","New","Medium","","","outcome","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=1
+'"vbajson1","Defect","FIXED","Medium","","","outcome","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=1
 '"vbajson2","Defect","New","Medium","","","parseString bug","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=2
 '"vbajson3","Defect","New","Medium","","","Incorrect CrLf encoding?","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=3
 '"vbajson4","Defect","New","Medium","","","improve parseNumber() for other decimal settings","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=4
