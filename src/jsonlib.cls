@@ -23,7 +23,7 @@ Public Function parse(ByRef str As String) As Object
 
     Dim index As Long
     index = 1
-    
+
     On Error Resume Next
 
     Call skipChar(str, index)
@@ -42,14 +42,14 @@ End Function
 Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 
     Set parseObject = CreateObject("Scripting.Dictionary")
-    
+
     ' "{"
     Call skipChar(str, index)
     If Mid(str, index, 1) <> "{" Then Err.Raise vbObjectError + INVALID_OBJECT, Description:="char " & index & " : " & Mid(str, index)
     index = index + 1
-    
+
     Do
-    
+
         Call skipChar(str, index)
         If "}" = Mid(str, index, 1) Then
             index = index + 1
@@ -58,12 +58,12 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
             index = index + 1
             Call skipChar(str, index)
         End If
-        
+
         Dim key As String
-        
+
         ' add key/value pair
         parseObject.Add key:=parseKey(str, index), Item:=parseValue(str, index)
-        
+
     Loop
 
 End Function
@@ -74,15 +74,17 @@ End Function
 Private Function parseArray(ByRef str As String, ByRef index As Long) As Collection
 
     Set parseArray = New Collection
-    
+
     ' "["
     Call skipChar(str, index)
+
     If Mid(str, index, 1) <> "[" Then Err.Raise vbObjectError + INVALID_ARRAY, Description:="char " & index & " : " + Mid(str, index)
     index = index + 1
-    
+
     Do
-        
+
         Call skipChar(str, index)
+
         If "]" = Mid(str, index, 1) Then
             index = index + 1
             Exit Do
@@ -90,10 +92,10 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
             index = index + 1
             Call skipChar(str, index)
         End If
-        
+
         ' add value
         parseArray.Add parseValue(str, index)
-        
+
     Loop
 
 End Function
@@ -104,20 +106,20 @@ End Function
 Private Function parseValue(ByRef str As String, ByRef index As Long)
 
     Call skipChar(str, index)
-    
+
     Select Case Mid(str, index, 1)
-    Case "{"
-        Set parseValue = parseObject(str, index)
-    Case "["
-        Set parseValue = parseArray(str, index)
-    Case """", "'"
-        parseValue = parseString(str, index)
-    Case "t", "f"
-        parseValue = parseBoolean(str, index)
-    Case "n"
-        parseValue = parseNull(str, index)
-    Case Else
-        parseValue = parseNumber(str, index)
+        Case "{"
+            Set parseValue = parseObject(str, index)
+        Case "["
+            Set parseValue = parseArray(str, index)
+        Case """", "'"
+            parseValue = parseString(str, index)
+        Case "t", "f"
+            parseValue = parseBoolean(str, index)
+        Case "n"
+            parseValue = parseNull(str, index)
+        Case Else
+            parseValue = parseNumber(str, index)
     End Select
 
 End Function
@@ -130,8 +132,9 @@ Private Function parseString(ByRef str As String, ByRef index As Long) As String
     Dim quote   As String
     Dim char    As String
     Dim code    As String
-    
+
     Call skipChar(str, index)
+
     quote = Mid(str, index, 1)
     index = index + 1
     Do While index > 0 And index <= Len(str)
@@ -183,8 +186,9 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
 
     Dim myValue   As String
     Dim char    As String
-    
+
     Call skipChar(str, index)
+
     Do While index > 0 And index <= Len(str)
         char = Mid(str, index, 1)
         If InStr("+-0123456789.eE", char) Then
@@ -200,7 +204,6 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
         End If
     Loop
 
-
 End Function
 
 '
@@ -209,6 +212,7 @@ End Function
 Private Function parseBoolean(ByRef str As String, ByRef index As Long) As Boolean
 
     Call skipChar(str, index)
+
     If Mid(str, index, 4) = "true" Then
         parseBoolean = True
         index = index + 4
@@ -227,6 +231,7 @@ End Function
 Private Function parseNull(ByRef str As String, ByRef index As Long)
 
     Call skipChar(str, index)
+
     If Mid(str, index, 4) = "null" Then
         parseNull = Null
         index = index + 4
@@ -241,40 +246,41 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
     Dim dquote  As Boolean
     Dim squote  As Boolean
     Dim char    As String
-    
+
     Call skipChar(str, index)
+
     Do While index > 0 And index <= Len(str)
         char = Mid(str, index, 1)
         Select Case (char)
-        Case """"
-            dquote = Not dquote
-            index = index + 1
-            If Not dquote Then
-                Call skipChar(str, index)
-                If Mid(str, index, 1) <> ":" Then
-                    Err.Raise vbObjectError + INVALID_KEY, Description:="char " & index & " : " & parseKey
-                End If
-            End If
-        Case "'"
-            squote = Not squote
-            index = index + 1
-            If Not squote Then
-                Call skipChar(str, index)
-                If Mid(str, index, 1) <> ":" Then
-                    Err.Raise vbObjectError + INVALID_KEY, Description:="char " & index & " : " & parseKey
-                End If
-            End If
-        Case ":"
-            If Not dquote And Not squote Then
+            Case """"
+                dquote = Not dquote
                 index = index + 1
-                Exit Do
-            End If
-        Case Else
-            If InStr(vbCrLf & vbCr & vbLf & vbTab & " ", char) Then
-            Else
-                parseKey = parseKey & char
-            End If
-            index = index + 1
+                If Not dquote Then
+                    Call skipChar(str, index)
+                    If Mid(str, index, 1) <> ":" Then
+                        Err.Raise vbObjectError + INVALID_KEY, Description:="char " & index & " : " & parseKey
+                    End If
+                End If
+            Case "'"
+                squote = Not squote
+                index = index + 1
+                If Not squote Then
+                    Call skipChar(str, index)
+                    If Mid(str, index, 1) <> ":" Then
+                        Err.Raise vbObjectError + INVALID_KEY, Description:="char " & index & " : " & parseKey
+                    End If
+                End If
+            Case ":"
+                If Not dquote And Not squote Then
+                    index = index + 1
+                    Exit Do
+                End If
+            Case Else
+                If InStr(vbCrLf & vbCr & vbLf & vbTab & " ", char) Then
+                Else
+                    parseKey = parseKey & char
+                End If
+                index = index + 1
         End Select
     Loop
 
@@ -337,7 +343,7 @@ Public Function toString(ByRef obj As Variant) As String
 End Function
 
 Private Function encode(str) As String
-    
+
     Dim i, j, aL1, aL2, c, p
 
     aL1 = Array(&H22, &H5C, &H2F, &H8, &HC, &HA, &HD, &H9)
@@ -363,14 +369,16 @@ Private Function encode(str) As String
             End If
         End If
     Next
+
 End Function
 
 Private Function multiArray(aBD, iBC, sPS, ByRef sPT)   ' Array BoDy, Integer BaseCount, String PoSition
+
     Dim iDU, iDL, i ' Integer DimensionUBound, Integer DimensionLBound
     On Error Resume Next
     iDL = LBound(aBD, iBC)
     iDU = UBound(aBD, iBC)
-    
+
     Dim sPB1, sPB2  ' String PointBuffer1, String PointBuffer2
     If Err.Number = 9 Then
         sPB1 = sPT & sPS
@@ -391,6 +399,6 @@ Private Function multiArray(aBD, iBC, sPS, ByRef sPT)   ' Array BoDy, Integer Ba
         sPT = Left(sPT, iBC - 2)
     End If
     Err.Clear
-End Function
 
+End Function
 
