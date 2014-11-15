@@ -1,4 +1,4 @@
-Attribute VB_Name = "basTESTvba_json"
+Attribute VB_Name = "basTESTvbajson"
 Option Explicit
 
 '"ID","Type","Status","Priority","Milestone","Owner","Summary","AllLabels","Link"

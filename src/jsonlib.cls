@@ -45,6 +45,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 
     ' "{"
     Call skipChar(str, index)
+
     If Mid(str, index, 1) <> "{" Then Err.Raise vbObjectError + INVALID_OBJECT, Description:="char " & index & " : " & Mid(str, index)
     index = index + 1
 

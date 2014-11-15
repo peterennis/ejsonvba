@@ -1,4 +1,4 @@
-Attribute VB_Name = "basTESTeJsonVBA"
+Attribute VB_Name = "basTESTjsonlib"
 Option Explicit
 
 Public Sub RunAllTests()
