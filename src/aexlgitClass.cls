@@ -23,19 +23,19 @@ Option Compare Text
 'License along with this library; if not, visit
 'http://www.gnu.org/licenses/lgpl-3.0.txt
 
-
 '=======================================================================
 ' Author:   Peter F. Ennis
 ' Date:     July 13, 2013
 ' Comment:  Create class for revision control
-' History:  See comment details, basChangeLog, commit messages on github
+' History:  See comment details, basChangeLog, commit messages on GitHub
+' GitHub:   https://github.com/peterennis/aexlgit
 ' Ref:      http://www.rondebruin.nl/win/s9/win002.htm
 '=======================================================================
 
 Private Declare Sub Sleep Lib "kernel32" (ByVal lngMilliSeconds As Long)
 
 Private Const aexlgitVERSION As String = "0.1.0"
-Private Const aexlgitVERSION_DATE As String = "November 13, 2014"
+Private Const aexlgitVERSION_DATE As String = "November 14, 2014"
 
 Private Type mySetupType
     SourceFolder As String
