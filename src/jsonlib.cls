@@ -145,7 +145,7 @@ Private Function parseString(ByRef str As String, ByRef index As Long) As String
             index = index + 1
             char = Mid(str, index, 1)
             Select Case (char)
-            Case """", "\\", "/"
+            Case """", "\\", "/", "'"
                 parseString = parseString & char
                 index = index + 1
             Case "b"
