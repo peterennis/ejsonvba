@@ -129,9 +129,9 @@ End Function
 '
 Private Function parseString(ByRef str As String, ByRef index As Long) As String
 
-    Dim quote   As String
-    Dim char    As String
-    Dim code    As String
+    Dim quote As String
+    Dim char As String
+    Dim code As String
 
     Call skipChar(str, index)
 
@@ -184,8 +184,8 @@ End Function
 '
 Private Function parseNumber(ByRef str As String, ByRef index As Long)
 
-    Dim myValue   As String
-    Dim char    As String
+    Dim myValue As String
+    Dim char As String
 
     Call skipChar(str, index)
 
@@ -243,9 +243,9 @@ End Function
 
 Private Function parseKey(ByRef str As String, ByRef index As Long) As String
 
-    Dim dquote  As Boolean
-    Dim squote  As Boolean
-    Dim char    As String
+    Dim dquote As Boolean
+    Dim squote As Boolean
+    Dim char As String
 
     Call skipChar(str, index)
 
@@ -344,7 +344,12 @@ End Function
 
 Private Function encode(str) As String
 
-    Dim i, j, aL1, aL2, c, p
+    Dim i As Integer
+    Dim j As Integer
+    Dim aL1 As Variant
+    Dim aL2 As Variant
+    Dim c As String
+    Dim p As Boolean
 
     aL1 = Array(&H22, &H5C, &H2F, &H8, &HC, &HA, &HD, &H9)
     aL2 = Array(&H22, &H5C, &H2F, &H62, &H66, &H6E, &H72, &H74)
@@ -374,12 +379,17 @@ End Function
 
 Private Function multiArray(aBD, iBC, sPS, ByRef sPT)   ' Array BoDy, Integer BaseCount, String PoSition
 
-    Dim iDU, iDL, i ' Integer DimensionUBound, Integer DimensionLBound
+    Dim iDU As Integer  ' Integer DimensionUBound
+    Dim iDL As Integer  ' Integer DimensionLBound
+    Dim i As Integer
+
     On Error Resume Next
     iDL = LBound(aBD, iBC)
     iDU = UBound(aBD, iBC)
 
-    Dim sPB1, sPB2  ' String PointBuffer1, String PointBuffer2
+    Dim sPB1 As String  ' String PointBuffer1
+    Dim sPB2 As String  ' String PointBuffer2
+
     If Err.Number = 9 Then
         sPB1 = sPT & sPS
         For i = 1 To Len(sPB1)
