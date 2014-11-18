@@ -10,7 +10,7 @@ This is synonomous to the question [How do I write my own parser?](http://techbl
 
 Kudos also to the dormant [vba-json](https://code.google.com/p/vba-json/) project. Initial steps in eJsonVBA development will build on that foundation. It has open [issues](http://code.google.com/p/vba-json/issues/list) and other [problems](http://stackoverflow.com/questions/5773683/excel-vba-parsed-json-object-loop/19359035#19359035) that will be addressed here in a systematic way.
 
-In addition there is the [VB-JSON](http://www.ediy.co.nz/vbjson-json-parser-library-in-vb6-xidc55680.html) work that has some roots in vba-json.
+In addition there is the [VB-JSON](http://www.ediy.co.nz/vbjson-json-parser-library-in-vb6-xidc55680.html) work that may have some roots in vba-json and [JsonBag](http://www.vbforums.com/showthread.php?738845-VB6-JsonBag-Another-JSON-Parser-Generator) - a VB6 implemenation.
 
 
 

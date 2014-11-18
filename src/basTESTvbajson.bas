@@ -45,20 +45,42 @@ Option Explicit
 '"vbajson21","Defect","New","Medium","","","parseKey with Key containing "":""","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=21
 '"vbajson22","Defect","New","Medium","","","Bug: Case statement comparing one character ""\"" to ""\\""","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=22
 '"vbajson23","Defect","New","Medium","","","Need a new owner","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=23
-
+'
+' *** Online JSON Validator
+' *** http://www.jsonlint.com/
+'
 Public Sub vbajson1()
 
     Dim S As New jsonlib
     Dim o As Object
+    Dim strJson As String
 
     ' read the JSON into an object:
-    Set o = S.parse("{bla:""hi"", items: [{it:1,itx:2},{i3:'x'}] }")
-   
+    ' Set o = S.parse("{ bla:""hi"", items: [{it:1,itx:2},{i3:'x'}] }")
+    strJson = "{ bla:""hi"", ""items"": [{it:1,itx:2},{i3:""x""}] }"
+    Debug.Print "strJson=" & strJson
+    'Set o = S.parse("{ bla:""hi"", items: [{it:1,itx:2},{i3:'x'}] }")
+    Set o = S.parse(strJson)
+
+' Use Online JSON Validator to get the following validated:
+'{
+'    "bla": "hi",
+'    "items": [
+'        {
+'            "it": 1,
+'            "itx": 2
+'        },
+'        {
+'            "i3": "x"
+'        }
+'    ]
+'}
+
     ' get the parsed text back:
     Debug.Print S.toString(o)
 
     ' get data from arrays etc.:
-    Debug.Print "Bla: " & o.Item("bla") & " - Items: " & _
+    Debug.Print "Bla: " & o.Item("bla") & " - Items of itx: " & _
         o.Item("items").Item(1).Item("itx")
 
 End Sub
@@ -67,6 +89,8 @@ Public Sub vbajson2()
 
     Dim S As New jsonlib
     Dim o As Object
+
+    Debug.Print "vbajson2: This test will kill Excel!"
 
     ' read the JSON into an object:
     Set o = S.parse("{bla:'hi I'm a single quote!'"", items: [{it:1,itx:2},{i3:'x'}] }")
@@ -80,4 +104,12 @@ Public Sub vbajson2()
 
 End Sub
 
+Public Sub vbajson3()
+
+    Dim S As New jsonlib
+    Dim o As Object
+
+    Debug.Print "vbajson3: Test case needed."
+
+End Sub
 
