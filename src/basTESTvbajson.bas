@@ -56,10 +56,8 @@ Public Sub vbajson1()
     Dim strJson As String
 
     ' read the JSON into an object:
-    ' Set o = S.parse("{ bla:""hi"", items: [{it:1,itx:2},{i3:'x'}] }")
-    strJson = "{ bla:""hi"", ""items"": [{it:1,itx:2},{i3:""x""}] }"
+    strJson = "{ bla:""hi"", ""items"": [{""it"":1,""itx"":2},{""i3"":""x""}] }"
     Debug.Print "strJson=" & strJson
-    'Set o = S.parse("{ bla:""hi"", items: [{it:1,itx:2},{i3:'x'}] }")
     Set o = S.parse(strJson)
 
 ' Use Online JSON Validator to get the following validated:
@@ -90,7 +88,10 @@ Public Sub vbajson2()
     Dim S As New jsonlib
     Dim o As Object
 
-    Debug.Print "vbajson2: This test will kill Excel!"
+    Debug.Print "vbajson2: This test will kill Excel!" & vbCrLf & _
+        "    NEEDS ERROR HANDLING"
+
+Exit Sub
 
     ' read the JSON into an object:
     Set o = S.parse("{bla:'hi I'm a single quote!'"", items: [{it:1,itx:2},{i3:'x'}] }")
