@@ -4,7 +4,7 @@ Option Explicit
 '"ID","Type","Status","Priority","Milestone","Owner","Summary","AllLabels","Link"
 '"vbajson1","Defect","FIXED","Medium","","","outcome","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=1
     ' How can i read a parsed JSON string as an array?
-'"vbajson2","Defect","New","Medium","","","parseString bug","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=2
+'"vbajson2","Defect","New","High","","","parseString bug","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=2
     ' I found an issue that crashes the parseString function where data delimited
     ' with a single quote and containing encoded single quotes.
     ' It causes a freeze. This can be fixed by adding a single quote to the case statement:
@@ -14,6 +14,17 @@ Option Explicit
     '              index = index + 1
     '           Case "b"
 '"vbajson3","Defect","New","Medium","","","Incorrect CrLf encoding?","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=3
+    ' Reported by webmas...@ediy.co.nz, Mar 24, 2009
+    ' Some data seemed to have double the enters in text every time it was saved,
+    ' it seems to be because
+    '               Case "n"
+    '                 SB.Append vbNewLine
+    '                 index = index + 1
+    ' should be:
+    '               Case "n"
+    '                 SB.Append vbLf
+    '                 index = index + 1
+    ' in the parseString function.
 '"vbajson4","Defect","New","Medium","","","improve parseNumber() for other decimal settings","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=4
 '"vbajson5","Defect","New","Medium","","","Added suport for JSON-RPC 2.0 in jsonlib","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=5
 '"vbajson6","Defect","New","Medium","","","Enter one-line summary","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=6
