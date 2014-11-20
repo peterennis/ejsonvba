@@ -115,7 +115,7 @@ Private Sub parse_test3()
     Dim lib As New jsonlib
     Dim json As Object
 
-    Set json = lib.parse(" " & vbCrLf & vbTab & " [[], {""test1"":'v1', 'test2':'v222', test3:""v33333""}, null , ""test"", 123, 567.8910, 4.7e+10, true,  false]")
+    Set json = lib.parse(" " & vbCrLf & vbTab & " [[], {""test1"":""v1"", ""test2"":""v222"", test3:""v33333""}, null , ""test"", 123, 567.8910, 4.7e+10, true,  false]")
     Debug.Assert Err.Number = 0
 
     Debug.Print lib.toString(json)

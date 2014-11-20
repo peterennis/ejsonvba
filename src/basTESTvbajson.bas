@@ -53,6 +53,22 @@ Option Explicit
 ' Some bugs fixed, speed improvements added for VB6 by Michael Glaser (vbjson@ediy.co.nz)
 ' BSD Licensed
 '
+'=============================================================================================================================
+' Tasks:
+' %005 -
+' %004 -
+' %003 -
+' %002 -
+' %001 -
+' Issues:
+' #005 -
+' #004 -
+' #003 -
+' #003 -
+' #002 - vbatest2 still kills Excel
+' #001 - Run-time error '424' Object required in test vbajson1
+'=============================================================================================================================
+
 ' http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
 ' The answer is no for strict JSON interchange.
 ' The correct approach is here: http://blog.getify.com/json-comments/
@@ -70,7 +86,8 @@ Public Sub vbajson1()
 
     ' read the JSON into an object:
     strJson = "{ bla:""hi"", ""items"": [{""it"":1,""itx"":2},{""i3"":""x""}] }"
-    Debug.Print "strJson=" & strJson
+    Debug.Print "=> vbajson1"
+    Debug.Print , "strJson=" & strJson
     Set o = S.parse(strJson)
 
 ' Use Online JSON Validator to get the following validated:
@@ -88,10 +105,10 @@ Public Sub vbajson1()
 '}
 
     ' get the parsed text back:
-    Debug.Print "S.toString(o)=" & S.toString(o)
+    Debug.Print , "S.toString(o)=" & S.toString(o)
 
     ' get data from arrays etc.:
-    Debug.Print "Bla: " & o.Item("bla") & " - Items of itx: " & _
+    Debug.Print , "Bla: " & o.Item("bla") & " - Items of itx: " & _
         o.Item("items").Item(1).Item("itx")
 
 End Sub

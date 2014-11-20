@@ -9,13 +9,16 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Const INVALID_JSON      As Long = 1
-Const INVALID_OBJECT    As Long = 2
-Const INVALID_ARRAY     As Long = 3
-Const INVALID_BOOLEAN   As Long = 4
-Const INVALID_NULL      As Long = 5
-Const INVALID_KEY       As Long = 6
-Const INVALID_RPC_CALL  As Long = 7
+Private Const INVALID_JSON      As Long = 1
+Private Const INVALID_OBJECT    As Long = 2
+Private Const INVALID_ARRAY     As Long = 3
+Private Const INVALID_BOOLEAN   As Long = 4
+Private Const INVALID_NULL      As Long = 5
+Private Const INVALID_KEY       As Long = 6
+Private Const INVALID_RPC_CALL  As Long = 7
+
+Private Const jsonlibVERSION As String = "0.1.0"
+Private Const jsonlibVERSION_DATE As String = "November 19, 2014"
 
 Private psErrors As String
 
@@ -57,6 +60,8 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 
     Set parseObject = CreateObject("Scripting.Dictionary")
 
+    Dim sKey As String
+
     ' "{"
     Call skipChar(str, index)
 
@@ -78,12 +83,20 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
         ElseIf "," = Mid(str, index, 1) Then
             index = index + 1
             Call skipChar(str, index)
+        ElseIf index > Len(str) Then
+            psErrors = psErrors & "Missing '}': " & Right(str, 20) & vbCrLf
+            Exit Do
         End If
 
-        Dim key As String
-
         ' add key/value pair
-        parseObject.Add key:=parseKey(str, index), Item:=parseValue(str, index)
+        sKey = parseKey(str, index)
+        On Error Resume Next
+        
+        parseObject.Add sKey:=parseKey(str, index), Item:=parseValue(str, index)
+        If Err.Number <> 0 Then
+            psErrors = psErrors & Err.Description & ": " & sKey & vbCrLf
+            Exit Do
+        End If
 
     Loop
 
