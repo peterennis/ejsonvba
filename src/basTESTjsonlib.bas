@@ -31,10 +31,11 @@ Private Sub toString_test1()
     Dim b As Date
     Dim lib As New jsonlib
 
+    Debug.Print "=> toString_test1"
+
     b = Now()
 
-    Debug.Print lib.toString(Array("a", "b", Array(1, b, "3")))
-
+    Debug.Print , "lib.toString(Array("; a; ", "; b; ", Array(1, b, "; 3; ")))=" & lib.toString(Array("a", "b", Array(1, b, "3")))
     Debug.Assert Err.Number = 0
 
     Set lib = Nothing
@@ -48,6 +49,8 @@ Private Sub toString_test2()
     Dim c As New Collection
     Dim lib As New jsonlib
 
+    Debug.Print "=> toString_test2"
+
     Set a = CreateObject("Scripting.Dictionary")
     Set b = CreateObject("Scripting.Dictionary")
 
@@ -58,7 +61,7 @@ Private Sub toString_test2()
     c.Add "ghi"
     c.Add 999
 
-    Debug.Print lib.toString(a)
+    Debug.Print , "lib.toString(a)=" & lib.toString(a)
     Debug.Assert Err.Number = 0
 
     Set lib = Nothing
@@ -76,11 +79,13 @@ Private Sub parse_test1()
     Dim lib As New jsonlib
     Dim json As Object
 
+    Debug.Print "=> parse_test1"
+
     Set json = lib.parse(" " & vbCrLf & vbTab & " {}")
     Debug.Assert TypeName(json) = "Dictionary"
     Debug.Assert Err.Number = 0
 
-    Debug.Print TypeName(json), json.Count
+    Debug.Print , "TypeName(json)=" & TypeName(json), "json.Count=" & json.Count
 
     Set json = Nothing
 
@@ -88,7 +93,7 @@ Private Sub parse_test1()
     Debug.Assert TypeName(json) = "Collection"
     Debug.Assert Err.Number = 0
 
-    Debug.Print TypeName(json), json.Count
+    Debug.Print , "TypeName(json)=" & TypeName(json), "json.Count=" & json.Count
 
     Set json = Nothing
     Set lib = Nothing
@@ -100,9 +105,11 @@ Private Sub parse_test2()
     Dim lib As New jsonlib
     Dim json As Object
 
+    Debug.Print "=> parse_test2"
+
     Set json = lib.parse(" " & vbCrLf & vbTab & " {}")
 
-    Debug.Print lib.toString(json)
+    Debug.Print , "lib.toString(json)=" & lib.toString(json)
     Debug.Assert Err.Number = 0
 
     Set json = Nothing

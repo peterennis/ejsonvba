@@ -64,7 +64,7 @@ Option Explicit
 ' #005 -
 ' #004 -
 ' #003 -
-' #003 -
+' #003 - parse_test3 breaks RunAllTests
 ' #002 - vbatest2 still kills Excel
 ' #001 - Run-time error '424' Object required in test vbajson1
 '=============================================================================================================================
