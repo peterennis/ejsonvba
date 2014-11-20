@@ -46,9 +46,22 @@ Option Explicit
 '"vbajson22","Defect","New","Medium","","","Bug: Case statement comparing one character ""\"" to ""\\""","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=22
 '"vbajson23","Defect","New","Medium","","","Need a new owner","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=23
 '
-' *** Online JSON Validator
-' *** http://www.jsonlint.com/
+' Change integration:
+' Add the file JSON.bas from Michael Glaser, review and integrate changes as appropriate
+' VBJSON (http://www.ediy.co.nz/vbjson-json-parser-library-in-vb6-xidc55680.html)
+' is a VB6 adaptation of the VBA JSON project at http://code.google.com/p/vba-json/
+' Some bugs fixed, speed improvements added for VB6 by Michael Glaser (vbjson@ediy.co.nz)
+' BSD Licensed
 '
+' http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
+' The answer is no for strict JSON interchange.
+' The correct approach is here: http://blog.getify.com/json-comments/
+'
+' *** Online JSON Validators
+' *** http://www.jsonlint.com/
+' *** http://jsonformatter.curiousconcept.com/
+'
+
 Public Sub vbajson1()
 
     Dim S As New jsonlib
@@ -75,7 +88,7 @@ Public Sub vbajson1()
 '}
 
     ' get the parsed text back:
-    Debug.Print S.toString(o)
+    Debug.Print "S.toString(o)=" & S.toString(o)
 
     ' get data from arrays etc.:
     Debug.Print "Bla: " & o.Item("bla") & " - Items of itx: " & _
@@ -90,7 +103,6 @@ Public Sub vbajson2()
 
     Debug.Print "vbajson2: This test will kill Excel!" & vbCrLf & _
         "    NEEDS ERROR HANDLING"
-
 Exit Sub
 
     ' read the JSON into an object:

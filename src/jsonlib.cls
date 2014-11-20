@@ -15,6 +15,17 @@ Const INVALID_ARRAY     As Long = 3
 Const INVALID_BOOLEAN   As Long = 4
 Const INVALID_NULL      As Long = 5
 Const INVALID_KEY       As Long = 6
+Const INVALID_RPC_CALL  As Long = 7
+
+Private psErrors As String
+
+Public Function GetParserErrors() As String
+   GetParserErrors = psErrors
+End Function
+
+Public Function ClearParserErrors() As String
+   psErrors = ""
+End Function
 
 '
 '   parse string and create JSON object (Dictionary or Collection in VB)
@@ -23,21 +34,24 @@ Public Function parse(ByRef str As String) As Object
 
     Dim index As Long
     index = 1
-
+    psErrors = ""
     On Error Resume Next
 
     Call skipChar(str, index)
+
     Select Case Mid(str, index, 1)
     Case "{"
         Set parse = parseObject(str, index)
     Case "["
         Set parse = parseArray(str, index)
+    Case Else
+        psErrors = "Invalid JSON"
     End Select
 
 End Function
 
 '
-'   parse collection of key/value (Dictionary in VB)
+'   parse collection of key/value
 '
 Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 
@@ -46,12 +60,18 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
     ' "{"
     Call skipChar(str, index)
 
-    If Mid(str, index, 1) <> "{" Then Err.Raise vbObjectError + INVALID_OBJECT, Description:="char " & index & " : " & Mid(str, index)
+    'If Mid(str, index, 1) <> "{" Then Err.Raise vbObjectError + INVALID_OBJECT, Description:="char " & index & " : " & Mid(str, index)
+    If Mid(str, index, 1) <> "{" Then
+        psErrors = psErrors & "Invalid Object at position " & index & " : " & Mid(str, index) & vbCrLf
+        Exit Function
+    End If
+
     index = index + 1
 
     Do
 
         Call skipChar(str, index)
+
         If "}" = Mid(str, index, 1) Then
             index = index + 1
             Exit Do
