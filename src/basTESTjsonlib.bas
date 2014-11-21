@@ -3,12 +3,13 @@ Option Explicit
 
 Public Sub RunAlljsonlibTests()
 
-    toString_test1
-    Debug.Print "=> toString_test1 Finished!" & vbCrLf
-    toString_test2
-    Debug.Print "=> toString_test2 Finished!" & vbCrLf
+'    toString_test1
+'    Debug.Print "=> toString_test1 Finished!" & vbCrLf
+'    toString_test2
+'    Debug.Print "=> toString_test2 Finished!" & vbCrLf
     parse_test1
     Debug.Print "=> parse_test1 Finished!" & vbCrLf
+Exit Sub
     parse_test2
     Debug.Print "=> parse_test2 Finished!" & vbCrLf
     parse_test3
@@ -95,30 +96,43 @@ Private Sub parse_test1()
     Dim lib As New jsonlib
     Dim json As Object
     Dim errString As String
+    Dim parseString As String
 
     Debug.Print "=> parse_test1"
+    parseString = " " & vbCrLf & vbTab & " {}"
+    Debug.Print , "parseString=" & parseString
 
     Set json = lib.parse(" " & vbCrLf & vbTab & " {}")
-    Debug.Assert TypeName(json) = "Dictionary"
-    Debug.Assert Err.Number = 0
-
-    Debug.Print , "TypeName(json)=" & TypeName(json), "json.Count=" & json.Count
-
-    Set json = Nothing
-
-    Set json = lib.parse(" " & vbCrLf & vbTab & " []")
-    Debug.Assert TypeName(json) = "Collection"
     'Debug.Assert Err.Number = 0
     errString = lib.GetParserErrors
     If errString = "" Then
         Debug.Print , "VALIDATED"
     Else
         Debug.Print , errString
-        Debug.Print , "FAILED"
+        Debug.Print , "FAILED {}"
+        GoTo PROC_EXIT
     End If
+    Debug.Assert TypeName(json) = "Dictionary"
+    Debug.Print , "TypeName(json)=" & TypeName(json), "json.Count=" & json.Count
+    Debug.Print
+    
+    parseString = " " & vbCrLf & vbTab & " []"
+    Debug.Print , "parseString=" & parseString
 
+    Set json = lib.parse(" " & vbCrLf & vbTab & " []")
+    'Debug.Assert Err.Number = 0
+    errString = lib.GetParserErrors
+    If errString = "" Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , errString
+        Debug.Print , "FAILED []"
+        GoTo PROC_EXIT
+    End If
+    Debug.Assert TypeName(json) = "Collection"
     Debug.Print , "TypeName(json)=" & TypeName(json), "json.Count=" & json.Count
 
+PROC_EXIT:
     Set json = Nothing
     Set lib = Nothing
 
@@ -149,7 +163,7 @@ Private Sub parse_test2()
 
 End Sub
 
-Public Sub parse_test3()
+Private Sub parse_test3()
 
     Dim lib As New jsonlib
     Dim json As Object
