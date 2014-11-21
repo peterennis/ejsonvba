@@ -7,13 +7,13 @@ Public Sub RunAlljsonlibTests()
 '    Debug.Print "=> toString_test1 Finished!" & vbCrLf
 '    toString_test2
 '    Debug.Print "=> toString_test2 Finished!" & vbCrLf
-    parse_test1
-    Debug.Print "=> parse_test1 Finished!" & vbCrLf
-Exit Sub
-    parse_test2
-    Debug.Print "=> parse_test2 Finished!" & vbCrLf
+'    parse_test1
+'    Debug.Print "=> parse_test1 Finished!" & vbCrLf
+'    parse_test2
+'    Debug.Print "=> parse_test2 Finished!" & vbCrLf
     parse_test3
     Debug.Print "=> parse_test3 Finished!" & vbCrLf
+Exit Sub
     parse_test4
     Debug.Print "=> parse_test4 Finished!" & vbCrLf
     parse_test5
