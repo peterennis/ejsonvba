@@ -34,7 +34,7 @@ End Sub
 
 Public Function GetParserErrors() As String
    GetParserErrors = psErrors
-   Stop
+   'Stop
 End Function
 
 Public Function ClearParserErrors() As String

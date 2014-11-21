@@ -4,21 +4,21 @@ Option Explicit
 Public Sub RunAlljsonlibTests()
 
     toString_test1
-    Debug.Print "=> toString_test1 Finished!"
+    Debug.Print "=> toString_test1 Finished!" & vbCrLf
     toString_test2
-    Debug.Print "=> toString_test2 Finished!"
+    Debug.Print "=> toString_test2 Finished!" & vbCrLf
     parse_test1
-    Debug.Print "=> parse_test1 Finished!"
+    Debug.Print "=> parse_test1 Finished!" & vbCrLf
     parse_test2
-    Debug.Print "=> parse_test2 Finished!"
+    Debug.Print "=> parse_test2 Finished!" & vbCrLf
     parse_test3
-    Debug.Print "=> parse_test3 Finished!"
+    Debug.Print "=> parse_test3 Finished!" & vbCrLf
     parse_test4
-    Debug.Print "=> parse_test4 Finished!"
+    Debug.Print "=> parse_test4 Finished!" & vbCrLf
     parse_test5
-    Debug.Print "=> parse_test5 Finished!"
+    Debug.Print "=> parse_test5 Finished!" & vbCrLf
     skip_test
-    Debug.Print "=> skip_test Finished!"
+    Debug.Print "=> skip_test Finished!" & vbCrLf
 
 End Sub
 
@@ -30,14 +30,21 @@ Private Sub toString_test1()
     Dim a As String
     Dim b As Date
     Dim lib As New jsonlib
+    Dim errString As String
 
     Debug.Print "=> toString_test1"
 
     b = Now()
 
     Debug.Print , "toString_test1=" & lib.toString(Array("a", "b", Array(1, b, "3")))
-    Debug.Assert Err.Number = 0
-    Debug.Print , "VALIDATED"
+    'Debug.Assert Err.Number = 0
+    errString = lib.GetParserErrors
+    If errString = "" Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , errString
+        Debug.Print , "FAILED"
+    End If
 
     Set lib = Nothing
 
@@ -49,6 +56,7 @@ Private Sub toString_test2()
     Dim b As Object
     Dim c As New Collection
     Dim lib As New jsonlib
+    Dim errString As String
 
     Debug.Print "=> toString_test2"
 
@@ -63,7 +71,14 @@ Private Sub toString_test2()
     c.Add 999
 
     Debug.Print , "lib.toString(a)=" & lib.toString(a)
-    Debug.Assert Err.Number = 0
+    'Debug.Assert Err.Number = 0
+    errString = lib.GetParserErrors
+    If errString = "" Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , errString
+        Debug.Print , "FAILED"
+    End If
 
     Set lib = Nothing
     Set c = Nothing
@@ -79,6 +94,7 @@ Private Sub parse_test1()
 
     Dim lib As New jsonlib
     Dim json As Object
+    Dim errString As String
 
     Debug.Print "=> parse_test1"
 
@@ -92,7 +108,14 @@ Private Sub parse_test1()
 
     Set json = lib.parse(" " & vbCrLf & vbTab & " []")
     Debug.Assert TypeName(json) = "Collection"
-    Debug.Assert Err.Number = 0
+    'Debug.Assert Err.Number = 0
+    errString = lib.GetParserErrors
+    If errString = "" Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , errString
+        Debug.Print , "FAILED"
+    End If
 
     Debug.Print , "TypeName(json)=" & TypeName(json), "json.Count=" & json.Count
 
@@ -105,13 +128,21 @@ Private Sub parse_test2()
 
     Dim lib As New jsonlib
     Dim json As Object
+    Dim errString As String
 
     Debug.Print "=> parse_test2"
 
     Set json = lib.parse(" " & vbCrLf & vbTab & " {}")
 
     Debug.Print , "lib.toString(json)=" & lib.toString(json)
-    Debug.Assert Err.Number = 0
+    'Debug.Assert Err.Number = 0
+    errString = lib.GetParserErrors
+    If errString = "" Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , errString
+        Debug.Print , "FAILED"
+    End If
 
     Set json = Nothing
     Set lib = Nothing
@@ -124,6 +155,7 @@ Public Sub parse_test3()
     Dim json As Object
     Dim strEmbed As String
     Dim strEmbedValid As String
+    Dim errString As String
 
     Debug.Print "=> parse_test3"
 
@@ -135,7 +167,14 @@ Public Sub parse_test3()
     Set json = lib.parse(" " & vbCrLf & vbTab & strEmbed)
 
     Debug.Print , "lib.toString(json)=" & lib.toString(json)
-    Debug.Assert Err.Number = 0
+    'Debug.Assert Err.Number = 0
+    errString = lib.GetParserErrors
+    If errString = "" Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , errString
+        Debug.Print , "FAILED"
+    End If
 
     Set json = Nothing
     Set lib = Nothing
@@ -146,11 +185,21 @@ Private Sub parse_test4()
 
     Dim lib As New jsonlib
     Dim json As Object
+    Dim errString As String
+
+    Debug.Print "=> parse_test4"
 
     Set json = lib.parse("[{""type"":""t1"",""title"":""データ1"",""attr"":[""1-1"",""1-2""]},{""type"":""t2"",""title"":""データ2"",""attr"":[""2-1"",""2-2""]}]")
-    Debug.Assert Err.Number = 0
 
     Debug.Print lib.toString(json)
+    'Debug.Assert Err.Number = 0
+    errString = lib.GetParserErrors
+    If errString = "" Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , errString
+        Debug.Print , "FAILED"
+    End If
 
     Set json = Nothing
     Set lib = Nothing
@@ -164,11 +213,14 @@ Private Sub parse_test5()
     Dim text As String
     Dim res1 As String
     Dim res2 As String
+    Dim errString As String
+
+    Debug.Print "=> parse_test5"
 
     With CreateObject("ADODB.Stream")
         .Open
         .Charset = "UTF-8"
-        .LoadFromFile ActiveWorkbook.Path & "\\test\test1.json"
+        .LoadFromFile ActiveWorkbook.Path & "\test\test1.json"
         text = .ReadText(-1)
         .Close
     End With
@@ -203,6 +255,9 @@ Private Sub skip_test()
     Dim lib As New jsonlib
     Dim str As String
     Dim index As Long
+    Dim errString As String
+
+    Debug.Print "=> skip_test"
 
     str = vbCrLf & vbCr & vbLf & " " & "abc"
     index = 1
