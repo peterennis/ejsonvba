@@ -1,7 +1,7 @@
 Attribute VB_Name = "basTESTjsonlib"
 Option Explicit
 
-Public Sub RunAllTests()
+Public Sub RunAlljsonlibTests()
 
     toString_test1
     Debug.Print "=> toString_test1 Finished!"
@@ -35,8 +35,9 @@ Private Sub toString_test1()
 
     b = Now()
 
-    Debug.Print , "lib.toString(Array("; a; ", "; b; ", Array(1, b, "; 3; ")))=" & lib.toString(Array("a", "b", Array(1, b, "3")))
+    Debug.Print , "toString_test1=" & lib.toString(Array("a", "b", Array(1, b, "3")))
     Debug.Assert Err.Number = 0
+    Debug.Print , "VALIDATED"
 
     Set lib = Nothing
 
@@ -117,15 +118,24 @@ Private Sub parse_test2()
 
 End Sub
 
-Private Sub parse_test3()
+Public Sub parse_test3()
 
     Dim lib As New jsonlib
     Dim json As Object
+    Dim strEmbed As String
+    Dim strEmbedValid As String
 
-    Set json = lib.parse(" " & vbCrLf & vbTab & " [[], {""test1"":""v1"", ""test2"":""v222"", test3:""v33333""}, null , ""test"", 123, 567.8910, 4.7e+10, true,  false]")
+    Debug.Print "=> parse_test3"
+
+    strEmbedValid = " [[], {""test1"":""v1"", ""test2"":""v222"", ""test3"":""v33333""}, null , ""test"", 123, 567.8910, 4.7e+10, true,  false]"
+    Debug.Print , "strEmbedValid=" & strEmbedValid
+    strEmbed = " [[], {""test1"":'v1', 'test2':'v222', test3:""v33333""}, null , ""test"", 123, 567.8910, 4.7e+10, true,  false]"
+    Debug.Print , "strEmbed=" & strEmbed
+
+    Set json = lib.parse(" " & vbCrLf & vbTab & strEmbed)
+
+    Debug.Print , "lib.toString(json)=" & lib.toString(json)
     Debug.Assert Err.Number = 0
-
-    Debug.Print lib.toString(json)
 
     Set json = Nothing
     Set lib = Nothing

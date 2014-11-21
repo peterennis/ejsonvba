@@ -22,8 +22,19 @@ Private Const jsonlibVERSION_DATE As String = "November 19, 2014"
 
 Private psErrors As String
 
+Private Sub Class_Initialize()
+    Debug.Print , "Class_Initialize"
+    'Debug.Print , "jsonlibVERSION=" & jsonlibVERSION
+    'Debug.Print , "jsonlibVERSION_DATE=" & jsonlibVERSION_DATE
+End Sub
+
+Private Sub Class_Terminate()
+    Debug.Print , "Class_Terminate"
+End Sub
+
 Public Function GetParserErrors() As String
    GetParserErrors = psErrors
+   Stop
 End Function
 
 Public Function ClearParserErrors() As String
@@ -48,7 +59,8 @@ Public Function parse(ByRef str As String) As Object
     Case "["
         Set parse = parseArray(str, index)
     Case Else
-        psErrors = "Invalid JSON"
+        psErrors = "str=" & str & " index=" & index & " Invalid JSON"
+        GetParserErrors
     End Select
 
 End Function
