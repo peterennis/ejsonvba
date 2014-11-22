@@ -1,5 +1,7 @@
 Attribute VB_Name = "basTESTvbajson"
 Option Explicit
+Option Compare Text
+Option Private Module
 
 '"ID","Type","Status","Priority","Milestone","Owner","Summary","AllLabels","Link"
 '"vbajson1","Defect","FIXED","Medium","","","outcome","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=1
@@ -81,18 +83,27 @@ Option Explicit
 
 Public Sub RunAllvbajsonTests()
 
-    vbajson1
-    Debug.Print "=> vbajson1 Finished!" & vbCrLf
+'    vbajson1
+'    Debug.Print "=> vbajson1 Finished!" & vbCrLf
     vbajson2
     Debug.Print "=> vbajson2 Finished!" & vbCrLf
+Exit Sub
     vbajson3
     Debug.Print "=> vbajson3 Finished!" & vbCrLf
+    vbajson4
+    Debug.Print "=> vbajson4 Finished!" & vbCrLf
+    vbajson5
+    Debug.Print "=> vbajson5 Finished!" & vbCrLf
+    vbajson6
+    Debug.Print "=> vbajson6 Finished!" & vbCrLf
+    vbajson7
+    Debug.Print "=> vbajson7 Finished!" & vbCrLf
 
 End Sub
 
 Private Sub vbajson1()
 
-    Dim S As New jsonlib
+    Dim lib As New jsonlib
     Dim o As Object
     Dim strJson As String
 
@@ -101,7 +112,7 @@ Private Sub vbajson1()
     ' read the JSON into an object:
     strJson = "{ bla:""hi"", ""items"": [{""it"":1,""itx"":2},{""i3"":""x""}] }"
     Debug.Print , "strJson=" & strJson
-    Set o = S.parse(strJson)
+    Set o = lib.parse(strJson)
 
 ' Use Online JSON Validator to get the following validated:
 '{
@@ -118,7 +129,7 @@ Private Sub vbajson1()
 '}
 
     ' get the parsed text back:
-    Debug.Print , "S.toString(o)=" & S.toString(o)
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
     ' get data from arrays etc.:
     Debug.Print , "Bla: " & o.Item("bla") & " - Items of itx: " & _
@@ -126,11 +137,14 @@ Private Sub vbajson1()
 
     Debug.Print , "VALIDATED"
 
+    Set lib = Nothing
+    Set o = Nothing
+
 End Sub
 
 Private Sub vbajson2()
 
-    Dim S As New jsonlib
+    Dim lib As New jsonlib
     Dim o As Object
 
     Debug.Print "=> vbajson2"
@@ -140,25 +154,87 @@ Private Sub vbajson2()
 Exit Sub
 
     ' read the JSON into an object:
-    Set o = S.parse("{bla:'hi I'm a single quote!'"", items: [{it:1,itx:2},{i3:'x'}] }")
+    Set o = lib.parse("{bla:'hi I'm a single quote!'"", items: [{it:1,itx:2},{i3:'x'}] }")
    
     ' get the parsed text back:
-    Debug.Print S.toString(o)
+    Debug.Print lib.toString(o)
 
     ' get data from arrays etc.:
     Debug.Print "Bla: " & o.Item("bla") & " - Items: " & _
         o.Item("items").Item(1).Item("itx")
 
+    Set lib = Nothing
+    Set o = Nothing
+
 End Sub
 
 Private Sub vbajson3()
 
-    Dim S As New jsonlib
+    Dim lib As New jsonlib
     Dim o As Object
 
     Debug.Print "=> vbajson3"
 
     Debug.Print , "vbajson3: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson4()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson4"
+
+    Debug.Print , "vbajson4: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson5()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson5"
+
+    Debug.Print , "vbajson5: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson6()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson6"
+
+    Debug.Print , "vbajson6: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson7()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson7"
+
+    Debug.Print , "vbajson7: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
 
 End Sub
 

@@ -1,5 +1,7 @@
 Attribute VB_Name = "basTESTjsonlib"
 Option Explicit
+Option Compare Text
+Option Private Module
 
 Public Sub RunAlljsonlibTests()
 

@@ -8,6 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+Option Compare Text
 
 Private Const INVALID_JSON      As Long = 1
 Private Const INVALID_OBJECT    As Long = 2
@@ -115,7 +116,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 End Function
 
 '
-'   parse list (Collection in VB)
+'   parse list
 '
 Private Function parseArray(ByRef str As String, ByRef index As Long) As Collection
 
@@ -124,7 +125,11 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
     ' "["
     Call skipChar(str, index)
 
-    If Mid(str, index, 1) <> "[" Then Err.Raise vbObjectError + INVALID_ARRAY, Description:="char " & index & " : " + Mid(str, index)
+    If Mid(str, index, 1) <> "[" Then
+        psErrors = psErrors & "Invalid Array at position " & index & " : " + Mid(str, index, 20) & vbCrLf
+        Exit Function
+    End If
+
     index = index + 1
 
     Do
@@ -137,10 +142,18 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
         ElseIf "," = Mid(str, index, 1) Then
             index = index + 1
             Call skipChar(str, index)
+        ElseIf index > Len(str) Then
+            psErrors = psErrors & "Missing ']': " & Right(str, 20) & vbCrLf
+            Exit Do
         End If
 
         ' add value
+        On Error Resume Next
         parseArray.Add parseValue(str, index)
+        If Err.Number <> 0 Then
+            psErrors = psErrors & Err.Description & ": " & Mid(str, index, 20) & vbCrLf
+            Exit Do
+        End If
 
     Loop
 
@@ -182,7 +195,9 @@ Private Function parseString(ByRef str As String, ByRef index As Long) As String
     Call skipChar(str, index)
 
     quote = Mid(str, index, 1)
+    Debug.Print , "quote=" & quote, index
     index = index + 1
+
     Do While index > 0 And index <= Len(str)
         char = Mid(str, index, 1)
         Select Case (char)
@@ -200,7 +215,7 @@ Private Function parseString(ByRef str As String, ByRef index As Long) As String
                 parseString = parseString & vbFormFeed
                 index = index + 1
             Case "n"
-                parseString = parseString & vbNewLine
+                parseString = parseString & vbLf        '''vbNewLine
                 index = index + 1
             Case "r"
                 parseString = parseString & vbCr
