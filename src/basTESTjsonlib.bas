@@ -15,9 +15,8 @@ Public Sub RunAlljsonlibTests()
 '    Debug.Print "=> parse_test3 Finished!" & vbCrLf
 '    parse_test4
 '    Debug.Print "=> parse_test4 Finished!" & vbCrLf
-    parse_test5
-    Debug.Print "=> parse_test5 Finished!" & vbCrLf
-Exit Sub
+'    parse_test5
+'    Debug.Print "=> parse_test5 Finished!" & vbCrLf
     skip_test
     Debug.Print "=> skip_test Finished!" & vbCrLf
 
@@ -288,7 +287,7 @@ Private Sub skip_test()
     lib.skipChar str, index
     Debug.Assert index = 6
 
-    Debug.Print index, Mid(str, index, 1)
+    Debug.Print , "index=" & index, "Mid(str, index, 1)=" & Mid(str, index, 1)
 
     Set lib = Nothing
 
