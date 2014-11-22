@@ -180,18 +180,19 @@ Private Function aeDocumentTheExcelCode(Optional ByVal varDebug As Variant) As B
         Kill FolderWithVBAProjectFiles & "\*.*"
     On Error GoTo PROC_ERR
 
-    If ThisIsAnAddIn("DirTree.xla", varDebug) Then
-    Else
-        ' NOTE: This workbook must be open in Excel
-        strSourceWorkbook = ActiveWorkbook.Name
-        Set wkbSource = Application.Workbooks(strSourceWorkbook)
+    '''If ThisIsAnAddIn("DirTree.xla", varDebug) Then
+    '''Else
 
-        If wkbSource.VBProject.Protection = 1 Then
-            MsgBox "The VBA in this workbook is protected!" & vbCrLf & _
-                    "It is not possible to export the code."
-            Exit Function
-        End If
+    ' NOTE: This workbook must be open in Excel
+    strSourceWorkbook = ActiveWorkbook.Name
+    Set wkbSource = Application.Workbooks(strSourceWorkbook)
+
+    If wkbSource.VBProject.Protection = 1 Then
+        MsgBox "The VBA in this workbook is protected!" & vbCrLf & _
+                "It is not possible to export the code."
+        Exit Function
     End If
+    '''End If
 
     strExportPath = FolderWithVBAProjectFiles & "\"
 
