@@ -11,11 +11,11 @@ Public Sub RunAlljsonlibTests()
 '    Debug.Print "=> parse_test1 Finished!" & vbCrLf
 '    parse_test2
 '    Debug.Print "=> parse_test2 Finished!" & vbCrLf
-    parse_test3
-    Debug.Print "=> parse_test3 Finished!" & vbCrLf
-Exit Sub
+'    parse_test3
+'    Debug.Print "=> parse_test3 Finished!" & vbCrLf
     parse_test4
     Debug.Print "=> parse_test4 Finished!" & vbCrLf
+Exit Sub
     parse_test5
     Debug.Print "=> parse_test5 Finished!" & vbCrLf
     skip_test
@@ -200,12 +200,15 @@ Private Sub parse_test4()
     Dim lib As New jsonlib
     Dim json As Object
     Dim errString As String
+    Dim strEmbed As String
 
     Debug.Print "=> parse_test4"
+    strEmbed = "[{""type"":""t1"",""title"":""データ1"",""attr"":[""1-1"",""1-2""]},{""type"":""t2"",""title"":""データ2"",""attr"":[""2-1"",""2-2""]}]"""
+    Debug.Print , "strEmbed=" & strEmbed
 
     Set json = lib.parse("[{""type"":""t1"",""title"":""データ1"",""attr"":[""1-1"",""1-2""]},{""type"":""t2"",""title"":""データ2"",""attr"":[""2-1"",""2-2""]}]")
 
-    Debug.Print lib.toString(json)
+    Debug.Print , "lib.toString(json)=" & lib.toString(json)
     'Debug.Assert Err.Number = 0
     errString = lib.GetParserErrors
     If errString = "" Then
