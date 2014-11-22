@@ -79,15 +79,27 @@ Option Explicit
 ' *** http://jsonformatter.curiousconcept.com/
 '
 
-Public Sub vbajson1()
+Public Sub RunAllvbajsonTests()
+
+    vbajson1
+    Debug.Print "=> vbajson1 Finished!" & vbCrLf
+    vbajson2
+    Debug.Print "=> vbajson2 Finished!" & vbCrLf
+    vbajson3
+    Debug.Print "=> vbajson3 Finished!" & vbCrLf
+
+End Sub
+
+Private Sub vbajson1()
 
     Dim S As New jsonlib
     Dim o As Object
     Dim strJson As String
 
+    Debug.Print "=> vbajson1"
+
     ' read the JSON into an object:
     strJson = "{ bla:""hi"", ""items"": [{""it"":1,""itx"":2},{""i3"":""x""}] }"
-    Debug.Print "=> vbajson1"
     Debug.Print , "strJson=" & strJson
     Set o = S.parse(strJson)
 
@@ -112,15 +124,19 @@ Public Sub vbajson1()
     Debug.Print , "Bla: " & o.Item("bla") & " - Items of itx: " & _
         o.Item("items").Item(1).Item("itx")
 
+    Debug.Print , "VALIDATED"
+
 End Sub
 
-Public Sub vbajson2()
+Private Sub vbajson2()
 
     Dim S As New jsonlib
     Dim o As Object
 
-    Debug.Print "vbajson2: This test will kill Excel!" & vbCrLf & _
-        "    NEEDS ERROR HANDLING"
+    Debug.Print "=> vbajson2"
+
+    Debug.Print , "vbajson2: This test will kill Excel!"
+    Debug.Print , "NEEDS ERROR HANDLING"
 Exit Sub
 
     ' read the JSON into an object:
@@ -135,12 +151,14 @@ Exit Sub
 
 End Sub
 
-Public Sub vbajson3()
+Private Sub vbajson3()
 
     Dim S As New jsonlib
     Dim o As Object
 
-    Debug.Print "vbajson3: Test case needed."
+    Debug.Print "=> vbajson3"
+
+    Debug.Print , "vbajson3: Test case needed."
 
 End Sub
 
