@@ -61,13 +61,14 @@ Option Explicit
 ' %002 -
 ' %001 - Get test result "VALIDATED" be verified automatically with online parser
 ' Issues:
+' #006 -
 ' #005 -
 ' #004 -
-' #003 -
-' #003 - parse_test3 breaks RunAllTests
 ' #002 - vbatest2 still kills Excel
 ' #001 - Run-time error '424' Object required in test vbajson1
 '=============================================================================================================================
+
+' 20141121 - v011 - FIXED #003 - parse_test3 breaks RunAllTests
 
 ' http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
 ' The answer is no for strict JSON interchange.

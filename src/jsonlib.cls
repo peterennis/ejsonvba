@@ -17,8 +17,8 @@ Private Const INVALID_NULL      As Long = 5
 Private Const INVALID_KEY       As Long = 6
 Private Const INVALID_RPC_CALL  As Long = 7
 
-Private Const jsonlibVERSION As String = "0.1.0"
-Private Const jsonlibVERSION_DATE As String = "November 19, 2014"
+Private Const jsonlibVERSION As String = "0.1.1"
+Private Const jsonlibVERSION_DATE As String = "November 21, 2014"
 
 Private psErrors As String
 
@@ -60,7 +60,7 @@ Public Function parse(ByRef str As String) As Object
         Set parse = parseArray(str, index)
     Case Else
         psErrors = "str=" & str & " index=" & index & " Invalid JSON"
-        GetParserErrors
+        '''GetParserErrors
     End Select
 
 End Function
@@ -104,7 +104,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
         sKey = parseKey(str, index)
         On Error Resume Next
         
-        parseObject.Add sKey:=parseKey(str, index), Item:=parseValue(str, index)
+        parseObject.Add sKey, parseValue(str, index)
         If Err.Number <> 0 Then
             psErrors = psErrors & Err.Description & ": " & sKey & vbCrLf
             Exit Do
