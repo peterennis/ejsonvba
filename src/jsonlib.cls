@@ -539,3 +539,86 @@ Private Function multiArray(aBD, iBC, sPS, ByRef sPT)   ' Array BoDy, Integer Ba
 
 End Function
 
+Public Function JsonRpcCall(url As String, methName As String, args(), Optional user As String, Optional pwd As String) As Object
+
+    Dim r As Object
+    Dim cli As Object
+    Dim pText As String
+    Static reqId As Integer
+
+    reqId = reqId + 1
+
+    Set r = CreateObject("Scripting.Dictionary")
+    r("jsonrpc") = "2.0"
+    r("method") = methName
+    r("params") = args
+    r("id") = reqId
+
+    pText = toString(r)
+
+    Set cli = CreateObject("MSXML2.XMLHTTP.6.0")
+    ' Set cli = New MSXML2.XMLHTTP60
+    If Len(user) > 0 Then   ' If Not IsMissing(user) Then
+        cli.Open "POST", url, False, user, pwd
+    Else
+        cli.Open "POST", url, False
+    End If
+    cli.setRequestHeader "Content-Type", "application/json"
+    cli.Send pText
+
+    If cli.Status <> 200 Then
+        Err.Raise vbObjectError + INVALID_RPC_CALL + cli.Status, , cli.statusText
+    End If
+
+    Set r = parse(cli.responseText)
+    Set cli = Nothing
+
+    If r("id") <> reqId Then Err.Raise vbObjectError + INVALID_RPC_CALL, , "Bad Response id"
+
+    If r.Exists("error") Or Not r.Exists("result") Then
+        Err.Raise vbObjectError + INVALID_RPC_CALL, , "Json-Rpc Response error: " & r("error")("message")
+    End If
+
+    If Not r.Exists("result") Then Err.Raise vbObjectError + INVALID_RPC_CALL, , "Bad Response, missing result"
+
+    Set JsonRpcCall = r("result")
+
+End Function
+
+Public Function toUnicode(str As String) As String
+
+'    Dim x As Long
+'    Dim uStr As New cStringBuilder
+'    Dim uChrCode As Integer
+'
+'    For x = 1 To Len(str)
+'        uChrCode = Asc(Mid(str, x, 1))
+'        Select Case uChrCode
+'            Case 8:   ' backspace
+'                uStr.Append "\b"
+'            Case 9: ' tab
+'                uStr.Append "\t"
+'            Case 10:  ' line feed
+'                uStr.Append "\n"
+'            Case 12:  ' formfeed
+'                uStr.Append "\f"
+'            Case 13: ' carriage return
+'                uStr.Append "\r"
+'            Case 34: ' quote
+'                uStr.Append "\"""
+'            Case 39:  ' apostrophe
+'                uStr.Append "\'"
+'            Case 92: ' backslash
+'                uStr.Append "\\"
+'            Case 123, 125:  ' "{" and "}"
+'                uStr.Append ("\u" & Right("0000" & Hex(uChrCode), 4))
+'            Case Is < 32, Is > 127: ' non-ascii characters
+'                uStr.Append ("\u" & Right("0000" & Hex(uChrCode), 4))
+'            Case Else
+'                uStr.Append Chr$(uChrCode)
+'        End Select
+'    Next
+'    toUnicode = uStr.toString
+'    Exit Function
+
+End Function
