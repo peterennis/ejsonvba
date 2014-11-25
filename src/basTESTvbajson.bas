@@ -51,6 +51,32 @@ Option Private Module
     '           index = index + 1
     '        End If
 '"vbajson7","Defect","New","Medium","","","Cannot parse a JSON string containing an array...","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=7
+'Reported by c...@gmx.net, Oct 18, 2009
+    'What steps will reproduce the problem?
+    '1. Put this string in a variable:
+    '
+    '{"total_rows":36778,"offset":26220,"rows":[
+    '{"id":"6b80c0b76","key":"a@bbb.net","value":{"entryid":"81151F241C2500","subject":"test subject","senton":"2009-7-09 22:03:43"}},
+    '{"id":"b10ed9bee","key":"b@bbb.net","value":{"entryid":A7C3CF74EA95C9F","subject":"test subject2","senton":"2009-4-21 10:18:26"}}]}
+    '
+    '2. Instantiate a jsonlib object:  "Dim lib As New jsonlib"
+    '3. Define a new JSON object: "Dim json As Object"
+    '4. Instantiate the JSON object by invoking the jsonlib's "parse" method, the JSON string is the  parameter: "Set json = lib.parse(mystring)"
+    '
+    'What is the expected output? What do you see instead?
+    'I would expect to be able to access the elements in the json object; the parse method returns an error.
+    '
+    'What version of the product are you using? On what operating system?
+    'r2 from Feb 14,2009 - OS = Windows XP
+    '
+    'Please provide any additional information below.
+    'Parsing JSON strings containing a single record works perfectly, I'm using your VBA library to read/write/delete data in CouchDB.
+    '---------
+    '"vbajson7b"
+    '#1 amrita.c...@gmail.com
+    ' {"Cusip":[123,456,789],"Date":[1,2,3],"CloseType":["stock","bond","stock"]}
+    'THIS IS MY JSON STRING
+    'but when i try to parse(mystring)..I get back the same string
 '"vbajson8","Defect","New","Medium","","","Cannot convert a 2-d array to JSON","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=8
 '"vbajson9","Defect","New","Medium","","","Thank you for this code!","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=9
 '"vbajson10","Defect","New","Medium","","","improve parseNumber() with Long number","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=10
@@ -94,6 +120,8 @@ Option Private Module
     ' FIXED vbajson4
     ' FIXED vbajson5. Test case needed.
     ' FIXED vbajson6. Test case needed.
+    ' FIXED vbajson7b - @amrita.c... - paste the string into http://jsonlint.com/ validator and it validates.
+    '   -
 ' 20141121 - v011 - FIXED #003 - parse_test3 breaks RunAllTests
 
 ' http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
@@ -111,17 +139,25 @@ Public Sub RunAllvbajsonTests()
 '    Debug.Print "=> vbajson1 Finished!" & vbCrLf
     vbajson2
     Debug.Print "=> vbajson2 Finished!" & vbCrLf
-Exit Sub
-    vbajson3
-    Debug.Print "=> vbajson3 Finished!" & vbCrLf
-    vbajson4
-    Debug.Print "=> vbajson4 Finished!" & vbCrLf
-    vbajson5
-    Debug.Print "=> vbajson5 Finished!" & vbCrLf
-    vbajson6
-    Debug.Print "=> vbajson6 Finished!" & vbCrLf
+'    vbajson3
+'    Debug.Print "=> vbajson3 Finished!" & vbCrLf
+'    vbajson4
+'    Debug.Print "=> vbajson4 Finished!" & vbCrLf
+'    vbajson5
+'    Debug.Print "=> vbajson5 Finished!" & vbCrLf
+'    vbajson6
+'    Debug.Print "=> vbajson6 Finished!" & vbCrLf
     vbajson7
     Debug.Print "=> vbajson7 Finished!" & vbCrLf
+    vbajson7b
+    Debug.Print "=> vbajson7b Finished!" & vbCrLf
+Exit Sub
+    vbajson8
+    Debug.Print "=> vbajson8 Finished!" & vbCrLf
+    vbajson9
+    Debug.Print "=> vbajson9 Finished!" & vbCrLf
+    vbajson10
+    Debug.Print "=> vbajson10 Finished!" & vbCrLf
 
 End Sub
 
@@ -261,4 +297,70 @@ Private Sub vbajson7()
     Set o = Nothing
 
 End Sub
+
+Private Sub vbajson7b()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+    Dim strTest As String
+
+    Debug.Print "=> vbajson7b"
+
+    strTest = "{""Cusip"":[123,456,789],""Date"":[1,2,3],""CloseType"":[""stock"",""bond"",""stock""]}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+   
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "VALIDATED"
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson8()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson8"
+
+    Debug.Print , "vbajson8: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson9()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson9"
+
+    Debug.Print , "vbajson9: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson10()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson10"
+
+    Debug.Print , "vbajson10: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
 
