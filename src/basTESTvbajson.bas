@@ -36,7 +36,7 @@ Option Private Module
     '            parseNumber = CDbl(Value)
     '        Else
     '            parseNumber = CInt(Value)
-'"vbajson5","Defect","New","Medium","","","Added suport for JSON-RPC 2.0 in jsonlib","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=5
+'"vbajson5","Defect","FIXED","Medium","","","Added suport for JSON-RPC 2.0 in jsonlib","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=5
 '"vbajson6","Defect","New","Medium","","","Enter one-line summary","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=6
 '"vbajson7","Defect","New","Medium","","","Cannot parse a JSON string containing an array...","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=7
 '"vbajson8","Defect","New","Medium","","","Cannot convert a 2-d array to JSON","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=8
@@ -80,6 +80,7 @@ Option Private Module
 
 ' 20141124 - v011 - FIXED vbajson3 - s/vbNewLine/vbLf
     ' FIXED vbajson4
+    ' FIXED vbajson5. Test case needed.
 ' 20141121 - v011 - FIXED #003 - parse_test3 breaks RunAllTests
 
 ' http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
@@ -213,7 +214,7 @@ Private Sub vbajson5()
 
     Debug.Print "=> vbajson5"
 
-    Debug.Print , "vbajson5: Test case needed."
+    Debug.Print , "vbajson5: FIXED. Test case needed."
 
     Set lib = Nothing
     Set o = Nothing
