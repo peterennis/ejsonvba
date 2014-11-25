@@ -37,7 +37,19 @@ Option Private Module
     '        Else
     '            parseNumber = CInt(Value)
 '"vbajson5","Defect","FIXED","Medium","","","Added suport for JSON-RPC 2.0 in jsonlib","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=5
-'"vbajson6","Defect","New","Medium","","","Enter one-line summary","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=6
+    ' Code sample added, commented out - needs test case
+'"vbajson6","Defect","FIXED","Medium","","","Enter one-line summary","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=6
+    ' Reported by yama...@gmail.com, Sep 4, 2009
+    ' I found loop permanently when a string "key" include a colon.
+    ' so i changed "parseKey()" tentatively. as following:
+    '     Case ":"
+    '        If Not dquote And Not squote Then
+    '           index = index + 1
+    '           Exit Do
+    '        ElseIf dquote And Not squote Then
+    '            parseKey = parseKey & char
+    '           index = index + 1
+    '        End If
 '"vbajson7","Defect","New","Medium","","","Cannot parse a JSON string containing an array...","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=7
 '"vbajson8","Defect","New","Medium","","","Cannot convert a 2-d array to JSON","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=8
 '"vbajson9","Defect","New","Medium","","","Thank you for this code!","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=9
@@ -81,6 +93,7 @@ Option Private Module
 ' 20141124 - v011 - FIXED vbajson3 - s/vbNewLine/vbLf
     ' FIXED vbajson4
     ' FIXED vbajson5. Test case needed.
+    ' FIXED vbajson6. Test case needed.
 ' 20141121 - v011 - FIXED #003 - parse_test3 breaks RunAllTests
 
 ' http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
