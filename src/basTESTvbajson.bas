@@ -71,6 +71,9 @@ Option Private Module
     '
     'Please provide any additional information below.
     'Parsing JSON strings containing a single record works perfectly, I'm using your VBA library to read/write/delete data in CouchDB.
+    '
+    ' ANSWER:
+    ' There is a " missing before A7C3CF74EA95C9F so this will not parse correctly.
     '---------
     '"vbajson7b"
     '#1 amrita.c...@gmail.com
@@ -149,8 +152,8 @@ Public Sub RunAllvbajsonTests()
 '    Debug.Print "=> vbajson6 Finished!" & vbCrLf
     vbajson7
     Debug.Print "=> vbajson7 Finished!" & vbCrLf
-    vbajson7b
-    Debug.Print "=> vbajson7b Finished!" & vbCrLf
+'    vbajson7b
+'    Debug.Print "=> vbajson7b Finished!" & vbCrLf
 Exit Sub
     vbajson8
     Debug.Print "=> vbajson8 Finished!" & vbCrLf
@@ -288,10 +291,21 @@ Private Sub vbajson7()
 
     Dim lib As New jsonlib
     Dim o As Object
+    Dim strTest As String
 
     Debug.Print "=> vbajson7"
 
-    Debug.Print , "vbajson7: Test case needed."
+    strTest = "{""total_rows"":36778,""offset"":26220,""rows"":[" & _
+                "{""id"":""6b80c0b76"",""key"":""a@bbb.net"",""value"":{""entryid"":""81151F241C2500"",""subject"":""test subject"",""senton"":""2009-7-09 22:03:43""}}," & _
+                "{""id"":""b10ed9bee"",""key"":""b@bbb.net"",""value"":{""entryid"":A7C3CF74EA95C9F"",""subject"":""test subject2"",""senton"":""2009-4-21 10:18:26""}}]}"
+    Debug.Print "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+   
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "FAILED"
 
     Set lib = Nothing
     Set o = Nothing
