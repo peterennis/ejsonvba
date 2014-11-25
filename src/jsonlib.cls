@@ -256,6 +256,10 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
             myValue = myValue & char
             index = index + 1
         Else
+            ' for PT Local Settings where decimal is ","
+            If CStr(1.2) = "1,2" Then
+                myValue = Replace(myValue, ".", ",", 1, -1, 1)
+            End If
             parseNumber = CDec(myValue)
             'If InStr(myValue, ".") Or InStr(myValue, "e") Or InStr(myValue, "E") Then
             '    parseNumber = CDbl(myValue)

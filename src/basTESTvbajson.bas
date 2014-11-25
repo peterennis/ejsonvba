@@ -15,7 +15,7 @@ Option Private Module
     '              SB.Append char
     '              index = index + 1
     '           Case "b"
-'"vbajson3","Defect","New","Medium","","","Incorrect CrLf encoding?","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=3
+'"vbajson3","Defect","FIXED","Medium","","","Incorrect CrLf encoding?","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=3
     ' Reported by webmas...@ediy.co.nz, Mar 24, 2009
     ' Some data seemed to have double the enters in text every time it was saved,
     ' it seems to be because
@@ -27,7 +27,15 @@ Option Private Module
     '                 SB.Append vbLf
     '                 index = index + 1
     ' in the parseString function.
-'"vbajson4","Defect","New","Medium","","","improve parseNumber() for other decimal settings","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=4
+'"vbajson4","Defect","FIXED","Medium","","","improve parseNumber() for other decimal settings","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=4
+    ' Reported by telmo.ca...@gmail.com, Jun 12, 2009
+    ' I have added to parseNumber():
+    '        If InStr(Value, ".") Or InStr(Value, "e") Or InStr(Value, "E") Then
+    '            ' for PT Local Settings where decimal is ","
+    '            If CStr(1.2) = "1,2" Then value = Replace(value, ".", ",", 1, -1, 1)
+    '            parseNumber = CDbl(Value)
+    '        Else
+    '            parseNumber = CInt(Value)
 '"vbajson5","Defect","New","Medium","","","Added suport for JSON-RPC 2.0 in jsonlib","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=5
 '"vbajson6","Defect","New","Medium","","","Enter one-line summary","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=6
 '"vbajson7","Defect","New","Medium","","","Cannot parse a JSON string containing an array...","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=7
@@ -70,6 +78,8 @@ Option Private Module
 ' #001 - Run-time error '424' Object required in test vbajson1
 '=============================================================================================================================
 
+' 20141124 - v011 - FIXED vbajson3 - s/vbNewLine/vbLf
+    ' FIXED vbajson4
 ' 20141121 - v011 - FIXED #003 - parse_test3 breaks RunAllTests
 
 ' http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
@@ -175,7 +185,7 @@ Private Sub vbajson3()
 
     Debug.Print "=> vbajson3"
 
-    Debug.Print , "vbajson3: Test case needed."
+    Debug.Print , "vbajson3: FIXED."
 
     Set lib = Nothing
     Set o = Nothing
@@ -189,7 +199,7 @@ Private Sub vbajson4()
 
     Debug.Print "=> vbajson4"
 
-    Debug.Print , "vbajson4: Test case needed."
+    Debug.Print , "vbajson4: FIXED. Testing needed for other locale."
 
     Set lib = Nothing
     Set o = Nothing
