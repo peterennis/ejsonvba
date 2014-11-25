@@ -195,7 +195,7 @@ Private Function parseString(ByRef str As String, ByRef index As Long) As String
     Call skipChar(str, index)
 
     quote = Mid(str, index, 1)
-    Debug.Print , "quote=" & quote, index
+    'Debug.Print , "quote=" & quote, index
     index = index + 1
 
     Do While index > 0 And index <= Len(str)
@@ -256,11 +256,12 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
             myValue = myValue & char
             index = index + 1
         Else
-            If InStr(myValue, ".") Or InStr(myValue, "e") Or InStr(myValue, "E") Then
-                parseNumber = CDbl(myValue)
-            Else
-                parseNumber = CInt(myValue)
-            End If
+            parseNumber = CDec(myValue)
+            'If InStr(myValue, ".") Or InStr(myValue, "e") Or InStr(myValue, "E") Then
+            '    parseNumber = CDbl(myValue)
+            'Else
+            '    parseNumber = CInt(myValue)
+            'End If
             Exit Function
         End If
     Loop
@@ -281,7 +282,9 @@ Private Function parseBoolean(ByRef str As String, ByRef index As Long) As Boole
         parseBoolean = False
         index = index + 5
     Else
-        Err.Raise vbObjectError + INVALID_BOOLEAN, Description:="char " & index & " : " & Mid(str, index)
+        psErrors = psErrors & Err.Description & " - Invalid Boolean at position " & index & _
+                        " : " & Mid(str, index) & vbCrLf
+        'Err.Raise vbObjectError + INVALID_BOOLEAN, Description:="char " & index & " : " & Mid(str, index)
     End If
 
 End Function
@@ -297,7 +300,9 @@ Private Function parseNull(ByRef str As String, ByRef index As Long)
         parseNull = Null
         index = index + 4
     Else
-        Err.Raise vbObjectError + INVALID_NULL, Description:="char " & index & " : " & Mid(str, index)
+        psErrors = psErrors & Err.Description & " - Invalid Null value at position " & index & _
+                        " : " & Mid(str, index) & vbCrLf
+        'Err.Raise vbObjectError + INVALID_NULL, Description:="char " & index & " : " & Mid(str, index)
     End If
 
 End Function
@@ -319,7 +324,10 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                 If Not dquote Then
                     Call skipChar(str, index)
                     If Mid(str, index, 1) <> ":" Then
-                        Err.Raise vbObjectError + INVALID_KEY, Description:="char " & index & " : " & parseKey
+                        psErrors = psErrors & Err.Description & " - Invalid Key value at position " & index & _
+                                    " : " & parseKey & vbCrLf
+                        'Err.Raise vbObjectError + INVALID_KEY, Description:="char " & index & " : " & parseKey
+                        Exit Do
                     End If
                 End If
             Case "'"
@@ -328,13 +336,18 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                 If Not squote Then
                     Call skipChar(str, index)
                     If Mid(str, index, 1) <> ":" Then
-                        Err.Raise vbObjectError + INVALID_KEY, Description:="char " & index & " : " & parseKey
+                        psErrors = psErrors & Err.Description & " - Invalid Key value at position " & index & _
+                                    " : " & parseKey & vbCrLf
+                        'Err.Raise vbObjectError + INVALID_KEY, Description:="char " & index & " : " & parseKey
+                        Exit Do
                     End If
                 End If
             Case ":"
                 If Not dquote And Not squote Then
                     index = index + 1
                     Exit Do
+                Else
+                    parseKey = parseKey & char
                 End If
             Case Else
                 If InStr(vbCrLf & vbCr & vbLf & vbTab & " ", char) Then
@@ -354,9 +367,58 @@ End Function
 'Public Sub skipChar(ByRef str As String, ByRef index As Long)
 Friend Sub skipChar(ByRef str As String, ByRef index As Long)
 
-    While index > 0 And index <= Len(str) And InStr(vbCrLf & vbCr & vbLf & vbTab & " ", Mid(str, index, 1))
+'    While index > 0 And index <= Len(str) And InStr(vbCrLf & vbCr & vbLf & vbTab & " ", Mid(str, index, 1))
+'        index = index + 1
+'    Wend
+
+    Dim bComment As Boolean
+    Dim bStartComment As Boolean
+    Dim bLongComment As Boolean
+    Do While index > 0 And index <= Len(str)
+        Select Case Mid(str, index, 1)
+            Case vbCr, vbLf
+                If Not bLongComment Then
+                    bStartComment = False
+                    bComment = False
+                End If
+         
+            Case vbTab, " ", "(", ")"
+
+            Case "/"
+                If Not bLongComment Then
+                    If bStartComment Then
+                        bStartComment = False
+                        bComment = True
+                    Else
+                        bStartComment = True
+                        bComment = False
+                        bLongComment = False
+                    End If
+                Else
+                    If bStartComment Then
+                        bLongComment = False
+                        bStartComment = False
+                        bComment = False
+                End If
+            End If
+
+        Case "*"
+            If bStartComment Then
+                bStartComment = False
+                bComment = True
+                bLongComment = True
+            Else
+                bStartComment = True
+            End If
+
+        Case Else
+            If Not bComment Then
+                Exit Do
+            End If
+        End Select
+
         index = index + 1
-    Wend
+    Loop
 
 End Sub
 
