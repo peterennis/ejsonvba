@@ -6,7 +6,7 @@ Option Private Module
 '"ID","Type","Status","Priority","Milestone","Owner","Summary","AllLabels","Link"
 '"vbajson1","Defect","FIXED","Medium","","","outcome","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=1
     ' How can i read a parsed JSON string as an array?
-'"vbajson2","Defect","New","High","","","parseString bug","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=2
+'"vbajson2","Defect","New","HIGH","","","parseString bug","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=2
     ' I found an issue that crashes the parseString function where data delimited
     ' with a single quote and containing encoded single quotes.
     ' It causes a freeze. This can be fixed by adding a single quote to the case statement:
@@ -50,7 +50,7 @@ Option Private Module
     '            parseKey = parseKey & char
     '           index = index + 1
     '        End If
-'"vbajson7","Defect","New","Medium","","","Cannot parse a JSON string containing an array...","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=7
+'"vbajson7","Defect","New","HIGH","","","Cannot parse a JSON string containing an array...","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=7
 'Reported by c...@gmx.net, Oct 18, 2009
     'What steps will reproduce the problem?
     '1. Put this string in a variable:
