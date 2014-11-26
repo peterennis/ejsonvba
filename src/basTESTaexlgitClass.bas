@@ -3,6 +3,8 @@ Option Explicit
 Option Compare Text
 Option Private Module
 
+Private Const SOURCEROOT = "C:\ae\eJsonVBA\src"
+
 ' Default Usage:
 ' The following folders are used if no custom configuration is provided:
 ' aexlgitType.SourceFolder = "C:\ae\aexlgit\aerc\src\"
@@ -19,7 +21,7 @@ Option Private Module
 Public Function EXPORT_THE_CODE() As Boolean
     On Error GoTo 0
     'aexlgitClassTest
-    aexlgitClassTest varDebug:="varDebug", varSrcFldr:="C:\ae\eJsonVBA\src"
+    aexlgitClassTest varDebug:="varDebug", varSrcFldr:=SOURCEROOT
 End Function
 
 Public Function aexlgitClassTest(Optional ByVal varDebug As Variant, _

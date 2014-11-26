@@ -34,8 +34,8 @@ Option Compare Text
 
 Private Declare Sub Sleep Lib "kernel32" (ByVal lngMilliSeconds As Long)
 
-Private Const aexlgitVERSION As String = "0.1.0"
-Private Const aexlgitVERSION_DATE As String = "November 14, 2014"
+Private Const aexlgitVERSION As String = "0.1.1"
+Private Const aexlgitVERSION_DATE As String = "November 26, 2014"
 
 Private Type mySetupType
     SourceFolder As String
