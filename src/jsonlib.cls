@@ -61,7 +61,6 @@ Public Function parse(ByRef str As String) As Object
         Set parse = parseArray(str, index)
     Case Else
         psErrors = "str=" & str & " index=" & index & " Invalid JSON"
-        '''GetParserErrors
     End Select
 
 End Function
@@ -78,7 +77,6 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
     ' "{"
     Call skipChar(str, index)
 
-    'If Mid(str, index, 1) <> "{" Then Err.Raise vbObjectError + INVALID_OBJECT, Description:="char " & index & " : " & Mid(str, index)
     If Mid(str, index, 1) <> "{" Then
         psErrors = psErrors & "Invalid Object at position " & index & " : " & Mid(str, index) & vbCrLf
         Exit Function
@@ -205,39 +203,32 @@ Private Function parseString(ByRef str As String, ByRef index As Long) As String
             index = index + 1
             char = Mid(str, index, 1)
             Select Case (char)
-    '-            Case """", "\\", "/"
-    '+            Case "\"
-    '+                parseString = parseString & "\"
-    '+                index = index + 1
-    '+            Case """", "/", "'"
-    '                 parseString = parseString & char
-    '                 index = index + 1
-            Case "\"
-                parseString = parseString & "\"
-                index = index + 1
-            Case """", "/", "'", "\\"
-                parseString = parseString & char
-                index = index + 1
-            Case "b"
-                parseString = parseString & vbBack
-                index = index + 1
-            Case "f"
-                parseString = parseString & vbFormFeed
-                index = index + 1
-            Case "n"
-                parseString = parseString & vbLf        '''vbNewLine
-                index = index + 1
-            Case "r"
-                parseString = parseString & vbCr
-                index = index + 1
-            Case "t"
-                parseString = parseString & vbTab
-                index = index + 1
-            Case "u"
-                index = index + 1
-                code = Mid(str, index, 4)
-                parseString = parseString & ChrW(Val("&h" + code))
-                index = index + 4
+                Case "\"
+                    parseString = parseString & "\"
+                    index = index + 1
+                Case """", "/", "'", "\\"
+                    parseString = parseString & char
+                    index = index + 1
+                Case "b"
+                    parseString = parseString & vbBack
+                    index = index + 1
+                Case "f"
+                    parseString = parseString & vbFormFeed
+                    index = index + 1
+                Case "n"
+                    parseString = parseString & vbLf
+                    index = index + 1
+                Case "r"
+                    parseString = parseString & vbCr
+                    index = index + 1
+                Case "t"
+                    parseString = parseString & vbTab
+                    index = index + 1
+                Case "u"
+                    index = index + 1
+                    code = Mid(str, index, 4)
+                    parseString = parseString & ChrW(Val("&h" + code))
+                    index = index + 4
             End Select
         Case quote
             index = index + 1
@@ -266,16 +257,11 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
             myValue = myValue & char
             index = index + 1
         Else
-            ' for PT Local Settings where decimal is ","
+            ' for PT Locale Settings where decimal is ","
             If CStr(1.2) = "1,2" Then
                 myValue = Replace(myValue, ".", ",", 1, -1, 1)
             End If
             parseNumber = CDec(myValue)
-            'If InStr(myValue, ".") Or InStr(myValue, "e") Or InStr(myValue, "E") Then
-            '    parseNumber = CDbl(myValue)
-            'Else
-            '    parseNumber = CInt(myValue)
-            'End If
             Exit Function
         End If
     Loop
@@ -298,7 +284,6 @@ Private Function parseBoolean(ByRef str As String, ByRef index As Long) As Boole
     Else
         psErrors = psErrors & Err.Description & " - Invalid Boolean at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
-        'Err.Raise vbObjectError + INVALID_BOOLEAN, Description:="char " & index & " : " & Mid(str, index)
     End If
 
 End Function
@@ -316,7 +301,6 @@ Private Function parseNull(ByRef str As String, ByRef index As Long)
     Else
         psErrors = psErrors & Err.Description & " - Invalid Null value at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
-        'Err.Raise vbObjectError + INVALID_NULL, Description:="char " & index & " : " & Mid(str, index)
     End If
 
 End Function
@@ -340,7 +324,6 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                     If Mid(str, index, 1) <> ":" Then
                         psErrors = psErrors & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
-                        'Err.Raise vbObjectError + INVALID_KEY, Description:="char " & index & " : " & parseKey
                         Exit Do
                     End If
                 End If
@@ -352,7 +335,6 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                     If Mid(str, index, 1) <> ":" Then
                         psErrors = psErrors & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
-                        'Err.Raise vbObjectError + INVALID_KEY, Description:="char " & index & " : " & parseKey
                         Exit Do
                     End If
                 End If

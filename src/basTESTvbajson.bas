@@ -203,7 +203,25 @@ Option Private Module
     ' -----------
     ' For VBA the " has to be "" and for JSON \ needs to be escaped as \\
     ' See vbajson12 test. I do not have the locale setup to verify the international characters.
-'"vbajson13","Defect","New","Medium","","","here's an update for office 64-bit support","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=13
+'"vbajson13","Defect","OPEN","Medium","","","here's an update for office 64-bit support","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=13
+    ' Hi I am trying to parse the below but I am getting an error that Object Not Found.
+    '{"schedules":[{"summary":"Sign in","executedOn":"10/Oct/12 1:50 PM","cycleName":"asdf","cycleID":15,"label":"1, 2, 3, 4, 5","issueId":123,"versionName":"asdf","issueID":123,"defects":[
+    '{"key":"124","status":"Closed","summary":"Title"},{"key":"asdf","status":"Closed","summary":"asdfasdf"}],"executedByDisplay":"Name of person","executionStatus":"2","htmlComment":"asdfasd","projectID":"asdf","executedBy":"asdasg","component":"","versionID":"adasd","issueKey":"asdf","scheduleID":73,"comment":"adsfasdf"},
+    '{"summary":"asdf","executedOn":"10/Oct/12 1:17 PM","cycleName":"asdf","cycleID":15,"label":"1, 2, 3, 4, 5, 6, 7, 89, 5, 34","issueId":10012,"versionName":"sdf","issueID":10012,"defects":[
+    '{"key":"asdf","asdf":"asdf","summary":"asdf"},{"key":"asdf","status":"Closed","summary":"asdf"}],"executedByDisplay":"asdf","executionStatus":"2","htmlComment":"asdf","projectID":10002,"executedBy":"asdf","component":"","versionID":10001,"issueKey":"Edf","scheduleID":18,"comment":"asdf"},
+    '{"summary":"asdf","executedOn":"10/Oct/12 1:20 PM","cycleName":"asdf","cycleID":15,"label":"1, 2","issueId":10011,"versionName":"asdf","issueID":10011,"defects":[
+    '{"key":"asdf","status":"Closed","summary":"asdf"},{"key":"asdf","status":"Closed","summary":"asdf - asdf"}],"executedByDisplay":"asdf","executionStatus":"2","htmlComment":"asdf","projectID":10002,"executedBy":"asdf","component":"","versionID":10001,"issueKey":"asdf","scheduleID":17,"comment":"asdf"},
+    '{"summary":"asdfasdf","executedOn":"10/Oct/12 1:26 PM","cycleName":"asdf","cycleID":15,"label":"1,2","issueId":10010,"versionName":"asdf","issueID":10010,"defects":[
+    '{"key":"asdf","status":"Closed","summary":"asdfa"},{"key":"asdf","status":"Closed","summary":"asdf"}],"executedByDisplay":"asdfasf","executionStatus":"2","htmlComment":"asdfafd","projectID":10002,"executedBy":"asdf","component":"","versionID":10001,"issueKey":"afgaf","scheduleID":16,"comment":"asdf"}]}
+    '
+    ' ANSWER
+    ' ---------
+    ' It validates correctly as JSON, but in the VBA IDE the string is too long.
+    ' Broke it up and tested in vbajson13
+    '
+    ' OPEN
+    ' ---------
+    ' String Builder Class and Office x64
 '"vbajson14","Defect","New","Medium","","","Unable to parse strings containing colons - Infinite loop","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=14
 '"vbajson15","Defect","New","Medium","","","Unable to handle multi-dimensional arrays","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=15
 '"vbajson16","Defect","New","Medium","","","parseNumber and regional settings","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=16
@@ -241,6 +259,7 @@ Option Private Module
     ' FIXED vbajson10
     ' FIXED vbajson11
     ' FIXED vbajson12
+    ' FIXED vbajson13, but vbajson13b OPEN and TBD for string builder class and Office x64
 ' 20141124 - v011 - FIXED vbajson3 - s/vbNewLine/vbLf
     ' FIXED vbajson4
     ' FIXED vbajson5. Test case needed.
@@ -275,23 +294,23 @@ Public Sub RunAllvbajsonTests()
 '    Debug.Print "=> vbajson7 Finished!" & vbCrLf
 '    vbajson7b
 '    Debug.Print "=> vbajson7b Finished!" & vbCrLf
-    vbajson8
-    Debug.Print "=> vbajson8 Finished!" & vbCrLf
-    vbajson8b
-    Debug.Print "=> vbajson8b Finished!" & vbCrLf
-    vbajson8c
-    Debug.Print "=> vbajson8c Finished!" & vbCrLf
-    vbajson9
-    Debug.Print "=> vbajson9 Finished!" & vbCrLf
-    vbajson10
-    Debug.Print "=> vbajson10 Finished!" & vbCrLf
-    vbajson11
-    Debug.Print "=> vbajson11 Finished!" & vbCrLf
-    vbajson12
-    Debug.Print "=> vbajson12 Finished!" & vbCrLf
-Exit Sub
+'    vbajson8
+'    Debug.Print "=> vbajson8 Finished!" & vbCrLf
+'    vbajson8b
+'    Debug.Print "=> vbajson8b Finished!" & vbCrLf
+'    vbajson8c
+'    Debug.Print "=> vbajson8c Finished!" & vbCrLf
+'    vbajson9
+'    Debug.Print "=> vbajson9 Finished!" & vbCrLf
+'    vbajson10
+'    Debug.Print "=> vbajson10 Finished!" & vbCrLf
+'    vbajson11
+'    Debug.Print "=> vbajson11 Finished!" & vbCrLf
+'    vbajson12
+'    Debug.Print "=> vbajson12 Finished!" & vbCrLf
     vbajson13
     Debug.Print "=> vbajson13 Finished!" & vbCrLf
+Exit Sub
     vbajson14
     Debug.Print "=> vbajson14 Finished!" & vbCrLf
     vbajson15
@@ -700,10 +719,57 @@ Private Sub vbajson13()
 
     Dim lib As New jsonlib
     Dim o As Object
+    Dim str1 As String
+    Dim str2 As String
+    Dim str3 As String
+    Dim str4 As String
+    Dim str5 As String
+    Dim str6 As String
+    Dim str7 As String
+    Dim str8 As String
+    Dim strTest As String
 
     Debug.Print "=> vbajson13"
 
-    Debug.Print , "vbajson13: Test case needed."
+    str1 = "{""schedules"":[{""summary"":""Sign in"",""executedOn"":""10/Oct/12 1:50 PM"",""cycleName"":""asdf"",""cycleID"":15,""label"":""1, 2, 3, 4, 5"",""issueId"":123,""versionName"":""asdf"",""issueID"":123,""defects"":["
+    Debug.Print , "str1=" & str1
+    str2 = "{""key"":""124"",""status"":""Closed"",""summary"":""Title""},{""key"":""asdf"",""status"":""Closed"",""summary"":""asdfasdf""}],""executedByDisplay"":""Name of person"",""executionStatus"":""2"",""htmlComment"":""asdfasd"",""projectID"":""asdf"",""executedBy"":""asdasg"",""component"":"""",""versionID"":""adasd"",""issueKey"":""asdf"",""scheduleID"":73,""comment"":""adsfasdf""},"
+    Debug.Print , "str2=" & str2
+    str3 = "{""summary"":""asdf"",""executedOn"":""10/Oct/12 1:17 PM"",""cycleName"":""asdf"",""cycleID"":15,""label"":""1, 2, 3, 4, 5, 6, 7, 89, 5, 34"",""issueId"":10012,""versionName"":""sdf"",""issueID"":10012,""defects"":["
+    Debug.Print , "str3=" & str3
+    str4 = "{""key"":""asdf"",""asdf"":""asdf"",""summary"":""asdf""},{""key"":""asdf"",""status"":""Closed"",""summary"":""asdf""}],""executedByDisplay"":""asdf"",""executionStatus"":""2"",""htmlComment"":""asdf"",""projectID"":10002,""executedBy"":""asdf"",""component"":"""",""versionID"":10001,""issueKey"":""Edf"",""scheduleID"":18,""comment"":""asdf""},"
+    Debug.Print , "str4=" & str4
+    str5 = "{""summary"":""asdf"",""executedOn"":""10/Oct/12 1:20 PM"",""cycleName"":""asdf"",""cycleID"":15,""label"":""1, 2"",""issueId"":10011,""versionName"":""asdf"",""issueID"":10011,""defects"":["
+    Debug.Print , "str5=" & str5
+    str6 = "{""key"":""asdf"",""status"":""Closed"",""summary"":""asdf""},{""key"":""asdf"",""status"":""Closed"",""summary"":""asdf - asdf""}],""executedByDisplay"":""asdf"",""executionStatus"":""2"",""htmlComment"":""asdf"",""projectID"":10002,""executedBy"":""asdf"",""component"":"""",""versionID"":10001,""issueKey"":""asdf"",""scheduleID"":17,""comment"":""asdf""},"
+    Debug.Print , "str6=" & str6
+    str7 = "{""summary"":""asdfasdf"",""executedOn"":""10/Oct/12 1:26 PM"",""cycleName"":""asdf"",""cycleID"":15,""label"":""1,2"",""issueId"":10010,""versionName"":""asdf"",""issueID"":10010,""defects"":["
+    Debug.Print , "str7=" & str7
+    str8 = "{""key"":""asdf"",""status"":""Closed"",""summary"":""asdfa""},{""key"":""asdf"",""status"":""Closed"",""summary"":""asdf""}],""executedByDisplay"":""asdfasf"",""executionStatus"":""2"",""htmlComment"":""asdfafd"",""projectID"":10002,""executedBy"":""asdf"",""component"":"""",""versionID"":10001,""issueKey"":""afgaf"",""scheduleID"":16,""comment"":""asdf""}]}"
+    Debug.Print , "str8=" & str8
+
+    strTest = str1 & str2 & str3 & str4 & str5 & str6 & str7 & str8
+
+    Set o = lib.parse(strTest)
+    Debug.Print , "strTest=" & strTest
+    Debug.Assert Err.Number = 0
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "VALIDATED - WATCH OUT FOR LINE WRAP WITH C&P TO JSONLint"
+    Debug.Print
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson13b()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson13b"
+
+    Debug.Print , "vbajson13b: Test case needed. String Builder Class and Office x64 - TBD."
 
     Set lib = Nothing
     Set o = Nothing
