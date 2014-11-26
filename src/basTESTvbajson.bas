@@ -30,12 +30,12 @@ Option Private Module
 '"vbajson4","Defect","FIXED","Medium","","","improve parseNumber() for other decimal settings","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=4
     ' Reported by telmo.ca...@gmail.com, Jun 12, 2009
     ' I have added to parseNumber():
-    '        If InStr(Value, ".") Or InStr(Value, "e") Or InStr(Value, "E") Then
+    '        If InStr(myValue, ".") Or InStr(myValue, "e") Or InStr(myValue, "E") Then
     '            ' for PT Local Settings where decimal is ","
-    '            If CStr(1.2) = "1,2" Then value = Replace(value, ".", ",", 1, -1, 1)
-    '            parseNumber = CDbl(Value)
+    '            If CStr(1.2) = "1,2" Then myValue = Replace(myValue, ".", ",", 1, -1, 1)
+    '            parseNumber = CDbl(myValue)
     '        Else
-    '            parseNumber = CInt(Value)
+    '            parseNumber = CInt(myValue)
 '"vbajson5","Defect","FIXED","Medium","","","Added suport for JSON-RPC 2.0 in jsonlib","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=5
     ' Code sample added, commented out - needs test case
 '"vbajson6","Defect","FIXED","Medium","","","Enter one-line summary","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=6
@@ -81,10 +81,128 @@ Option Private Module
     'THIS IS MY JSON STRING
     'but when i try to parse(mystring)..I get back the same string
 '"vbajson8","Defect","New","Medium","","","Cannot convert a 2-d array to JSON","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=8
-'"vbajson9","Defect","New","Medium","","","Thank you for this code!","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=9
-'"vbajson10","Defect","New","Medium","","","improve parseNumber() with Long number","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=10
-'"vbajson11","Defect","New","Medium","","","double backslash parse problem","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=11
-'"vbajson12","Defect","New","Medium","","","String wont parse","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=12
+    'Reported by mheber...@gmail.com, Jan 15, 2010
+    '-What steps will reproduce the problem?
+    '1. Create a 2-d array, such as:
+    'Dim arr(0 To 1, 0 To 1) As String
+    'arr(0, 0) = "a"
+    'arr(0, 1) = "b"
+    'arr(1, 0) = "c"
+    'arr(1, 1) = "d"
+    '2. Try to convert to JSON with
+    'Debug.Print lib.toString(arr)
+    '-What is the expected output? What do you see instead?
+    'I expect [["a", "b"], ["c", "d"]]
+    'but I get a "Type Mismatch" error. If I change the array type to Variant, I
+    'get the following:
+    '[[,],[,]]
+    'but it returns an error.
+    '-What version of the product are you using? On what operating system?
+    'json.xls downloaded on 1/15/2010 from the Google Code Site.
+    '-Please provide any additional information below.
+    'Thanks for looking into it!
+    '
+    'Oct 14, 2014 #1 walid.na...@gmail.com
+    'One work-around seems to be to use an array of arrays instead of a 2-d array.
+    'Also, arrays seem to need to be of type Variant for this to work.
+    'So
+    '    Dim arr(0 To 3) As Variant
+    '    arr(0) = "a"
+    '    arr(1) = "b"
+    '    arr(2) = "c"
+    '    arr(3) = "d"
+    'works. And
+    '    Dim arr(1 To 2) As Variant
+    '    arr(1) = Array("a", "b")
+    '    arr(2) = Array("c", "d")
+    'works.
+'"vbajson9","Defect","CLOSED","Medium","","","Thank you for this code!","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=9
+'"vbajson10","Defect","FIXED","Medium","","","improve parseNumber() with Long number","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=10
+    'Reported by akun...@gmail.com, May 8, 2010
+    '-What steps will reproduce the problem?
+    '  1. Set json = lib.parse("{"BigNumber":32769}")
+    '  2. an Exception was raise because the CInt Cannot process the Big number
+    '-What is the expected output? What do you see instead?
+    '  Debug.Assert json.Item("BigNumber") = 32769
+    '-What version of the product are you using? On what operating system?
+    'Please provide any additional information below.
+    '
+    ''I use CLng to replace CInt
+    'Private Function parseNumber(ByRef str As String, ByRef index As Long)
+    '
+    '    Dim value   As String
+    '    Dim char    As String
+    '
+    '    Call skipChar(str, index)
+    '    Do While index > 0 And index <= Len(str)
+    '        char = Mid(str, index, 1)
+    '        If InStr("+-0123456789.eE", char) Then
+    '            value = value & char
+    '            index = index + 1
+    '        Else
+    '            If InStr(value, ".") Or InStr(value, "e") Or InStr(value, "E") Then
+    '                parseNumber = CDbl(value)
+    '            Else
+    '                parseNumber = CLng(value) 'CInt(value)
+    '            End If
+    '            Exit Function
+    '        End If
+    '    Loop
+    'End Function
+    'Aug 27, 2012 #1 djm...@googlemail.com
+    'This needs CDbl instead of CInt. Otherwise you can get numbers which are written as a single number but are too big for long. (because it's not written using scientific format, the check for "e" or "E" won't pick it up).
+'"vbajson11","Defect","FIXED","Medium","","","double backslash parse problem","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=11
+    'Reported by akun...@gmail.com, May 12, 2010
+    '-What steps will reproduce the problem?
+    'I create an Test Case:
+    '
+    'Sub parse_test7()
+    '
+    '    Dim lib As New jsonlib
+    '    Dim json As Object
+    '
+    '    Set json = lib.parse("{""Path"":""C:\\sample\\sample.jpg""}")
+    '    Debug.Assert Err.Number = 0
+    '
+    '    Debug.Print lib.toString(json)
+    '
+    '    Set json = Nothing
+    '    Set lib = Nothing
+    '
+    'End Sub
+    '
+    '-What is the expected output? What do you see instead?
+    'expected:
+    '{"Path":"C:\sample\sample.jpg"}
+    'instead:
+    '{"Path":"C:samplesample.jpg"}
+    '-What version of the product are you using? On what operating system?
+    'Please provide any additional information below.
+    '
+    'I manual fix by follow:
+    '@@ -149,7 +147,10 @@
+    '             index = index + 1
+    '             char = Mid(str, index, 1)
+    '             Select Case (char)
+    '-            Case """", "\\", "/"
+    '+            Case "\"
+    '+                parseString = parseString & "\"
+    '+                index = index + 1
+    '+            Case """", "/", "'"
+    '                 parseString = parseString & char
+    '                 index = index + 1
+    '             Case "b"
+'"vbajson12","Defect","FIXED","Medium","","","String wont parse","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=12
+    'Reported by ehb...@gmail.com, Aug 23, 2010
+    'Why wont the parser parse the string below ?
+    'It creates the root ListsState but leaves it empty, no sub objects are created.
+    '
+    '{"ListsState":{"MenuLocation":["Kelim","ChecklistTools"],"CurentLoadedChecklist":"ToolsConfig","InnerDoc":{"DapiotRegel":{"ClassName":"White","CHLTitle":"???? ???","Fields":{}},"ToolsConfig":{"ClassName":"White","CHLTitle":"??????","Fields":{"ToolsConfigHeliID":"036","ToolsConfigCrewSize":"3","ToolsConfigOperativeWgt":"1,500","ToolsConfigNumOf669":"0","ToolsConfigNumOf669Doc":"0","ToolsConfigNumOf669Med":"0","ToolsConfigNumOf669Equip":"0","ToolsConfigNumOfSol":"0","ToolsConfigNumOfPax":"0","ToolsConfigCargo":"0","ToolsConfigCar":"0","ToolsConfigFuelExtTanks":"0","ToolsConfigFuelTotal":"0","ToolsConfigCarUnits_Save":"?\"?"}}}}}
+    '
+    ' ANSWER
+    ' -----------
+    ' For VBA the " has to be "" and for JSON \ needs to be escaped as \\
+    ' See vbajson12 test. I do not have the locale setup to verify the international characters.
 '"vbajson13","Defect","New","Medium","","","here's an update for office 64-bit support","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=13
 '"vbajson14","Defect","New","Medium","","","Unable to parse strings containing colons - Infinite loop","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=14
 '"vbajson15","Defect","New","Medium","","","Unable to handle multi-dimensional arrays","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=15
@@ -110,21 +228,24 @@ Option Private Module
 ' %004 -
 ' %003 -
 ' %002 -
-' %001 - Get test result "VALIDATED" be verified automatically with online parser
+' %001 - Have test result "VALIDATED" be verified automatically with online parser - TBD
 ' Issues:
 ' #006 -
 ' #005 -
-' #004 -
-' #002 - vbatest2 still kills Excel
+' #004 - vbajson7 is a FAIL
+' #002 - vbajson2 still kills Excel
 ' #001 - Run-time error '424' Object required in test vbajson1
 '=============================================================================================================================
 
+' 20141125 - v011 - FIXED vbajson9
+    ' FIXED vbajson10
+    ' FIXED vbajson11
+    ' FIXED vbajson12
 ' 20141124 - v011 - FIXED vbajson3 - s/vbNewLine/vbLf
     ' FIXED vbajson4
     ' FIXED vbajson5. Test case needed.
     ' FIXED vbajson6. Test case needed.
     ' FIXED vbajson7b - @amrita.c... - paste the string into http://jsonlint.com/ validator and it validates.
-    '   -
 ' 20141121 - v011 - FIXED #003 - parse_test3 breaks RunAllTests
 
 ' http://stackoverflow.com/questions/244777/can-i-comment-a-json-file
@@ -140,8 +261,8 @@ Public Sub RunAllvbajsonTests()
 
 '    vbajson1
 '    Debug.Print "=> vbajson1 Finished!" & vbCrLf
-    vbajson2
-    Debug.Print "=> vbajson2 Finished!" & vbCrLf
+'    vbajson2
+'    Debug.Print "=> vbajson2 Finished!" & vbCrLf
 '    vbajson3
 '    Debug.Print "=> vbajson3 Finished!" & vbCrLf
 '    vbajson4
@@ -150,17 +271,41 @@ Public Sub RunAllvbajsonTests()
 '    Debug.Print "=> vbajson5 Finished!" & vbCrLf
 '    vbajson6
 '    Debug.Print "=> vbajson6 Finished!" & vbCrLf
-    vbajson7
-    Debug.Print "=> vbajson7 Finished!" & vbCrLf
+'    vbajson7
+'    Debug.Print "=> vbajson7 Finished!" & vbCrLf
 '    vbajson7b
 '    Debug.Print "=> vbajson7b Finished!" & vbCrLf
-Exit Sub
     vbajson8
     Debug.Print "=> vbajson8 Finished!" & vbCrLf
+    vbajson8b
+    Debug.Print "=> vbajson8b Finished!" & vbCrLf
+    vbajson8c
+    Debug.Print "=> vbajson8c Finished!" & vbCrLf
     vbajson9
     Debug.Print "=> vbajson9 Finished!" & vbCrLf
     vbajson10
     Debug.Print "=> vbajson10 Finished!" & vbCrLf
+    vbajson11
+    Debug.Print "=> vbajson11 Finished!" & vbCrLf
+    vbajson12
+    Debug.Print "=> vbajson12 Finished!" & vbCrLf
+Exit Sub
+    vbajson13
+    Debug.Print "=> vbajson13 Finished!" & vbCrLf
+    vbajson14
+    Debug.Print "=> vbajson14 Finished!" & vbCrLf
+    vbajson15
+    Debug.Print "=> vbajson15 Finished!" & vbCrLf
+    vbajson16
+    Debug.Print "=> vbajson16 Finished!" & vbCrLf
+    vbajson17
+    Debug.Print "=> vbajson17 Finished!" & vbCrLf
+    vbajson18
+    Debug.Print "=> vbajson18 Finished!" & vbCrLf
+    vbajson19
+    Debug.Print "=> vbajson19 Finished!" & vbCrLf
+    vbajson20
+    Debug.Print "=> vbajson20 Finished!" & vbCrLf
 
 End Sub
 
@@ -342,7 +487,60 @@ Private Sub vbajson8()
 
     Debug.Print "=> vbajson8"
 
-    Debug.Print , "vbajson8: Test case needed."
+    ' Create a 2-d array, such as:
+    Dim arr(0 To 1, 0 To 1) As String
+    arr(0, 0) = "a"
+    arr(0, 1) = "b"
+    arr(1, 0) = "c"
+    arr(1, 1) = "d"
+
+    ' Try to convert to JSON with
+    ' Debug.Print lib.toString(arr)
+    ' Type Mismatch ERROR raised here: toString = Replace(obj, ",", ".")
+    
+    Debug.Print , "vbajson8: FAILED. - Not supported in this version of VBA-JSON"
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson8b()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson8b"
+
+    Dim arr(0 To 3) As Variant
+    arr(0) = "a"
+    arr(1) = "b"
+    arr(2) = "c"
+    arr(3) = "d"
+
+    Debug.Print , "lib.toString(arr)=" & lib.toString(arr)
+
+    Debug.Print , "VALIDATED"
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson8c()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson8c"
+
+    Dim arr(1 To 2) As Variant
+    arr(1) = Array("a", "b")
+    arr(2) = Array("c", "d")
+
+    Debug.Print , "lib.toString(arr)=" & lib.toString(arr)
+
+    Debug.Print , "VALIDATED"
 
     Set lib = Nothing
     Set o = Nothing
@@ -356,7 +554,7 @@ Private Sub vbajson9()
 
     Debug.Print "=> vbajson9"
 
-    Debug.Print , "vbajson9: Test case needed."
+    Debug.Print , "vbajson9: CLOSED."
 
     Set lib = Nothing
     Set o = Nothing
@@ -367,14 +565,249 @@ Private Sub vbajson10()
 
     Dim lib As New jsonlib
     Dim o As Object
+    Dim strTest As String
 
     Debug.Print "=> vbajson10"
 
-    Debug.Print , "vbajson10: Test case needed."
+    strTest = "{""BigNumber1"":32769}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "VALIDATED"
+
+    strTest = "{""BigNumber2"":1234567890}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "VALIDATED"
+
+    strTest = "{""BigNumber3"":123456789012345678901}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "VALIDATED WITH ROUNDING"
+
+    strTest = "{""BigNumber4"":1234567890123456789012345678901234567890}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "VALIDATED WITH e+39"
 
     Set lib = Nothing
     Set o = Nothing
 
 End Sub
+
+Private Sub vbajson11()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+    Dim strTest As String
+
+    Debug.Print "=> vbajson11"
+
+    strTest = "{""Path"":""C:\sample\sample.jpg""}"
+    Set o = lib.parse(strTest)
+    Debug.Print , "1. strTest=" & strTest
+    Debug.Assert Err.Number = 0
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "VALIDATED"
+    Debug.Print
+
+    strTest = "{""Path"":""C:\\sample\\sample.jpg""}"
+    Debug.Print , "2. strTest=" & strTest
+    Set o = lib.parse(strTest)
+    Debug.Assert Err.Number = 0
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "VALIDATED"
+    Debug.Print
+
+    strTest = "{""Path"":""C:\\\sample\\\sample.jpg""}"
+    Debug.Print , "3. strTest=" & strTest
+    Set o = lib.parse(strTest)
+    Debug.Assert Err.Number = 0
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "VALIDATED"
+    Debug.Print
+
+    strTest = "{""Path"":""C:\\\\sample\\\\sample.jpg""}"
+    Debug.Print , "4. strTest=" & strTest
+    Set o = lib.parse(strTest)
+    Debug.Assert Err.Number = 0
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "VALIDATED"
+    Debug.Print
+
+    strTest = "{""Path"":""C:\\\\\sample\\\\\sample.jpg""}"
+    Debug.Print , "5. strTest=" & strTest
+    Set o = lib.parse(strTest)
+    Debug.Assert Err.Number = 0
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "VALIDATED"
+    Debug.Print
+
+    strTest = "{""Path"":""C:\\\\\\sample\\\\\\sample.jpg""}"
+    Debug.Print , "6. strTest=" & strTest
+    Set o = lib.parse(strTest)
+    Debug.Assert Err.Number = 0
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "VALIDATED"
+    Debug.Print
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson12()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+    Dim strTest As String
+
+    Debug.Print "=> vbajson12"
+
+    strTest = "{""ListsState"":{""MenuLocation"":[""Kelim"",""ChecklistTools""],""CurentLoadedChecklist"":""ToolsConfig"",""InnerDoc"":{""DapiotRegel"":{""ClassName"":""White"",""CHLTitle"":""???? ???"",""Fields"":{}},""ToolsConfig"":{""ClassName"":""White"",""CHLTitle"":""??????"",""Fields"":{""ToolsConfigHeliID"":""036"",""ToolsConfigCrewSize"":""3"",""ToolsConfigOperativeWgt"":""1,500"",""ToolsConfigNumOf669"":""0"",""ToolsConfigNumOf669Doc"":""0"",""ToolsConfigNumOf669Med"":""0"",""ToolsConfigNumOf669Equip"":""0"",""ToolsConfigNumOfSol"":""0"",""ToolsConfigNumOfPax"":""0"",""ToolsConfigCargo"":""0"",""ToolsConfigCar"":""0"",""ToolsConfigFuelExtTanks"":""0"",""ToolsConfigFuelTotal"":""0"",""ToolsConfigCarUnits_Save"":""?\\?""}}}}}"
+    Set o = lib.parse(strTest)
+    Debug.Print , "strTest=" & strTest
+    Debug.Assert Err.Number = 0
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "VALIDATED BUT INTERNATIONAL CHARACTERS NOT DISPLAYED - NEED APPROPRIATE LOCALE SETUP"
+    Debug.Print
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson13()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson13"
+
+    Debug.Print , "vbajson13: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson14()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson14"
+
+    Debug.Print , "vbajson14: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson15()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson15"
+
+    Debug.Print , "vbajson15: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson16()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson16"
+
+    Debug.Print , "vbajson16: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson17()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson17"
+
+    Debug.Print , "vbajson17: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson18()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson18"
+
+    Debug.Print , "vbajson18: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson19()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson19"
+
+    Debug.Print , "vbajson19: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+Private Sub vbajson20()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+
+    Debug.Print "=> vbajson20"
+
+    Debug.Print , "vbajson20: Test case needed."
+
+    Set lib = Nothing
+    Set o = Nothing
+
+End Sub
+
+
 
 
