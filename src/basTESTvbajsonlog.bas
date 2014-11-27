@@ -3,10 +3,24 @@ Option Explicit
 Option Compare Text
 Option Private Module
 
+' Original source from here: https://code.google.com/p/vba-json/source/detail?r=2
+' Author: ryoyoko
+' Date: Feb 14, 2009
+' New BSD License : http://opensource.org/licenses/BSD-3-Clause
+
+' Change integration:
+' Add the file JSON.bas from Michael Glaser, review and integrate changes as appropriate
+' VBJSON (http://www.ediy.co.nz/vbjson-json-parser-library-in-vb6-xidc55680.html)
+' is a VB6 adaptation of the VBA JSON project at http://code.google.com/p/vba-json/
+' Some bugs fixed, speed improvements added for VB6 by Michael Glaser (vbjson@ediy.co.nz)
+' BSD Licensed
+
 '"ID","Type","Status","Priority","Milestone","Owner","Summary","AllLabels","Link"
 '"vbajson1","Defect","FIXED","Medium","","","outcome","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=1
+    ' Reported by tkleinmi...@fenl.nl, Mar 19, 2009
     ' How can i read a parsed JSON string as an array?
 '"vbajson2","Defect","New","HIGH","","","parseString bug","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=2
+    ' Reported by webmas...@ediy.co.nz, Mar 24, 2009
     ' I found an issue that crashes the parseString function where data delimited
     ' with a single quote and containing encoded single quotes.
     ' It causes a freeze. This can be fixed by adding a single quote to the case statement:
@@ -37,6 +51,7 @@ Option Private Module
     '        Else
     '            parseNumber = CInt(myValue)
 '"vbajson5","Defect","FIXED","Medium","","","Added suport for JSON-RPC 2.0 in jsonlib","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=5
+    ' Reported by telmo.ca...@gmail.com, Jun 16, 2009
     ' Code sample added, commented out - needs test case
 '"vbajson6","Defect","FIXED","Medium","","","Enter one-line summary","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=6
     ' Reported by yama...@gmail.com, Sep 4, 2009
@@ -51,7 +66,7 @@ Option Private Module
     '           index = index + 1
     '        End If
 '"vbajson7","Defect","New","HIGH","","","Cannot parse a JSON string containing an array...","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=7
-'Reported by c...@gmx.net, Oct 18, 2009
+    'Reported by c...@gmx.net, Oct 18, 2009
     'What steps will reproduce the problem?
     '1. Put this string in a variable:
     '
@@ -117,6 +132,7 @@ Option Private Module
     '    arr(2) = Array("c", "d")
     'works.
 '"vbajson9","Defect","CLOSED","Medium","","","Thank you for this code!","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=9
+    ' Reported by compwiz...@gmail.com, Apr 7, 2010
 '"vbajson10","Defect","FIXED","Medium","","","improve parseNumber() with Long number","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=10
     'Reported by akun...@gmail.com, May 8, 2010
     '-What steps will reproduce the problem?
@@ -127,7 +143,7 @@ Option Private Module
     '-What version of the product are you using? On what operating system?
     'Please provide any additional information below.
     '
-    ''I use CLng to replace CInt
+    'I use CLng to replace CInt
     'Private Function parseNumber(ByRef str As String, ByRef index As Long)
     '
     '    Dim value   As String
@@ -204,6 +220,7 @@ Option Private Module
     ' For VBA the " has to be "" and for JSON \ needs to be escaped as \\
     ' See vbajson12 test. I do not have the locale setup to verify the international characters.
 '"vbajson13","Defect","OPEN","Medium","","","here's an update for office 64-bit support","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=13
+    ' #2 sajja.pr...@gmail.com
     ' Hi I am trying to parse the below but I am getting an error that Object Not Found.
     '{"schedules":[{"summary":"Sign in","executedOn":"10/Oct/12 1:50 PM","cycleName":"asdf","cycleID":15,"label":"1, 2, 3, 4, 5","issueId":123,"versionName":"asdf","issueID":123,"defects":[
     '{"key":"124","status":"Closed","summary":"Title"},{"key":"asdf","status":"Closed","summary":"asdfasdf"}],"executedByDisplay":"Name of person","executionStatus":"2","htmlComment":"asdfasd","projectID":"asdf","executedBy":"asdasg","component":"","versionID":"adasd","issueKey":"asdf","scheduleID":73,"comment":"adsfasdf"},
@@ -221,7 +238,27 @@ Option Private Module
     '
     ' OPEN
     ' ---------
+    ' Reported by jho...@gmail.com, Jan 12, 2011
     ' String Builder Class and Office x64
+    ' #1 myungdae...@soonjeonggame.com - Mar 10, 2014
+    'use this
+    '
+    '#If Win64 Then
+    'Private Declare PtrSafe Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" _
+    '      (pDst As Any, pSrc As Any, ByVal ByteLen As Long)
+    '#Else
+    'Private Declare PtrSafe Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" _
+    '      (pDst As Any, pSrc As Any, ByVal ByteLen As Long)
+    '#End If
+    '
+    ' #5 glsmca.c...@gmail.com - Aug 27, 2014
+    'Hello,
+    'I am getting the error "Run-time error '424': Object Required".
+    'How to fix this?
+    '
+    ' #7 ohr.hach...@gmail.com - Nov 12, 2014
+    'i 'm getting this error: type mismatch at this line: CopyMemory ByVal UnsignedAdd(StrPtr(m_sString), m_iPos), ByVal StrPtr(sThis), lLen
+    'i added already the PtrSafe to the function decleration
 '"vbajson14","Defect","FIXED","Medium","","","Unable to parse strings containing colons - Infinite loop","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=14
     'Reported by fadeyi.f...@gmail.com, Jun 1, 2012
     '-What steps will reproduce the problem?
@@ -277,6 +314,8 @@ Option Private Module
 '=============================================================================================================================
 
 ' 20141126 - v011 - Move history to basTESTvbajsonlog
+    ' FIXED vbajson14
+    ' Add basTESTRUNNER module
 ' 20141125 - v011 - FIXED vbajson9
     ' FIXED vbajson10
     ' FIXED vbajson11
