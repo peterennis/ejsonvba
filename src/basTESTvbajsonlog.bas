@@ -222,7 +222,28 @@ Option Private Module
     ' OPEN
     ' ---------
     ' String Builder Class and Office x64
-'"vbajson14","Defect","New","Medium","","","Unable to parse strings containing colons - Infinite loop","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=14
+'"vbajson14","Defect","FIXED","Medium","","","Unable to parse strings containing colons - Infinite loop","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=14
+    'Reported by fadeyi.f...@gmail.com, Jun 1, 2012
+    '-What steps will reproduce the problem?
+    '1. In the parse_test4 subroutine, change any of the ""test"" elems to ""te:st""
+    '2. Run the subroutine
+    '-What is the expected output? What do you see instead?
+    'The expected output should be the normal json output from the test. Instead, Excel freezes - because it is really good at detecting redundancies so it just loops them as fast as possible till windows asks if you want to crash the instance and restart.
+    '-What version of the product are you using? On what operating system?
+    'The latest version - with Microsoft Office 2007 running on Windows 7
+    '
+    'Please provide any additional information below.
+    '
+    'Great parser.It 's worked really well so far. I'll fix this bug in my instance, but I'm not sure if I should add my fix here or not. I'm pretty sure it won't be elegant :)
+    'Jun 1, 2012 #1 fadeyi.f...@gmail.com
+    'I fixed this by modifying the case for ":" in the method parsekey as follows:
+    '        Case ":"
+    '            index = index + 1
+    '            If Not dquote And Not squote Then
+    '                Exit Do
+    '            Else
+    '                parseKey = parseKey & char
+    '            End If
 '"vbajson15","Defect","New","Medium","","","Unable to handle multi-dimensional arrays","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=15
 '"vbajson16","Defect","New","Medium","","","parseNumber and regional settings","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=16
 '"vbajson17","Defect","New","Medium","","","http: 85","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=17

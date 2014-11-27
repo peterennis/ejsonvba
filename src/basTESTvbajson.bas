@@ -44,13 +44,13 @@ Public Sub RunAllvbajsonTests()
 '    Debug.Print "=> vbajson11 Finished!" & vbCrLf
 '    vbajson12
 '    Debug.Print "=> vbajson12 Finished!" & vbCrLf
-    vbajson13
-    Debug.Print "=> vbajson13 Finished!" & vbCrLf
-Exit Sub
-    vbajson14
-    Debug.Print "=> vbajson14 Finished!" & vbCrLf
+'    vbajson13
+'    Debug.Print "=> vbajson13 Finished!" & vbCrLf
+'    vbajson14
+'    Debug.Print "=> vbajson14 Finished!" & vbCrLf
     vbajson15
     Debug.Print "=> vbajson15 Finished!" & vbCrLf
+Exit Sub
     vbajson16
     Debug.Print "=> vbajson16 Finished!" & vbCrLf
     vbajson17
@@ -100,8 +100,8 @@ Private Sub vbajson1()
 
     Debug.Print , "VALIDATED"
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -126,8 +126,8 @@ Exit Sub
     Debug.Print "Bla: " & o.Item("bla") & " - Items: " & _
         o.Item("items").Item(1).Item("itx")
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -140,8 +140,8 @@ Private Sub vbajson3()
 
     Debug.Print , "vbajson3: FIXED."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -154,8 +154,8 @@ Private Sub vbajson4()
 
     Debug.Print , "vbajson4: FIXED. Testing needed for other locale."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -168,8 +168,8 @@ Private Sub vbajson5()
 
     Debug.Print , "vbajson5: FIXED. Test case needed."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -182,8 +182,8 @@ Private Sub vbajson6()
 
     Debug.Print , "vbajson6: Test case needed."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -207,8 +207,8 @@ Private Sub vbajson7()
 
     Debug.Print , "FAILED"
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -230,8 +230,8 @@ Private Sub vbajson7b()
 
     Debug.Print , "VALIDATED"
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -255,8 +255,8 @@ Private Sub vbajson8()
     
     Debug.Print , "vbajson8: FAILED. - Not supported in this version of VBA-JSON"
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -277,8 +277,8 @@ Private Sub vbajson8b()
 
     Debug.Print , "VALIDATED"
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -297,8 +297,8 @@ Private Sub vbajson8c()
 
     Debug.Print , "VALIDATED"
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -311,8 +311,8 @@ Private Sub vbajson9()
 
     Debug.Print , "vbajson9: CLOSED."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -364,8 +364,8 @@ Private Sub vbajson10()
 
     Debug.Print , "VALIDATED WITH e+39"
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -423,10 +423,9 @@ Private Sub vbajson11()
     Debug.Assert Err.Number = 0
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
     Debug.Print , "VALIDATED"
-    Debug.Print
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -444,10 +443,9 @@ Private Sub vbajson12()
     Debug.Assert Err.Number = 0
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
     Debug.Print , "VALIDATED BUT INTERNATIONAL CHARACTERS NOT DISPLAYED - NEED APPROPRIATE LOCALE SETUP"
-    Debug.Print
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -491,10 +489,9 @@ Private Sub vbajson13()
     Debug.Assert Err.Number = 0
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
     Debug.Print , "VALIDATED - WATCH OUT FOR LINE WRAP WITH C&P TO JSONLint"
-    Debug.Print
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -507,8 +504,8 @@ Private Sub vbajson13b()
 
     Debug.Print , "vbajson13b: Test case needed. String Builder Class and Office x64 - TBD."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -516,13 +513,27 @@ Private Sub vbajson14()
 
     Dim lib As New jsonlib
     Dim o As Object
+    Dim errString As String
+    Dim strEmbed As String
 
-    Debug.Print "=> vbajson14"
+    Debug.Print "=> parse_test4"
+    strEmbed = "[{""ty:pe"":""t1"",""title"":""データ1"",""attr"":[""1-1"",""1-2""]},{""type"":""t2"",""title"":""データ2"",""attr"":[""2-1"",""2-2""]}]"""
+    Debug.Print , "strEmbed=" & strEmbed
 
-    Debug.Print , "vbajson14: Test case needed."
+    Set o = lib.parse(strEmbed)
 
-    Set lib = Nothing
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    'Debug.Assert Err.Number = 0
+    errString = lib.GetParserErrors
+    If errString = "" Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , errString
+        Debug.Print , "FAILED"
+    End If
+
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -535,8 +546,8 @@ Private Sub vbajson15()
 
     Debug.Print , "vbajson15: Test case needed."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -549,8 +560,8 @@ Private Sub vbajson16()
 
     Debug.Print , "vbajson16: Test case needed."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -563,8 +574,8 @@ Private Sub vbajson17()
 
     Debug.Print , "vbajson17: Test case needed."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -577,8 +588,8 @@ Private Sub vbajson18()
 
     Debug.Print , "vbajson18: Test case needed."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -591,8 +602,8 @@ Private Sub vbajson19()
 
     Debug.Print , "vbajson19: Test case needed."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 
@@ -605,8 +616,8 @@ Private Sub vbajson20()
 
     Debug.Print , "vbajson20: Test case needed."
 
-    Set lib = Nothing
     Set o = Nothing
+    Set lib = Nothing
 
 End Sub
 

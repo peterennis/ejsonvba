@@ -339,8 +339,8 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                     End If
                 End If
             Case ":"
+                index = index + 1
                 If Not dquote And Not squote Then
-                    index = index + 1
                     Exit Do
                 'ElseIf dquote And Not squote Then
                 '    parseKey = parseKey & char

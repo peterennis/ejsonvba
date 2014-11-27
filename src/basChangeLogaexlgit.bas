@@ -25,6 +25,7 @@ Public Const MODULE_NOT_EMPTY_DUMMY As String = vbNullString
 '
 '
 '20141126 - v011 - Add SOURCEROOT
+    ' GitHub for eJsonVBA code export tool: https://github.com/peterennis/aexlgit/tree/eJsonVBA
 '20141114 - v010 - http://www.jpsoftwaretech.com/vba/filesystemobject-vba-examples/ for testing #002
     ' Late vs. Early binding
     ' http://superuser.com/questions/615463/how-to-avoid-references-in-vba-early-binding-vs-late-binding
