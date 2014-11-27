@@ -28,7 +28,7 @@ Option Compare Text
 ' Date:     July 13, 2013
 ' Comment:  Create class for revision control
 ' History:  See comment details, basChangeLog, commit messages on GitHub
-' GitHub:   https://github.com/peterennis/aexlgit
+' GitHub:   https://github.com/peterennis/aexlgit/tree/eJsonVBA
 ' Ref:      http://www.rondebruin.nl/win/s9/win002.htm
 '=======================================================================
 
