@@ -18,8 +18,8 @@ Private Const INVALID_NULL      As Long = 5
 Private Const INVALID_KEY       As Long = 6
 Private Const INVALID_RPC_CALL  As Long = 7
 
-Private Const jsonlibVERSION As String = "0.1.1"
-Private Const jsonlibVERSION_DATE As String = "November 21, 2014"
+Private Const jsonlibVERSION As String = "0.1.2"
+Private Const jsonlibVERSION_DATE As String = "November 27, 2014"
 
 Private psErrors As String
 
