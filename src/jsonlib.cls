@@ -10,12 +10,6 @@ Attribute VB_Exposed = False
 Option Explicit
 Option Compare Text
 
-Private Const INVALID_JSON      As Long = 1
-Private Const INVALID_OBJECT    As Long = 2
-Private Const INVALID_ARRAY     As Long = 3
-Private Const INVALID_BOOLEAN   As Long = 4
-Private Const INVALID_NULL      As Long = 5
-Private Const INVALID_KEY       As Long = 6
 Private Const INVALID_RPC_CALL  As Long = 7
 
 Private Const jsonlibVERSION As String = "0.1.2"
