@@ -40,6 +40,8 @@ Public Sub RunAllvbajsonTests()
 '    Debug.Print "=> vbajson9 Finished!" & vbCrLf
 '    vbajson10
 '    Debug.Print "=> vbajson10 Finished!" & vbCrLf
+    vbajson10a
+    Debug.Print "=> vbajson10a Finished!" & vbCrLf
 '    vbajson11
 '    Debug.Print "=> vbajson11 Finished!" & vbCrLf
 '    vbajson12
@@ -363,6 +365,59 @@ Private Sub vbajson10()
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
     Debug.Print , "VALIDATED WITH e+39"
+
+    Set o = Nothing
+    Set lib = Nothing
+
+End Sub
+
+Private Sub vbajson10a()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+    Dim strTest As String
+
+    Debug.Print "=> vbajson10a"
+
+    strTest = "{""RealNumber1"":32.769}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "VALIDATED"
+
+    strTest = "{""RealNumber2"":0.1234567890}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "VALIDATED"
+
+    strTest = "{""RealNumber3"":1.23456789012345678901}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "VALIDATED WITH ROUNDING TO 16 DECIMAL PLACES"
+
+    strTest = "{""RealNumber4"":-12345.67890123456789012345678901234567890}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "VALIDATED WITH ROUNDING TO 12 DECIMAL PLACES"
 
     Set o = Nothing
     Set lib = Nothing

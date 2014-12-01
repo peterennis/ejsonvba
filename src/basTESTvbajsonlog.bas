@@ -283,6 +283,13 @@ Option Private Module
     '            End If
 '"vbajson15","Defect","New","Medium","","","Unable to handle multi-dimensional arrays","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=15
 '"vbajson16","Defect","New","Medium","","","parseNumber and regional settings","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=16
+    'Reported by bl.lio...@gmail.com, Oct 11, 2012
+    'If you set "," as the decimal point in Control panel / Regional and Language settings then CDbl("12.34") will throw an error, but CDbl("12,34") will be parsed correctly.
+    '
+    'Some language uses comma for decimal point by default, so you can make more globalized parseNumber if you replace this:
+    '  parseNumber = CDbl(Value)
+    'to this:
+    '  parseNumber = CDbl(Replace(Value, ".", Mid(CStr(0.1), 2, 1)))
 '"vbajson17","Defect","New","Medium","","","http: 85","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=17
 '"vbajson18","Defect","New","Medium","","","Redundant vbCrLf","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=18
 '"vbajson19","Defect","New","Medium","","","Spaces improperly removed from object keys","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=19
