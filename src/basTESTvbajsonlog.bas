@@ -3,6 +3,11 @@ Option Explicit
 Option Compare Text
 Option Private Module
 
+' Fork of vba-json project
+' Author: Peter Ennis
+' GitHub: https://github.com/peterennis/eJsonVBA/tree/vba-json
+' Date : Nov 9, 2014
+
 ' Original source from here: https://code.google.com/p/vba-json/source/detail?r=2
 ' Author: ryoyoko
 ' Date: Feb 14, 2009
@@ -19,6 +24,7 @@ Option Private Module
 '"vbajson1","Defect","FIXED","Medium","","","outcome","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=1
     ' Reported by tkleinmi...@fenl.nl, Mar 19, 2009
     ' How can i read a parsed JSON string as an array?
+    ' ANSWER: See test vbajson1 and results
 '"vbajson2","Defect","New","HIGH","","","parseString bug","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=2
     ' Reported by webmas...@ediy.co.nz, Mar 24, 2009
     ' I found an issue that crashes the parseString function where data delimited
@@ -310,7 +316,7 @@ Option Private Module
 ' %005 -
 ' %004 -
 ' %003 -
-' %002 -
+' %002 - *** Ref: http://www.codeproject.com/Articles/720368/VB-JSON-Parser-Improved-Performance
 ' %001 - Have test result "VALIDATED" be verified automatically with online parser - TBD
 ' Issues:
 ' #006 -
@@ -320,6 +326,8 @@ Option Private Module
 ' #001 - Run-time error '424' Object required in test vbajson1
 '=============================================================================================================================
 
+' 20141201 - v012 - Add task to integrate improvements from task %002
+    '
 ' 20141126 - v011 - Move history to basTESTvbajsonlog
     ' FIXED vbajson14
     ' Add basTESTRUNNER module

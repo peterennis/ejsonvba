@@ -10,7 +10,12 @@ Option Private Module
 ' *** Online JSON Validators
 ' *** http://www.jsonlint.com/
 ' *** http://jsonformatter.curiousconcept.com/
-'
+' *** http://www.freeformatter.com/json-formatter.html
+' *** http://www.jsoneditoronline.org/ (validated by jsonlint)
+' *** http://json.parser.online.fr/
+' *** http://www.jsontest.com/ (JSONTest.com is a testing platform for services utilizing JSON)
+' *** http://www.ist.rit.edu/~jxs/services/JSON/ (JSON Explorer)
+' *** http://json-ld.org/ ***
 
 Public Sub RunAllvbajsonTests()
 
@@ -40,8 +45,8 @@ Public Sub RunAllvbajsonTests()
 '    Debug.Print "=> vbajson9 Finished!" & vbCrLf
 '    vbajson10
 '    Debug.Print "=> vbajson10 Finished!" & vbCrLf
-    vbajson10a
-    Debug.Print "=> vbajson10a Finished!" & vbCrLf
+'    vbajson10a
+'    Debug.Print "=> vbajson10a Finished!" & vbCrLf
 '    vbajson11
 '    Debug.Print "=> vbajson11 Finished!" & vbCrLf
 '    vbajson12
