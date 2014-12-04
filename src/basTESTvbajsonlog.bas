@@ -24,7 +24,9 @@ Option Private Module
 '"vbajson1","Defect","FIXED","Medium","","","outcome","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=1
     ' Reported by tkleinmi...@fenl.nl, Mar 19, 2009
     ' How can i read a parsed JSON string as an array?
-    ' ANSWER: See test vbajson1 and results
+    ' ANSWER
+    ' -----------
+    ' See test vbajson1 and results
 '"vbajson2","Defect","New","HIGH","","","parseString bug","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=2
     ' Reported by webmas...@ediy.co.nz, Mar 24, 2009
     ' I found an issue that crashes the parseString function where data delimited
@@ -314,8 +316,8 @@ Option Private Module
 '=============================================================================================================================
 ' Tasks:
 ' %005 -
-' %004 -
-' %003 -
+' %004 - Review http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf
+' %003 - Review http://www.ietf.org/rfc/rfc4627.txt
 ' %002 - *** Ref: http://www.codeproject.com/Articles/720368/VB-JSON-Parser-Improved-Performance
 ' %001 - Have test result "VALIDATED" be verified automatically with online parser - TBD
 ' Issues:

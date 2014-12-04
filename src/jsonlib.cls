@@ -12,10 +12,15 @@ Option Compare Text
 
 Private Const INVALID_RPC_CALL  As Long = 7
 
-Private Const jsonlibVERSION As String = "0.1.2"
-Private Const jsonlibVERSION_DATE As String = "November 27, 2014"
+Private Const jsonlibVERSION As String = "0.1.3"
+Private Const jsonlibVERSION_DATE As String = "December 2, 2014"
 
 Private psErrors As String
+Private m_SDecimal As String
+Private m_SThousand As String
+Private m_StrLen As Long
+Private m_Str() As Integer
+'
 
 Private Sub Class_Initialize()
     Debug.Print , "Class_Initialize"
@@ -32,7 +37,7 @@ Public Function GetParserErrors() As String
    'Stop
 End Function
 
-Public Function ClearParserErrors() As String
+Private Function ClearParserErrors() As String
    psErrors = ""
 End Function
 
@@ -41,9 +46,15 @@ End Function
 '
 Public Function parse(ByRef str As String) As Object
 
+    m_SDecimal = GetSDecimal
+    m_SThousand = GetSThousand
+
     Dim index As Long
     index = 1
-    psErrors = ""
+
+    'Call GenerateStringArray(str)
+
+    psErrors = vbNullString
     On Error Resume Next
 
     Call skipChar(str, index)
@@ -55,9 +66,24 @@ Public Function parse(ByRef str As String) As Object
         Set parse = parseArray(str, index)
     Case Else
         psErrors = "str=" & str & " index=" & index & " Invalid JSON"
+        Debug.Print , "E1 parse: " & psErrors
+        Exit Function
     End Select
 
 End Function
+
+Private Sub GenerateStringArray(ByRef str As String)
+
+    Dim i As Long
+
+    m_StrLen = Len(str)
+    ReDim m_Str(1 To m_StrLen)
+
+    For i = 1 To m_StrLen
+        m_Str(i) = AscW(Mid$(str, i, 1))
+    Next i
+
+End Sub
 
 '
 '   parse collection of key/value
@@ -73,6 +99,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 
     If Mid(str, index, 1) <> "{" Then
         psErrors = psErrors & "Invalid Object at position " & index & " : " & Mid(str, index) & vbCrLf
+        Debug.Print , "E2 parseObject: " & psErrors
         Exit Function
     End If
 
@@ -90,6 +117,8 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
             Call skipChar(str, index)
         ElseIf index > Len(str) Then
             psErrors = psErrors & "Missing '}': " & Right(str, 20) & vbCrLf
+            Debug.Print , "E3 parseObject: " & psErrors
+            Exit Function
             Exit Do
         End If
 
@@ -100,6 +129,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
         parseObject.Add sKey, parseValue(str, index)
         If Err.Number <> 0 Then
             psErrors = psErrors & Err.Description & ": " & sKey & vbCrLf
+            Debug.Print , "E4 parseObject: " & psErrors
             Exit Do
         End If
 
@@ -119,6 +149,7 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
 
     If Mid(str, index, 1) <> "[" Then
         psErrors = psErrors & "Invalid Array at position " & index & " : " + Mid(str, index, 20) & vbCrLf
+        Debug.Print , "E5 parseArray: " & psErrors
         Exit Function
     End If
 
@@ -136,7 +167,8 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
             Call skipChar(str, index)
         ElseIf index > Len(str) Then
             psErrors = psErrors & "Missing ']': " & Right(str, 20) & vbCrLf
-            Exit Do
+            Debug.Print , "E6 parseArray: " & psErrors
+            Exit Function
         End If
 
         ' add value
@@ -144,7 +176,8 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
         parseArray.Add parseValue(str, index)
         If Err.Number <> 0 Then
             psErrors = psErrors & Err.Description & ": " & Mid(str, index, 20) & vbCrLf
-            Exit Do
+            Debug.Print , "E7 parseArray: " & psErrors
+            Exit Function
         End If
 
     Loop
@@ -243,18 +276,35 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
     Dim myValue As String
     Dim char As String
 
+    'Debug.Print "parseNumber", str
+
     Call skipChar(str, index)
 
+    'Debug.Print "m_StrLen=" & m_StrLen
+    'Debug.Print "Len(str)=" & Len(str)
+    
     Do While index > 0 And index <= Len(str)
         char = Mid(str, index, 1)
         If InStr("+-0123456789.eE", char) Then
             myValue = myValue & char
+            'Debug.Print myValue
             index = index + 1
-        Else
-            ' for PT Locale Settings where decimal is ","
-            If CStr(1.2) = "1,2" Then
-                myValue = Replace(myValue, ".", ",", 1, -1, 1)
+            If index > 200 Then
+                Debug.Print "STOP"
+                Stop
             End If
+        Else
+'            'check what is the grouping separator
+'            If Not m_SDecimal = "." Then
+'                myValue = Replace(myValue, ".", m_SDecimal)
+'                Debug.Print "SD", myValue
+'            End If
+'
+'            If m_SThousand = "." Then
+'                myValue = Replace(myValue, ".", m_SDecimal)
+'                Debug.Print "ST", myValue
+'            End If
+'
             parseNumber = CDec(myValue)
             Exit Function
         End If
@@ -278,6 +328,8 @@ Private Function parseBoolean(ByRef str As String, ByRef index As Long) As Boole
     Else
         psErrors = psErrors & Err.Description & " - Invalid Boolean at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
+        Debug.Print , "E8 parseBoolean: " & psErrors
+        Exit Function
     End If
 
 End Function
@@ -295,6 +347,8 @@ Private Function parseNull(ByRef str As String, ByRef index As Long)
     Else
         psErrors = psErrors & Err.Description & " - Invalid Null value at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
+        Debug.Print , "E9 parseNull: " & psErrors
+        Exit Function
     End If
 
 End Function
@@ -318,7 +372,8 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                     If Mid(str, index, 1) <> ":" Then
                         psErrors = psErrors & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
-                        Exit Do
+                    Debug.Print , "E10 parseKey: " & psErrors
+                    Exit Function
                     End If
                 End If
             Case "'"
@@ -329,16 +384,25 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                     If Mid(str, index, 1) <> ":" Then
                         psErrors = psErrors & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
-                        Exit Do
+                        Debug.Print , "E11 parseKey: " & psErrors
+                        Exit Function
                     End If
                 End If
             Case ":"
+'                If Not dquote And Not squote Then
+'                    index = index + 1
+'                    Exit Do
+'                ElseIf dquote And Not squote Then
+'                    parseKey = parseKey & char
+'                    index = index + 1
+'                End If
+
                 index = index + 1
                 If Not dquote And Not squote Then
                     Exit Do
-                'ElseIf dquote And Not squote Then
-                '    parseKey = parseKey & char
-                '    index = index + 1
+                ElseIf dquote And Not squote Then
+                    parseKey = parseKey & char
+                    index = index + 1
                 'End If
                 Else
                     parseKey = parseKey & char
@@ -529,7 +593,7 @@ Private Function multiArray(aBD, iBC, sPS, ByRef sPT)   ' Array BoDy, Integer Ba
 
 End Function
 
-Public Function JsonRpcCall(url As String, methName As String, args(), Optional user As String, Optional pwd As String) As Object
+Private Function JsonRpcCall(url As String, methName As String, args(), Optional user As String, Optional pwd As String) As Object
 
     Dim r As Object
     Dim cli As Object

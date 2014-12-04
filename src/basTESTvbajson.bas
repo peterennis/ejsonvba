@@ -53,13 +53,15 @@ Public Sub RunAllvbajsonTests()
 '    Debug.Print "=> vbajson12 Finished!" & vbCrLf
 '    vbajson13
 '    Debug.Print "=> vbajson13 Finished!" & vbCrLf
-'    vbajson14
-'    Debug.Print "=> vbajson14 Finished!" & vbCrLf
+    vbajson14
+    Debug.Print "=> vbajson14 Finished!" & vbCrLf
     vbajson15
     Debug.Print "=> vbajson15 Finished!" & vbCrLf
-Exit Sub
     vbajson16
     Debug.Print "=> vbajson16 Finished!" & vbCrLf
+    vbajson16a
+    Debug.Print "=> vbajson16a Finished!" & vbCrLf
+Exit Sub
     vbajson17
     Debug.Print "=> vbajson17 Finished!" & vbCrLf
     vbajson18
@@ -120,7 +122,7 @@ Private Sub vbajson2()
     Debug.Print "=> vbajson2"
 
     Debug.Print , "vbajson2: This test will kill Excel!"
-    Debug.Print , "NEEDS ERROR HANDLING"
+    Debug.Print , "NEEDS DEBUGGING AND ERROR HANDLING"
 Exit Sub
 
     ' read the JSON into an object:
@@ -573,10 +575,9 @@ Private Sub vbajson14()
 
     Dim lib As New jsonlib
     Dim o As Object
-    Dim errString As String
     Dim strEmbed As String
 
-    Debug.Print "=> parse_test4"
+    Debug.Print "=> vbajson14"
     strEmbed = "[{""ty:pe"":""t1"",""title"":""データ1"",""attr"":[""1-1"",""1-2""]},{""type"":""t2"",""title"":""データ2"",""attr"":[""2-1"",""2-2""]}]"""
     Debug.Print , "strEmbed=" & strEmbed
 
@@ -584,11 +585,10 @@ Private Sub vbajson14()
 
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
     'Debug.Assert Err.Number = 0
-    errString = lib.GetParserErrors
-    If errString = "" Then
+    If lib.GetParserErrors = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , errString
+        Debug.Print , lib.GetParserErrors
         Debug.Print , "FAILED"
     End If
 
@@ -615,11 +615,65 @@ Private Sub vbajson16()
 
     Dim lib As New jsonlib
     Dim o As Object
+    Dim strTest As String
 
     Debug.Print "=> vbajson16"
+    Debug.Print , "m_SDecimal= " & GetSDecimal
+    Debug.Print , "m_SThousand= " & GetSThousand
 
-    Debug.Print , "vbajson16: Test case needed."
+    strTest = "{""InternationalNumber1"":32769.05}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
 
+    If lib.GetParserErrors <> vbNullString Then
+        Debug.Print , "lib.GetParserErrors=" & lib.GetParserErrors
+        Debug.Print , "FAILED"
+        GoTo PROC_EXIT
+    End If
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    If lib.GetParserErrors = vbNullString Then
+        Debug.Print , "VALIDATED"
+    End If
+
+PROC_EXIT:
+    Set o = Nothing
+    Set lib = Nothing
+
+End Sub
+
+Private Sub vbajson16a()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+    Dim strTest As String
+
+    Debug.Print "=> vbajson16a"
+    Debug.Print , "m_SDecimal= " & GetSDecimal
+    Debug.Print , "m_SThousand= " & GetSThousand
+
+    strTest = "{""InternationalNumber2"":-1234567.89}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+
+    If lib.GetParserErrors <> vbNullString Then
+        Debug.Print , "lib.GetParserErrors=" & lib.GetParserErrors
+        Debug.Print , "FAILED"
+        GoTo PROC_EXIT
+    End If
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    If lib.GetParserErrors = vbNullString Then
+        Debug.Print , "VALIDATED"
+    End If
+
+PROC_EXIT:
     Set o = Nothing
     Set lib = Nothing
 
