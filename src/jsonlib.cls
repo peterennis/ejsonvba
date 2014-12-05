@@ -26,6 +26,7 @@ Private Const jsonlibVERSION As String = "0.1.4"
 Private Const jsonlibVERSION_DATE As String = "December 4, 2014"
 
 Private pParseError As String
+Private pDebug As Boolean
 Private m_SDecimal As String
 Private m_SThousand As String
 Private m_StrLen As Long
@@ -43,18 +44,27 @@ Private Sub Class_Terminate()
 End Sub
 
 Public Property Get GetParseError() As String
+    If pDebug Then Debug.Print ">>GetParseError"
     GetParseError = pParseError
 End Property
 
 Public Property Get ClearParseError() As String
-   pParseError = vbNullString
-   ClearParseError = "pParseError = vbNullString"
+    If pDebug Then Debug.Print ">>ClearParseError"
+    pParseError = vbNullString
+    ClearParseError = "pParseError = vbNullString"
+End Property
+
+Public Property Set SetDebug(blnDebug)
+    If pDebug Then Debug.Print ">>SetDebug"
+    pDebug = blnDebug
 End Property
 
 '
 '   parse string and create JSON object (Dictionary or Collection in VB)
 '
 Public Function parse(ByRef str As String) As Object
+
+    If pDebug Then Debug.Print ">>parse"
 
     m_SDecimal = GetSDecimal
     m_SThousand = GetSThousand
@@ -65,7 +75,7 @@ Public Function parse(ByRef str As String) As Object
     'Call GenerateStringArray(str)
 
     pParseError = vbNullString
-    On Error Resume Next
+    '''On Error Resume Next
 
     Call skipChar(str, index)
 
@@ -84,6 +94,8 @@ End Function
 
 Private Sub GenerateStringArray(ByRef str As String)
 
+    If pDebug Then Debug.Print ">>GenerateStringArray"
+
     Dim i As Long
 
     m_StrLen = Len(str)
@@ -99,6 +111,8 @@ End Sub
 '   parse collection of key/value
 '
 Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
+
+    If pDebug Then Debug.Print ">>parseObject"
 
     Set parseObject = CreateObject("Scripting.Dictionary")
 
@@ -133,7 +147,8 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 
         ' add key/value pair
         sKey = parseKey(str, index)
-        On Error Resume Next
+        Debug.Print , "sKey=" & sKey
+        '''On Error Resume Next
         
         parseObject.Add sKey, parseValue(str, index)
         If Err.Number <> 0 Then
@@ -150,6 +165,8 @@ End Function
 '   parse list
 '
 Private Function parseArray(ByRef str As String, ByRef index As Long) As Collection
+
+    If pDebug Then Debug.Print ">>parseArray"
 
     Set parseArray = New Collection
 
@@ -180,7 +197,7 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
         End If
 
         ' add value
-        On Error Resume Next
+        '''On Error Resume Next
         parseArray.Add parseValue(str, index)
         If Err.Number <> 0 Then
             pParseError = pParseError & Err.Description & ": " & Mid(str, index, 20) & vbCrLf
@@ -196,6 +213,8 @@ End Function
 '   parse string / number / object / array / true / false / null
 '
 Private Function parseValue(ByRef str As String, ByRef index As Long)
+
+    If pDebug Then Debug.Print ">>parseValue"
 
     Call skipChar(str, index)
 
@@ -220,6 +239,8 @@ End Function
 '   parse string
 '
 Private Function parseString(ByRef str As String, ByRef index As Long) As String
+
+    If pDebug Then Debug.Print ">>parseString"
 
     Dim quote As String
     Dim char As String
@@ -281,6 +302,8 @@ End Function
 '
 Private Function parseNumber(ByRef str As String, ByRef index As Long)
 
+    If pDebug Then Debug.Print ">>parseNumber"
+
     Dim myValue As String
     Dim char As String
 
@@ -325,6 +348,8 @@ End Function
 '
 Private Function parseBoolean(ByRef str As String, ByRef index As Long) As Boolean
 
+    If pDebug Then Debug.Print ">>parseBoolean"
+
     Call skipChar(str, index)
 
     If Mid(str, index, 4) = "true" Then
@@ -347,6 +372,8 @@ End Function
 '
 Private Function parseNull(ByRef str As String, ByRef index As Long)
 
+    If pDebug Then Debug.Print ">>parseNull"
+
     Call skipChar(str, index)
 
     If Mid(str, index, 4) = "null" Then
@@ -363,9 +390,13 @@ End Function
 
 Private Function parseKey(ByRef str As String, ByRef index As Long) As String
 
+    If pDebug Then Debug.Print ">>parseKey"
+
     Dim dquote As Boolean
     Dim squote As Boolean
     Dim char As String
+
+    Debug.Print , "parseKey str=" & str
 
     Call skipChar(str, index)
 
@@ -432,6 +463,8 @@ End Function
 'Public Sub skipChar(ByRef str As String, ByRef index As Long)
 Friend Sub skipChar(ByRef str As String, ByRef index As Long)
 
+    If pDebug Then Debug.Print ">>skipChar"
+
 '    While index > 0 And index <= Len(str) And InStr(vbCrLf & vbCr & vbLf & vbTab & " ", Mid(str, index, 1))
 '        index = index + 1
 '    Wend
@@ -489,6 +522,8 @@ End Sub
 
 Public Function toString(ByRef obj As Variant) As String
 
+    If pDebug Then Debug.Print ">>toString"
+
     Select Case VarType(obj)
         Case vbNull
             toString = "null"
@@ -532,6 +567,8 @@ End Function
 
 Private Function encode(str) As String
 
+    If pDebug Then Debug.Print ">>encode"
+
     Dim i As Integer
     Dim j As Integer
     Dim aL1 As Variant
@@ -567,11 +604,13 @@ End Function
 
 Private Function multiArray(aBD, iBC, sPS, ByRef sPT)   ' Array BoDy, Integer BaseCount, String PoSition
 
+    If pDebug Then Debug.Print ">>multiArray"
+
     Dim iDU As Integer  ' Integer DimensionUBound
     Dim iDL As Integer  ' Integer DimensionLBound
     Dim i As Integer
 
-    On Error Resume Next
+    '''On Error Resume Next
     iDL = LBound(aBD, iBC)
     iDU = UBound(aBD, iBC)
 
@@ -601,6 +640,8 @@ Private Function multiArray(aBD, iBC, sPS, ByRef sPT)   ' Array BoDy, Integer Ba
 End Function
 
 Private Function JsonRpcCall(url As String, methName As String, args(), Optional user As String, Optional pwd As String) As Object
+
+    If pDebug Then Debug.Print ">>JsonRpcCall"
 
     Dim r As Object
     Dim cli As Object
@@ -647,6 +688,8 @@ Private Function JsonRpcCall(url As String, methName As String, args(), Optional
 End Function
 
 Public Function toUnicode(str As String) As String
+
+    If pDebug Then Debug.Print ">>toUnicode"
 
 '    Dim x As Long
 '    Dim uStr As New cStringBuilder

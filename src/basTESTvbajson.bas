@@ -21,6 +21,9 @@ Public Sub RunAllvbajsonTests()
 
     vbajson1
     Debug.Print "=> vbajson1 Finished!" & vbCrLf
+    vbajson1a
+    Debug.Print "=> vbajson1a Finished!" & vbCrLf
+Exit Sub
 '    vbajson2
 '    Debug.Print "=> vbajson2 Finished!" & vbCrLf
 '    vbajson3
@@ -100,6 +103,41 @@ Private Sub vbajson1()
 '        }
 '    ]
 '}
+
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+        GoTo PROC_EXIT
+    End If
+
+    ' get data from arrays etc.:
+    Debug.Print , "Bla: " & o.Item("bla") & " - Items of itx: " & _
+        o.Item("items").Item(1).Item("itx")
+
+PROC_EXIT:
+    Set o = Nothing
+    Set lib = Nothing
+
+End Sub
+
+Private Sub vbajson1a()
+
+    Dim lib As New jsonlib
+    Dim o As Object
+    Dim strJson As String
+
+    Debug.Print "=> vbajson1a"
+
+    ' read the JSON into an object:
+    strJson = "{ bla:""hi"", ""here are some items"": [{""it"":1,""itx"":2},{""i3"":""x""}] }"
+    Debug.Print , "strJson=" & strJson & " DOES NOT VALIDATE AT jsonlint.com"
+    Debug.Print , "EXPECTING STRING"
+    Set o = lib.parse(strJson)
 
     ' get the parsed text back:
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
