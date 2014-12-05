@@ -36,9 +36,10 @@ Public Property Get GetParseError()
     GetParseError = pParseError
 End Property
 
-Private Function ClearParserErrors() As String
-   pParseError = ""
-End Function
+Public Property Get ClearParseError()
+   pParseError = vbNullString
+   ClearParseError = "pParseError = vbNullString"
+End Property
 
 '
 '   parse string and create JSON object (Dictionary or Collection in VB)
