@@ -10,6 +10,16 @@ Attribute VB_Exposed = False
 Option Explicit
 Option Compare Text
 
+'=======================================================================
+' Author:   Peter Ennis
+' Date :    Nov 9, 2014
+' Comment:  Fork of vba-json project
+' GitHub:   https://github.com/peterennis/eJsonVBA/tree/vba-json
+' History:  Read basTESTvbajsonlog history, commit messages on GitHub
+' License:  This class module is made available with the BSD License
+' Ref:      https://code.google.com/p/vba-json/source/detail?r=2
+'=======================================================================
+
 Private Const INVALID_RPC_CALL  As Long = 7
 
 Private Const jsonlibVERSION As String = "0.1.4"
@@ -94,7 +104,6 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 
     Dim sKey As String
 
-    ' "{"
     Call skipChar(str, index)
 
     If Mid(str, index, 1) <> "{" Then
@@ -144,7 +153,6 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
 
     Set parseArray = New Collection
 
-    ' "["
     Call skipChar(str, index)
 
     If Mid(str, index, 1) <> "[" Then
@@ -403,7 +411,6 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                 ElseIf dquote And Not squote Then
                     parseKey = parseKey & char
                     index = index + 1
-                'End If
                 Else
                     parseKey = parseKey & char
                 End If

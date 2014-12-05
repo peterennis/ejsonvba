@@ -7,5 +7,6 @@ Public Sub RUN_ALL_TESTS()
 
     RunAlljsonlibTests
     RunAllvbajsonTests
+    RunAllvbajsonErrorTests
 
 End Sub
