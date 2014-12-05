@@ -39,10 +39,10 @@ Private Sub toString_test1()
 
     Debug.Print , "toString_test1=" & lib.toString(Array("a", "b", Array(1, b, "3")))
     'Debug.Assert Err.Number = 0
-    If lib.GetParserErrors = vbNullString Then
+    If lib.GetParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParserErrors
+        Debug.Print , lib.GetParseError
         Debug.Print , "FAILED"
     End If
 
@@ -71,10 +71,10 @@ Private Sub toString_test2()
 
     Debug.Print , "lib.toString(a)=" & lib.toString(a)
     'Debug.Assert Err.Number = 0
-    If lib.GetParserErrors = vbNullString Then
+    If lib.GetParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParserErrors
+        Debug.Print , lib.GetParseError
         Debug.Print , "FAILED"
     End If
 
@@ -100,10 +100,10 @@ Private Sub parse_test1()
 
     Set json = lib.parse(" " & vbCrLf & vbTab & " {}")
     'Debug.Assert Err.Number = 0
-    If lib.GetParserErrors = vbNullString Then
+    If lib.GetParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParserErrors
+        Debug.Print , lib.GetParseError
         Debug.Print , "FAILED {}"
         GoTo PROC_EXIT
     End If
@@ -117,10 +117,10 @@ Private Sub parse_test1()
 
     Set json = lib.parse(" " & vbCrLf & vbTab & " []")
     'Debug.Assert Err.Number = 0
-    If lib.GetParserErrors = "" Then
+    If lib.GetParseError = "" Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParserErrors
+        Debug.Print , lib.GetParseError
         Debug.Print , "FAILED []"
         GoTo PROC_EXIT
     End If
@@ -145,10 +145,10 @@ Private Sub parse_test2()
 
     Debug.Print , "lib.toString(json)=" & lib.toString(json)
     'Debug.Assert Err.Number = 0
-    If lib.GetParserErrors = vbNullString Then
+    If lib.GetParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParserErrors
+        Debug.Print , lib.GetParseError
         Debug.Print , "FAILED"
     End If
 
@@ -176,10 +176,10 @@ Private Sub parse_test3()
 
     Debug.Print , "lib.toString(json)=" & lib.toString(json)
     'Debug.Assert Err.Number = 0
-    If lib.GetParserErrors = vbNullString Then
+    If lib.GetParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParserErrors
+        Debug.Print , lib.GetParseError
         Debug.Print , "FAILED"
     End If
 
@@ -203,7 +203,7 @@ Private Sub parse_test4()
 
     Debug.Print , "lib.toString(json)=" & lib.toString(json)
     'Debug.Assert Err.Number = 0
-    errString = lib.GetParserErrors
+    errString = lib.GetParseError
     If errString = "" Then
         Debug.Print , "VALIDATED"
     Else
@@ -245,7 +245,7 @@ Private Sub parse_test5()
     Debug.Assert Err.Number = 0
     res2 = lib.toString(json)
 
-    errString = lib.GetParserErrors
+    errString = lib.GetParseError
     If errString = "" Then
         Debug.Print , res1
         Debug.Print , res2

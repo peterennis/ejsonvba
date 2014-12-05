@@ -12,10 +12,10 @@ Option Compare Text
 
 Private Const INVALID_RPC_CALL  As Long = 7
 
-Private Const jsonlibVERSION As String = "0.1.3"
-Private Const jsonlibVERSION_DATE As String = "December 2, 2014"
+Private Const jsonlibVERSION As String = "0.1.4"
+Private Const jsonlibVERSION_DATE As String = "December 4, 2014"
 
-Private psErrors As String
+Private pParseError As String
 Private m_SDecimal As String
 Private m_SThousand As String
 Private m_StrLen As Long
@@ -32,13 +32,12 @@ Private Sub Class_Terminate()
     Debug.Print , "Class_Terminate"
 End Sub
 
-Public Function GetParserErrors() As String
-   GetParserErrors = psErrors
-   'Stop
-End Function
+Public Property Get GetParseError()
+    GetParseError = pParseError
+End Property
 
 Private Function ClearParserErrors() As String
-   psErrors = ""
+   pParseError = ""
 End Function
 
 '
@@ -54,7 +53,7 @@ Public Function parse(ByRef str As String) As Object
 
     'Call GenerateStringArray(str)
 
-    psErrors = vbNullString
+    pParseError = vbNullString
     On Error Resume Next
 
     Call skipChar(str, index)
@@ -65,8 +64,8 @@ Public Function parse(ByRef str As String) As Object
     Case "["
         Set parse = parseArray(str, index)
     Case Else
-        psErrors = "str=" & str & " index=" & index & " Invalid JSON"
-        Debug.Print , "E1 parse: " & psErrors
+        pParseError = "str=" & str & " index=" & index & " Invalid JSON"
+        Debug.Print , "E1 parse: " & pParseError
         Exit Function
     End Select
 
@@ -98,8 +97,8 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
     Call skipChar(str, index)
 
     If Mid(str, index, 1) <> "{" Then
-        psErrors = psErrors & "Invalid Object at position " & index & " : " & Mid(str, index) & vbCrLf
-        Debug.Print , "E2 parseObject: " & psErrors
+        pParseError = pParseError & "Invalid Object at position " & index & " : " & Mid(str, index) & vbCrLf
+        Debug.Print , "E2 parseObject: " & pParseError
         Exit Function
     End If
 
@@ -116,8 +115,8 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
             index = index + 1
             Call skipChar(str, index)
         ElseIf index > Len(str) Then
-            psErrors = psErrors & "Missing '}': " & Right(str, 20) & vbCrLf
-            Debug.Print , "E3 parseObject: " & psErrors
+            pParseError = pParseError & "Missing '}': " & Right(str, 20) & vbCrLf
+            Debug.Print , "E3 parseObject: " & pParseError
             Exit Function
             Exit Do
         End If
@@ -128,8 +127,8 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
         
         parseObject.Add sKey, parseValue(str, index)
         If Err.Number <> 0 Then
-            psErrors = psErrors & Err.Description & ": " & sKey & vbCrLf
-            Debug.Print , "E4 parseObject: " & psErrors
+            pParseError = pParseError & Err.Description & ": " & sKey & vbCrLf
+            Debug.Print , "E4 parseObject: " & pParseError
             Exit Do
         End If
 
@@ -148,8 +147,8 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
     Call skipChar(str, index)
 
     If Mid(str, index, 1) <> "[" Then
-        psErrors = psErrors & "Invalid Array at position " & index & " : " + Mid(str, index, 20) & vbCrLf
-        Debug.Print , "E5 parseArray: " & psErrors
+        pParseError = pParseError & "Invalid Array at position " & index & " : " + Mid(str, index, 20) & vbCrLf
+        Debug.Print , "E5 parseArray: " & pParseError
         Exit Function
     End If
 
@@ -166,8 +165,8 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
             index = index + 1
             Call skipChar(str, index)
         ElseIf index > Len(str) Then
-            psErrors = psErrors & "Missing ']': " & Right(str, 20) & vbCrLf
-            Debug.Print , "E6 parseArray: " & psErrors
+            pParseError = pParseError & "Missing ']': " & Right(str, 20) & vbCrLf
+            Debug.Print , "E6 parseArray: " & pParseError
             Exit Function
         End If
 
@@ -175,8 +174,8 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
         On Error Resume Next
         parseArray.Add parseValue(str, index)
         If Err.Number <> 0 Then
-            psErrors = psErrors & Err.Description & ": " & Mid(str, index, 20) & vbCrLf
-            Debug.Print , "E7 parseArray: " & psErrors
+            pParseError = pParseError & Err.Description & ": " & Mid(str, index, 20) & vbCrLf
+            Debug.Print , "E7 parseArray: " & pParseError
             Exit Function
         End If
 
@@ -326,9 +325,9 @@ Private Function parseBoolean(ByRef str As String, ByRef index As Long) As Boole
         parseBoolean = False
         index = index + 5
     Else
-        psErrors = psErrors & Err.Description & " - Invalid Boolean at position " & index & _
+        pParseError = pParseError & Err.Description & " - Invalid Boolean at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
-        Debug.Print , "E8 parseBoolean: " & psErrors
+        Debug.Print , "E8 parseBoolean: " & pParseError
         Exit Function
     End If
 
@@ -345,9 +344,9 @@ Private Function parseNull(ByRef str As String, ByRef index As Long)
         parseNull = Null
         index = index + 4
     Else
-        psErrors = psErrors & Err.Description & " - Invalid Null value at position " & index & _
+        pParseError = pParseError & Err.Description & " - Invalid Null value at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
-        Debug.Print , "E9 parseNull: " & psErrors
+        Debug.Print , "E9 parseNull: " & pParseError
         Exit Function
     End If
 
@@ -370,9 +369,9 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                 If Not dquote Then
                     Call skipChar(str, index)
                     If Mid(str, index, 1) <> ":" Then
-                        psErrors = psErrors & Err.Description & " - Invalid Key value at position " & index & _
+                        pParseError = pParseError & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
-                    Debug.Print , "E10 parseKey: " & psErrors
+                    Debug.Print , "E10 parseKey: " & pParseError
                     Exit Function
                     End If
                 End If
@@ -382,9 +381,9 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                 If Not squote Then
                     Call skipChar(str, index)
                     If Mid(str, index, 1) <> ":" Then
-                        psErrors = psErrors & Err.Description & " - Invalid Key value at position " & index & _
+                        pParseError = pParseError & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
-                        Debug.Print , "E11 parseKey: " & psErrors
+                        Debug.Print , "E11 parseKey: " & pParseError
                         Exit Function
                     End If
                 End If

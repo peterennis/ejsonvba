@@ -585,10 +585,10 @@ Private Sub vbajson14()
 
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
     'Debug.Assert Err.Number = 0
-    If lib.GetParserErrors = vbNullString Then
+    If lib.GetParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParserErrors
+        Debug.Print , lib.GetParseError
         Debug.Print , "FAILED"
     End If
 
@@ -626,8 +626,8 @@ Private Sub vbajson16()
     ' read the JSON into an object:
     Set o = lib.parse(strTest)
 
-    If lib.GetParserErrors <> vbNullString Then
-        Debug.Print , "lib.GetParserErrors=" & lib.GetParserErrors
+    If lib.GetParseError <> vbNullString Then
+        Debug.Print , "lib.GetParserError=" & lib.GetParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -635,7 +635,7 @@ Private Sub vbajson16()
     ' get the parsed text back:
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    If lib.GetParserErrors = vbNullString Then
+    If lib.GetParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     End If
 
@@ -660,8 +660,8 @@ Private Sub vbajson16a()
     ' read the JSON into an object:
     Set o = lib.parse(strTest)
 
-    If lib.GetParserErrors <> vbNullString Then
-        Debug.Print , "lib.GetParserErrors=" & lib.GetParserErrors
+    If lib.GetParseError <> vbNullString Then
+        Debug.Print , "lib.GetParseError=" & lib.GetParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -669,7 +669,7 @@ Private Sub vbajson16a()
     ' get the parsed text back:
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    If lib.GetParserErrors = vbNullString Then
+    If lib.GetParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     End If
 
