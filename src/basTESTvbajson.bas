@@ -19,8 +19,8 @@ Option Private Module
 
 Public Sub RunAllvbajsonTests()
 
-'    vbajson1
-'    Debug.Print "=> vbajson1 Finished!" & vbCrLf
+    vbajson1
+    Debug.Print "=> vbajson1 Finished!" & vbCrLf
 '    vbajson2
 '    Debug.Print "=> vbajson2 Finished!" & vbCrLf
 '    vbajson3
@@ -29,8 +29,8 @@ Public Sub RunAllvbajsonTests()
 '    Debug.Print "=> vbajson4 Finished!" & vbCrLf
 '    vbajson5
 '    Debug.Print "=> vbajson5 Finished!" & vbCrLf
-'    vbajson6
-'    Debug.Print "=> vbajson6 Finished!" & vbCrLf
+    vbajson6
+    Debug.Print "=> vbajson6 Finished!" & vbCrLf
 '    vbajson7
 '    Debug.Print "=> vbajson7 Finished!" & vbCrLf
 '    vbajson7b
@@ -83,7 +83,8 @@ Private Sub vbajson1()
 
     ' read the JSON into an object:
     strJson = "{ bla:""hi"", ""items"": [{""it"":1,""itx"":2},{""i3"":""x""}] }"
-    Debug.Print , "strJson=" & strJson
+    Debug.Print , "strJson=" & strJson & " DOES NOT VALIDATE AT jsonlint.com"
+    Debug.Print , "EXPECTING STRING"
     Set o = lib.parse(strJson)
 
 ' Use Online JSON Validator to get the following validated:
@@ -103,12 +104,19 @@ Private Sub vbajson1()
     ' get the parsed text back:
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+        GoTo PROC_EXIT
+    End If
+
     ' get data from arrays etc.:
     Debug.Print , "Bla: " & o.Item("bla") & " - Items of itx: " & _
         o.Item("items").Item(1).Item("itx")
 
-    Debug.Print , "VALIDATED"
-
+PROC_EXIT:
     Set o = Nothing
     Set lib = Nothing
 
@@ -186,10 +194,19 @@ Private Sub vbajson6()
 
     Dim lib As New jsonlib
     Dim o As Object
+    Dim strTest As String
 
     Debug.Print "=> vbajson6"
 
-    Debug.Print , "vbajson6: Test case needed."
+    strTest = "{""Cus:ip"":[123,456,789],""Da:te"":[1,2,3],""Close:Type"":[""stock"",""bo::nd"",""sto:::ck""]}"
+    Debug.Print , "strTest=" & strTest
+    ' read the JSON into an object:
+    Set o = lib.parse(strTest)
+   
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    Debug.Print , "VALIDATED"
 
     Set o = Nothing
     Set lib = Nothing

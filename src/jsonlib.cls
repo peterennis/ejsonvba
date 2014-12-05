@@ -397,23 +397,23 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                     End If
                 End If
             Case ":"
-'                If Not dquote And Not squote Then
-'                    index = index + 1
-'                    Exit Do
-'                ElseIf dquote And Not squote Then
-'                    parseKey = parseKey & char
-'                    index = index + 1
-'                End If
-
-                index = index + 1
                 If Not dquote And Not squote Then
+                    index = index + 1
                     Exit Do
                 ElseIf dquote And Not squote Then
                     parseKey = parseKey & char
                     index = index + 1
-                Else
-                    parseKey = parseKey & char
                 End If
+
+'                index = index + 1
+'                If Not dquote And Not squote Then
+'                    Exit Do
+'                ElseIf dquote And Not squote Then
+'                    parseKey = parseKey & char
+'                    index = index + 1
+'                Else
+'                    parseKey = parseKey & char
+'                End If
             Case Else
                 If InStr(vbCrLf & vbCr & vbLf & vbTab & " ", char) Then
                 Else

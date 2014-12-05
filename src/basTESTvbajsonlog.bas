@@ -49,7 +49,7 @@ Option Private Module
     '                 SB.Append vbLf
     '                 index = index + 1
     ' in the parseString function.
-'"vbajson4","Defect","FIXED","Medium","","","improve parseNumber() for other decimal settings","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=4
+'"vbajson4","Defect","REOPENED","Medium","","","improve parseNumber() for other decimal settings","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=4
     ' Reported by telmo.ca...@gmail.com, Jun 12, 2009
     ' I have added to parseNumber():
     '        If InStr(myValue, ".") Or InStr(myValue, "e") Or InStr(myValue, "E") Then
@@ -58,8 +58,10 @@ Option Private Module
     '            parseNumber = CDbl(myValue)
     '        Else
     '            parseNumber = CInt(myValue)
-'"vbajson5","Defect","FIXED","Medium","","","Added suport for JSON-RPC 2.0 in jsonlib","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=5
+'"vbajson5","Defect","OPEN","Medium","","","Added suport for JSON-RPC 2.0 in jsonlib","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=5
     ' Reported by telmo.ca...@gmail.com, Jun 16, 2009
+    ' ANSWER
+    ' -----------
     ' Code sample added, commented out - needs test case
 '"vbajson6","Defect","FIXED","Medium","","","Enter one-line summary","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=6
     ' Reported by yama...@gmail.com, Sep 4, 2009
