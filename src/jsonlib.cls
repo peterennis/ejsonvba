@@ -32,11 +32,11 @@ Private Sub Class_Terminate()
     Debug.Print , "Class_Terminate"
 End Sub
 
-Public Property Get GetParseError()
+Public Property Get GetParseError() As String
     GetParseError = pParseError
 End Property
 
-Public Property Get ClearParseError()
+Public Property Get ClearParseError() As String
    pParseError = vbNullString
    ClearParseError = "pParseError = vbNullString"
 End Property
@@ -98,7 +98,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
     Call skipChar(str, index)
 
     If Mid(str, index, 1) <> "{" Then
-        pParseError = pParseError & "Invalid Object at position " & index & " : " & Mid(str, index) & vbCrLf
+        pParseError = pParseError & "Invalid Object at position " & index & " : " & Mid(str, index)
         Debug.Print , "E2 parseObject: " & pParseError
         Exit Function
     End If
@@ -116,7 +116,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
             index = index + 1
             Call skipChar(str, index)
         ElseIf index > Len(str) Then
-            pParseError = pParseError & "Missing '}': " & Right(str, 20) & vbCrLf
+            pParseError = pParseError & "Missing '}' at index " & index
             Debug.Print , "E3 parseObject: " & pParseError
             Exit Function
             Exit Do
@@ -166,7 +166,7 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
             index = index + 1
             Call skipChar(str, index)
         ElseIf index > Len(str) Then
-            pParseError = pParseError & "Missing ']': " & Right(str, 20) & vbCrLf
+            pParseError = pParseError & "Missing ']' at index " & index
             Debug.Print , "E6 parseArray: " & pParseError
             Exit Function
         End If

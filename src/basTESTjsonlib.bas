@@ -98,7 +98,7 @@ Private Sub parse_test1()
     parseString = " " & vbCrLf & vbTab & " {}"
     Debug.Print , "parseString=" & parseString
 
-    Set json = lib.parse(" " & vbCrLf & vbTab & " {}")
+    Set json = lib.parse(parseString)
     'Debug.Assert Err.Number = 0
     If lib.GetParseError = vbNullString Then
         Debug.Print , "VALIDATED"
@@ -115,7 +115,7 @@ Private Sub parse_test1()
     parseString = " " & vbCrLf & vbTab & " []"
     Debug.Print , "parseString=" & parseString
 
-    Set json = lib.parse(" " & vbCrLf & vbTab & " []")
+    Set json = lib.parse(parseString)
     'Debug.Assert Err.Number = 0
     If lib.GetParseError = "" Then
         Debug.Print , "VALIDATED"
