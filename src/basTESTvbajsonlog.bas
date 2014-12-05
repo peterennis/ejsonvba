@@ -323,8 +323,9 @@ Option Private Module
 ' %002 - *** Ref: http://www.codeproject.com/Articles/720368/VB-JSON-Parser-Improved-Performance
 ' %001 - Have test result "VALIDATED" be verified automatically with online parser - TBD
 ' Issues:
-' #006 -
-' #005 - vbajson1a runtime error 424 object required
+' #008 -
+' #007 -
+' #006 - Error in multiArray if on error commented out when executing RunAlljsonlibTests
 ' #004 - vbajson7 is a FAIL
 ' #002 - vbajson2 still kills Excel
 ' #001 - Run-time error '424' Object required in test vbajson1
@@ -336,6 +337,7 @@ Option Private Module
     ' How do I preserve spaces in retrieving json keys? Ref: http://www.csspy.com/22_22639040/
     ' Added test vbajson1a
     ' http://www.codeproject.com/Articles/828911/Recursive-VBA-JSON-Parser-for-Excel
+    '  FIXED #005 - vbajson1a runtime error 424 object required
 ' 20141201 - v012 - Add task to integrate improvements from task %002
 ' 20141126 - v011 - Move history to basTESTvbajsonlog
     ' FIXED vbajson14

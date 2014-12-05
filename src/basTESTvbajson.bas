@@ -151,8 +151,8 @@ Private Sub vbajson1a()
     End If
 
     ' get data from arrays etc.:
-    Debug.Print , "Bla: " & o.Item("bla") & " - Items of itx: " & _
-        o.Item("items").Item(1).Item("itx")
+    Debug.Print , "The Blah: " & o.Item("bla")
+    Debug.Print , "The Item of itx: " & o.Item("here are some items").Item(1).Item("itx")
 
 PROC_EXIT:
     Set o = Nothing

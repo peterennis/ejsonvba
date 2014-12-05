@@ -446,7 +446,7 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
 '                    parseKey = parseKey & char
 '                End If
             Case Else
-                If InStr(vbCrLf & vbCr & vbLf & vbTab & " ", char) Then
+                If InStr(vbCrLf & vbCr & vbLf & vbTab, char) Then
                 Else
                     parseKey = parseKey & char
                 End If
@@ -610,8 +610,8 @@ Private Function multiArray(aBD, iBC, sPS, ByRef sPT)   ' Array BoDy, Integer Ba
     Dim iDL As Integer  ' Integer DimensionLBound
     Dim i As Integer
 
-    '''On Error Resume Next
-    iDL = LBound(aBD, iBC)
+    On Error Resume Next
+    iDL = LBound(aBD, iBC) ' <<< Error here if on error commented out - NEED FIX
     iDU = UBound(aBD, iBC)
 
     Dim sPB1 As String  ' String PointBuffer1
