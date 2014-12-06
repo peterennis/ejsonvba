@@ -21,9 +21,9 @@ Public Sub RunAllvbajsonTests()
 
     vbajson1
     Debug.Print "=> vbajson1 Finished!" & vbCrLf
-    vbajson1a
-    Debug.Print "=> vbajson1a Finished!" & vbCrLf
 Exit Sub
+'    vbajson1a
+'    Debug.Print "=> vbajson1a Finished!" & vbCrLf
 '    vbajson2
 '    Debug.Print "=> vbajson2 Finished!" & vbCrLf
 '    vbajson3

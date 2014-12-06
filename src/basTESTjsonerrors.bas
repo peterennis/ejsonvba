@@ -5,13 +5,13 @@ Option Private Module
 
 Public Sub RunAllvbajsonErrorTests()
 
-    parse_error_001
-    Debug.Print "=> parse_error_001 Finished!" & vbCrLf
-    parse_error_002
-    Debug.Print "=> parse_error_002 Finished!" & vbCrLf
+'    parse_error_001
+'    Debug.Print "=> parse_error_001 Finished!" & vbCrLf
+'    parse_error_002
+'    Debug.Print "=> parse_error_002 Finished!" & vbCrLf
+    parse_error_003
+    Debug.Print "=> parse_error_003 Finished!" & vbCrLf
 Exit Sub
-'    parse_error_003
-'    Debug.Print "=> parse_error_003 Finished!" & vbCrLf
 '    parse_error_004
 '    Debug.Print "=> parse_error_004 Finished!" & vbCrLf
 '    parse_error_005
@@ -45,10 +45,8 @@ Private Sub parse_error_001()
     Else
         Debug.Print , lib.GetParseError
         Debug.Print , "FAILED {}"
-        GoTo PROC_EXIT
     End If
 
-PROC_EXIT:
     Set json = Nothing
     Set lib = Nothing
 
@@ -70,11 +68,34 @@ Private Sub parse_error_002()
     Else
         Debug.Print , lib.GetParseError
         Debug.Print , "FAILED []"
-        GoTo PROC_EXIT
     End If
 
-PROC_EXIT:
     Set json = Nothing
     Set lib = Nothing
 
 End Sub
+
+Private Sub parse_error_003()
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim json As Object
+    Dim parseString As String
+
+    Debug.Print "=> parse_error_003"
+    parseString = " " & vbCrLf & vbTab & " <"
+    Debug.Print , "parseString=" & parseString
+
+    lib.DebugState = True
+    Set json = lib.parse(parseString)
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , "FAILED"
+    End If
+
+    Set json = Nothing
+    Set lib = Nothing
+
+End Sub
+

@@ -54,10 +54,31 @@ Public Property Get ClearParseError() As String
     ClearParseError = "pParseError = vbNullString"
 End Property
 
-Public Property Set SetDebug(blnDebug)
-    If pDebug Then Debug.Print ">>SetDebug"
+Public Property Get DebugState() As Boolean
+    If pDebug Then Debug.Print ">>DebugState=" & pDebug
+    DebugState = pDebug
+End Property
+
+Public Property Let DebugState(blnDebug As Boolean)
+    If pDebug Then Debug.Print ">>DebugState=" & pDebug
     pDebug = blnDebug
 End Property
+
+Private Function charView(str As String) As Boolean
+    
+    Dim i As Long
+    Dim iMax As Long
+    
+    iMax = Len(str)
+    For i = 1 To iMax
+        If Asc(Mid$(str, i, 1)) >= 33 And Asc(Mid$(str, i, 1)) < 127 Then
+            Debug.Print Mid$(str, i, 1);
+        Else
+            Debug.Print Chr(187) & Mid$(str, i, 1) & ":" & _
+                Asc(Mid$(str, i, 1));
+        End If
+    Next
+End Function
 
 '
 '   parse string and create JSON object (Dictionary or Collection in VB)
@@ -87,12 +108,16 @@ Public Function parse(ByRef str As String) As Object
     Case Else
         pParseError = "str=" & str & " index=" & index & " Invalid JSON"
         Debug.Print , "E1 parse: " & pParseError
+        If pDebug Then
+            Call charView(str)
+            Debug.Print
+        End If
         Exit Function
     End Select
 
 End Function
 
-Private Sub GenerateStringArray(ByRef str As String)
+Private Sub generateStringArray(ByRef str As String)
 
     If pDebug Then Debug.Print ">>GenerateStringArray"
 
@@ -396,11 +421,10 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
     Dim squote As Boolean
     Dim char As String
 
-    Debug.Print , "parseKey str=" & str
-
     Call skipChar(str, index)
 
     Do While index > 0 And index <= Len(str)
+        Debug.Print , "Function parseKey=" & parseKey, index
         char = Mid(str, index, 1)
         Select Case (char)
             Case """"
@@ -639,7 +663,7 @@ Private Function multiArray(aBD, iBC, sPS, ByRef sPT)   ' Array BoDy, Integer Ba
 
 End Function
 
-Private Function JsonRpcCall(url As String, methName As String, args(), Optional user As String, Optional pwd As String) As Object
+Private Function jsonRpcCall(url As String, methName As String, args(), Optional user As String, Optional pwd As String) As Object
 
     If pDebug Then Debug.Print ">>JsonRpcCall"
 
@@ -683,7 +707,7 @@ Private Function JsonRpcCall(url As String, methName As String, args(), Optional
 
     If Not r.Exists("result") Then Err.Raise vbObjectError + INVALID_RPC_CALL, , "Bad Response, missing result"
 
-    Set JsonRpcCall = r("result")
+    Set jsonRpcCall = r("result")
 
 End Function
 
