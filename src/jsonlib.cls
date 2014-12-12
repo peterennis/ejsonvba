@@ -23,10 +23,12 @@ Option Compare Text
 Private Const INVALID_RPC_CALL  As Long = 7
 
 Private Const jsonlibVERSION As String = "0.1.4"
-Private Const jsonlibVERSION_DATE As String = "December 4, 2014"
+Private Const jsonlibVERSION_DATE As String = "December 11, 2014"
 
 Private pParseError As String
 Private pDebug As Boolean
+Private pDebugParseKey As Boolean
+Private pDebugParseObject As Boolean
 Private m_SDecimal As String
 Private m_SThousand As String
 Private m_StrLen As Long
@@ -35,6 +37,8 @@ Private m_Str() As Integer
 
 Private Sub Class_Initialize()
     Debug.Print , "Class_Initialize"
+    pDebugParseKey = False
+    pDebugParseObject = False
     'Debug.Print , "jsonlibVERSION=" & jsonlibVERSION
     'Debug.Print , "jsonlibVERSION_DATE=" & jsonlibVERSION_DATE
 End Sub
@@ -99,6 +103,8 @@ Public Function parse(ByRef str As String) As Object
     '''On Error Resume Next
 
     Call skipChar(str, index)
+    Debug.Print , "Function parse", index, Mid(str, index, 1)
+
 
     Select Case Mid(str, index, 1)
     Case "{"
@@ -137,6 +143,8 @@ End Sub
 '
 Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 
+    On Error GoTo PROC_ERR
+
     If pDebug Then Debug.Print ">>parseObject"
 
     Set parseObject = CreateObject("Scripting.Dictionary")
@@ -152,14 +160,17 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
             Call charView(str)
             Debug.Print
         End If
+        'Err.Raise vbObjectError + 1000, "jsonVBA.parseObject", "E2 Prevent error message loop"
         Exit Function
     End If
 
     index = index + 1
+    If pDebugParseObject Then Debug.Print , "Function parseObject", index, Mid(str, index, 1)
 
     Do
 
         Call skipChar(str, index)
+        If pDebugParseObject Then Debug.Print , "Function parseObject", index, Mid(str, index, 1)
 
         If "}" = Mid(str, index, 1) Then
             index = index + 1
@@ -175,18 +186,30 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
                 Debug.Print
             End If
             Exit Function
-            Exit Do
+        End If
+
+        If ("""" <> Mid(str, index, 1)) And ("'" <> Mid(str, index, 1)) Then
+            pParseError = pParseError & "Missing "" or ' at index " & index
+            Debug.Print , "E4 parseObject: " & pParseError, Mid(str, 1, index)
+            'Stop
+            If pDebug Then
+                Call charView(str)
+                Debug.Print
+            End If
+            Exit Function
         End If
 
         ' add key/value pair
         sKey = parseKey(str, index)
-        Debug.Print , "sKey=" & sKey
+        If pDebugParseObject Then Debug.Print , "sKey=" & sKey, "index=" & index
+        'Stop
+        
         '''On Error Resume Next
         
         parseObject.Add sKey, parseValue(str, index)
         If Err.Number <> 0 Then
             pParseError = pParseError & Err.Description & ": " & sKey & vbCrLf
-            Debug.Print , "E4 parseObject: " & pParseError
+            Debug.Print , "E5 parseObject: " & pParseError
             If pDebug Then
                 Call charView(str)
                 Debug.Print
@@ -195,6 +218,13 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
         End If
 
     Loop
+
+PROC_EXIT:
+    Exit Function
+
+PROC_ERR:
+    MsgBox "Err=" & Err & " " & Err.Description, , "parseObject"
+    Resume PROC_EXIT
 
 End Function
 
@@ -211,7 +241,7 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
 
     If Mid(str, index, 1) <> "[" Then
         pParseError = pParseError & "Invalid Array at position " & index & " : " + Mid(str, index, 20) & vbCrLf
-        Debug.Print , "E5 parseArray: " & pParseError
+        Debug.Print , "E6 parseArray: " & pParseError
         If pDebug Then
             Call charView(str)
             Debug.Print
@@ -233,7 +263,7 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
             Call skipChar(str, index)
         ElseIf index > Len(str) Then
             pParseError = pParseError & "Missing ']' at index " & index
-            Debug.Print , "E6 parseArray: " & pParseError
+            Debug.Print , "E7 parseArray: " & pParseError
             If pDebug Then
                 Call charView(str)
                 Debug.Print
@@ -246,7 +276,7 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
         parseArray.Add parseValue(str, index)
         If Err.Number <> 0 Then
             pParseError = pParseError & Err.Description & ": " & Mid(str, index, 20) & vbCrLf
-            Debug.Print , "E7 parseArray: " & pParseError
+            Debug.Print , "E8 parseArray: " & pParseError
             If pDebug Then
                 Call charView(str)
                 Debug.Print
@@ -261,9 +291,11 @@ End Function
 '
 '   parse string / number / object / array / true / false / null
 '
-Private Function parseValue(ByRef str As String, ByRef index As Long)
+Private Function parseValue(ByRef str As String, ByRef index As Long) As Variant
 
     If pDebug Then Debug.Print ">>parseValue"
+
+    On Error GoTo PROC_EXIT
 
     Call skipChar(str, index)
 
@@ -276,11 +308,23 @@ Private Function parseValue(ByRef str As String, ByRef index As Long)
             parseValue = parseString(str, index)
         Case "t", "f"
             parseValue = parseBoolean(str, index)
+            If parseValue = "Error" Then
+                Debug.Print , "parseValue = ""Error""", index
+                'Err.Raise vbObjectError + 1001, "jsonVBA.parseValue", "parseValue boolean error"
+                'Exit Function
+            End If
         Case "n"
             parseValue = parseNull(str, index)
         Case Else
             parseValue = parseNumber(str, index)
     End Select
+
+PROC_EXIT:
+    Exit Function
+
+PROC_ERR:
+    MsgBox "Err=" & Err & " " & Err.Description, , "parseValue"
+    Resume PROC_EXIT
 
 End Function
 
@@ -367,7 +411,6 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
         char = Mid(str, index, 1)
         If InStr("+-0123456789.eE", char) Then
             myValue = myValue & char
-            'Debug.Print myValue
             index = index + 1
             If index > 200 Then
                 Debug.Print "STOP"
@@ -385,6 +428,7 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
 '                Debug.Print "ST", myValue
 '            End If
 '
+            Debug.Print , "myValue=" & myValue
             parseNumber = CDec(myValue)
             Exit Function
         End If
@@ -395,28 +439,41 @@ End Function
 '
 '   parse true / false
 '
-Private Function parseBoolean(ByRef str As String, ByRef index As Long) As Boolean
+Private Function parseBoolean(ByRef str As String, ByRef index As Long) As String
 
     If pDebug Then Debug.Print ">>parseBoolean"
+
+    On Error GoTo PROC_ERR:
 
     Call skipChar(str, index)
 
     If Mid(str, index, 4) = "true" Then
-        parseBoolean = True
+        parseBoolean = "True"
         index = index + 4
     ElseIf Mid(str, index, 5) = "false" Then
-        parseBoolean = False
+        parseBoolean = "False"
         index = index + 5
     Else
         pParseError = pParseError & Err.Description & " - Invalid Boolean at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
-        Debug.Print , "E8 parseBoolean: " & pParseError
+        Debug.Print , "E9 parseBoolean: " & pParseError
+        'Stop
         If pDebug Then
             Call charView(str)
             Debug.Print
         End If
-        Exit Function
+        parseBoolean = "Error"
+        index = Len(str)
+        'Err.Raise vbObjectError + 1000, "jsonVBA.parseBoolean", "E9 Prevent error message loop"
+        'Exit Function
     End If
+
+PROC_EXIT:
+    Exit Function
+
+PROC_ERR:
+    MsgBox "Err=" & Err & " " & Err.Description, , "parseBoolean"
+    Resume Next
 
 End Function
 
@@ -435,7 +492,7 @@ Private Function parseNull(ByRef str As String, ByRef index As Long)
     Else
         pParseError = pParseError & Err.Description & " - Invalid Null value at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
-        Debug.Print , "E9 parseNull: " & pParseError
+        Debug.Print , "E10 parseNull: " & pParseError
         If pDebug Then
             Call charView(str)
             Debug.Print
@@ -456,8 +513,8 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
     Call skipChar(str, index)
 
     Do While index > 0 And index <= Len(str)
-        Debug.Print , "Function parseKey=" & parseKey, index
         char = Mid(str, index, 1)
+        If pDebugParseKey Then Debug.Print , "Function parseKey=" & parseKey, index, char
         Select Case (char)
             Case """"
                 dquote = Not dquote
@@ -467,7 +524,7 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                     If Mid(str, index, 1) <> ":" Then
                         pParseError = pParseError & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
-                    Debug.Print , "E10 parseKey: " & pParseError
+                    Debug.Print , "E11 parseKey: " & pParseError
                     If pDebug Then
                         Call charView(str)
                         Debug.Print
@@ -483,7 +540,7 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                     If Mid(str, index, 1) <> ":" Then
                         pParseError = pParseError & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
-                        Debug.Print , "E11 parseKey: " & pParseError
+                        Debug.Print , "E12 parseKey: " & pParseError
                         If pDebug Then
                             Call charView(str)
                             Debug.Print
@@ -529,9 +586,10 @@ Friend Sub skipChar(ByRef str As String, ByRef index As Long)
 
     If pDebug Then Debug.Print ">>skipChar"
 
-'    While index > 0 And index <= Len(str) And InStr(vbCrLf & vbCr & vbLf & vbTab & " ", Mid(str, index, 1))
-'        index = index + 1
-'    Wend
+    While index > 0 And index <= Len(str) And InStr(vbCrLf & vbCr & vbLf & vbTab & " ", Mid(str, index, 1))
+        index = index + 1
+    Wend
+Exit Sub
 
     Dim bComment As Boolean
     Dim bStartComment As Boolean

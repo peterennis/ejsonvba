@@ -323,14 +323,17 @@ Option Private Module
 ' %002 - *** Ref: http://www.codeproject.com/Articles/720368/VB-JSON-Parser-Improved-Performance
 ' %001 - Have test result "VALIDATED" be verified automatically with online parser - TBD
 ' Issues:
+' #010 -
+' #009 -
 ' #008 -
-' #007 -
 ' #006 - Error in multiArray if on error commented out when executing RunAlljsonlibTests
 ' #004 - vbajson7 is a FAIL
 ' #002 - vbajson2 still kills Excel
-' #001 - Run-time error '424' Object required in test vbajson1
 '=============================================================================================================================
 
+' 20141211 - v014 -
+    ' FIXED - #001 - Run-time error '424' Object required in test vbajson1
+    ' FIXED - #007 - parse_error_004 fails for the wrong reason
 ' 20141205 - v014 -
     ' Ref: http://www.intl-spectrum.com/resource/397/Parsing-JSON-data-in-MultiValue.aspx
     ' Ref: http://www.b4x.com/android/forum/threads/jsonparser-for-vb-net.44151/

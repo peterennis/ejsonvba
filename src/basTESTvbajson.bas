@@ -21,27 +21,28 @@ Public Sub RunAllvbajsonTests()
 
     vbajson1
     Debug.Print "=> vbajson1 Finished!" & vbCrLf
-Exit Sub
-'    vbajson1a
-'    Debug.Print "=> vbajson1a Finished!" & vbCrLf
-'    vbajson2
-'    Debug.Print "=> vbajson2 Finished!" & vbCrLf
-'    vbajson3
-'    Debug.Print "=> vbajson3 Finished!" & vbCrLf
-'    vbajson4
-'    Debug.Print "=> vbajson4 Finished!" & vbCrLf
-'    vbajson5
-'    Debug.Print "=> vbajson5 Finished!" & vbCrLf
+    vbajson1a
+    Debug.Print "=> vbajson1a Finished!" & vbCrLf
+    vbajson2
+    Debug.Print "=> vbajson2 Finished!" & vbCrLf
+    vbajson3
+    Debug.Print "=> vbajson3 Finished!" & vbCrLf
+    vbajson4
+    Debug.Print "=> vbajson4 Finished!" & vbCrLf
+    vbajson5
+    Debug.Print "=> vbajson5 Finished!" & vbCrLf
     vbajson6
     Debug.Print "=> vbajson6 Finished!" & vbCrLf
-'    vbajson7
-'    Debug.Print "=> vbajson7 Finished!" & vbCrLf
-'    vbajson7b
-'    Debug.Print "=> vbajson7b Finished!" & vbCrLf
-'    vbajson8
-'    Debug.Print "=> vbajson8 Finished!" & vbCrLf
-'    vbajson8b
-'    Debug.Print "=> vbajson8b Finished!" & vbCrLf
+    vbajson7
+    Debug.Print "=> vbajson7 Finished!" & vbCrLf
+Exit Sub
+    vbajson7b
+    Debug.Print "=> vbajson7b Finished!" & vbCrLf
+    vbajson8
+    Debug.Print "=> vbajson8 Finished!" & vbCrLf
+TEST:
+    vbajson8b
+    Debug.Print "=> vbajson8b Finished!" & vbCrLf
 '    vbajson8c
 '    Debug.Print "=> vbajson8c Finished!" & vbCrLf
 '    vbajson9
@@ -78,31 +79,20 @@ End Sub
 
 Private Sub vbajson1()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson1"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strJson As String
 
-    Debug.Print "=> vbajson1"
-
     ' read the JSON into an object:
-    strJson = "{ bla:""hi"", ""items"": [{""it"":1,""itx"":2},{""i3"":""x""}] }"
+    strJson = "{ ""bla"":""hi"", ""items"": [{""it"":1,""itx"":2},{""i3"":""x""}] }"
     Debug.Print , "strJson=" & strJson & " DOES NOT VALIDATE AT jsonlint.com"
     Debug.Print , "EXPECTING STRING"
-    Set o = lib.parse(strJson)
 
-' Use Online JSON Validator to get the following validated:
-'{
-'    "bla": "hi",
-'    "items": [
-'        {
-'            "it": 1,
-'            "itx": 2
-'        },
-'        {
-'            "i3": "x"
-'        }
-'    ]
-'}
+    'lib.DebugState = True
+    Set o = lib.parse(strJson)
 
     ' get the parsed text back:
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
@@ -127,16 +117,19 @@ End Sub
 
 Private Sub vbajson1a()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson1a"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strJson As String
 
-    Debug.Print "=> vbajson1a"
-
     ' read the JSON into an object:
-    strJson = "{ bla:""hi"", ""here are some items"": [{""it"":1,""itx"":2},{""i3"":""x""}] }"
+    strJson = "{ 'bla':""hi"", ""here are some items"": [{""it"":1,""itx"":2},{""i3"":""x""}] }"
     Debug.Print , "strJson=" & strJson & " DOES NOT VALIDATE AT jsonlint.com"
     Debug.Print , "EXPECTING STRING"
+
+    'lib.DebugState = True
     Set o = lib.parse(strJson)
 
     ' get the parsed text back:
@@ -162,18 +155,20 @@ End Sub
 
 Private Sub vbajson2()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson2"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson2: This test will kill Excel!"
     Debug.Print , "NEEDS DEBUGGING AND ERROR HANDLING"
 Exit Sub
 
     ' read the JSON into an object:
+    'lib.DebugState = True
     Set o = lib.parse("{bla:'hi I'm a single quote!'"", items: [{it:1,itx:2},{i3:'x'}] }")
-   
+
     ' get the parsed text back:
     Debug.Print lib.toString(o)
 
@@ -188,10 +183,11 @@ End Sub
 
 Private Sub vbajson3()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson3"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson3: FIXED."
 
@@ -202,10 +198,11 @@ End Sub
 
 Private Sub vbajson4()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson4"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson4: FIXED. Testing needed for other locale."
 
@@ -216,10 +213,11 @@ End Sub
 
 Private Sub vbajson5()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson5"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson5: FIXED. Test case needed."
 
@@ -230,21 +228,29 @@ End Sub
 
 Private Sub vbajson6()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson6"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strTest As String
 
-    Debug.Print "=> vbajson6"
-
     strTest = "{""Cus:ip"":[123,456,789],""Da:te"":[1,2,3],""Close:Type"":[""stock"",""bo::nd"",""sto:::ck""]}"
     Debug.Print , "strTest=" & strTest
+
     ' read the JSON into an object:
+    'lib.DebugState = True
     Set o = lib.parse(strTest)
    
     ' get the parsed text back:
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    Debug.Print , "VALIDATED"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+    End If
 
     Set o = Nothing
     Set lib = Nothing
@@ -253,17 +259,20 @@ End Sub
 
 Private Sub vbajson7()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson7"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strTest As String
-
-    Debug.Print "=> vbajson7"
 
     strTest = "{""total_rows"":36778,""offset"":26220,""rows"":[" & _
                 "{""id"":""6b80c0b76"",""key"":""a@bbb.net"",""value"":{""entryid"":""81151F241C2500"",""subject"":""test subject"",""senton"":""2009-7-09 22:03:43""}}," & _
                 "{""id"":""b10ed9bee"",""key"":""b@bbb.net"",""value"":{""entryid"":A7C3CF74EA95C9F"",""subject"":""test subject2"",""senton"":""2009-4-21 10:18:26""}}]}"
     Debug.Print "strTest=" & strTest
+
     ' read the JSON into an object:
+    'lib.DebugState = True
     Set o = lib.parse(strTest)
    
     ' get the parsed text back:
@@ -278,15 +287,18 @@ End Sub
 
 Private Sub vbajson7b()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson7b"
+    
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strTest As String
 
-    Debug.Print "=> vbajson7b"
-
     strTest = "{""Cusip"":[123,456,789],""Date"":[1,2,3],""CloseType"":[""stock"",""bond"",""stock""]}"
     Debug.Print , "strTest=" & strTest
+
     ' read the JSON into an object:
+    'lib.DebugState = True
     Set o = lib.parse(strTest)
    
     ' get the parsed text back:
@@ -301,10 +313,11 @@ End Sub
 
 Private Sub vbajson8()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson8"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     ' Create a 2-d array, such as:
     Dim arr(0 To 1, 0 To 1) As String
@@ -326,10 +339,11 @@ End Sub
 
 Private Sub vbajson8b()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson8b"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Dim arr(0 To 3) As Variant
     arr(0) = "a"
@@ -348,10 +362,11 @@ End Sub
 
 Private Sub vbajson8c()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson8c"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Dim arr(1 To 2) As Variant
     arr(1) = Array("a", "b")
@@ -368,10 +383,11 @@ End Sub
 
 Private Sub vbajson9()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson9"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson9: CLOSED."
 
@@ -382,11 +398,12 @@ End Sub
 
 Private Sub vbajson10()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson10"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strTest As String
-
-    Debug.Print "=> vbajson10"
 
     strTest = "{""BigNumber1"":32769}"
     Debug.Print , "strTest=" & strTest
@@ -435,11 +452,12 @@ End Sub
 
 Private Sub vbajson10a()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson10a"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strTest As String
-
-    Debug.Print "=> vbajson10a"
 
     strTest = "{""RealNumber1"":32.769}"
     Debug.Print , "strTest=" & strTest
@@ -488,11 +506,12 @@ End Sub
 
 Private Sub vbajson11()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson11"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strTest As String
-
-    Debug.Print "=> vbajson11"
 
     strTest = "{""Path"":""C:\sample\sample.jpg""}"
     Set o = lib.parse(strTest)
@@ -548,11 +567,12 @@ End Sub
 
 Private Sub vbajson12()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson12"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strTest As String
-
-    Debug.Print "=> vbajson12"
 
     strTest = "{""ListsState"":{""MenuLocation"":[""Kelim"",""ChecklistTools""],""CurentLoadedChecklist"":""ToolsConfig"",""InnerDoc"":{""DapiotRegel"":{""ClassName"":""White"",""CHLTitle"":""???? ???"",""Fields"":{}},""ToolsConfig"":{""ClassName"":""White"",""CHLTitle"":""??????"",""Fields"":{""ToolsConfigHeliID"":""036"",""ToolsConfigCrewSize"":""3"",""ToolsConfigOperativeWgt"":""1,500"",""ToolsConfigNumOf669"":""0"",""ToolsConfigNumOf669Doc"":""0"",""ToolsConfigNumOf669Med"":""0"",""ToolsConfigNumOf669Equip"":""0"",""ToolsConfigNumOfSol"":""0"",""ToolsConfigNumOfPax"":""0"",""ToolsConfigCargo"":""0"",""ToolsConfigCar"":""0"",""ToolsConfigFuelExtTanks"":""0"",""ToolsConfigFuelTotal"":""0"",""ToolsConfigCarUnits_Save"":""?\\?""}}}}}"
     Set o = lib.parse(strTest)
@@ -568,7 +588,10 @@ End Sub
 
 Private Sub vbajson13()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson13"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim str1 As String
     Dim str2 As String
@@ -579,8 +602,6 @@ Private Sub vbajson13()
     Dim str7 As String
     Dim str8 As String
     Dim strTest As String
-
-    Debug.Print "=> vbajson13"
 
     str1 = "{""schedules"":[{""summary"":""Sign in"",""executedOn"":""10/Oct/12 1:50 PM"",""cycleName"":""asdf"",""cycleID"":15,""label"":""1, 2, 3, 4, 5"",""issueId"":123,""versionName"":""asdf"",""issueID"":123,""defects"":["
     Debug.Print , "str1=" & str1
@@ -614,10 +635,11 @@ End Sub
 
 Private Sub vbajson13b()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson13b"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson13b: Test case needed. String Builder Class and Office x64 - TBD."
 
@@ -628,11 +650,13 @@ End Sub
 
 Private Sub vbajson14()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson14"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strEmbed As String
 
-    Debug.Print "=> vbajson14"
     strEmbed = "[{""ty:pe"":""t1"",""title"":""データ1"",""attr"":[""1-1"",""1-2""]},{""type"":""t2"",""title"":""データ2"",""attr"":[""2-1"",""2-2""]}]"""
     Debug.Print , "strEmbed=" & strEmbed
 
@@ -654,10 +678,11 @@ End Sub
 
 Private Sub vbajson15()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson15"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson15: Test case needed."
 
@@ -668,11 +693,13 @@ End Sub
 
 Private Sub vbajson16()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson16"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strTest As String
 
-    Debug.Print "=> vbajson16"
     Debug.Print , "m_SDecimal= " & GetSDecimal
     Debug.Print , "m_SThousand= " & GetSThousand
 
@@ -702,11 +729,13 @@ End Sub
 
 Private Sub vbajson16a()
 
-    Dim lib As New jsonlib
+    Debug.Print "=> vbajson16a"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
     Dim o As Object
     Dim strTest As String
 
-    Debug.Print "=> vbajson16a"
     Debug.Print , "m_SDecimal= " & GetSDecimal
     Debug.Print , "m_SThousand= " & GetSThousand
 
@@ -736,10 +765,11 @@ End Sub
 
 Private Sub vbajson17()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson17"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson17: Test case needed."
 
@@ -750,10 +780,11 @@ End Sub
 
 Private Sub vbajson18()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson18"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson18: Test case needed."
 
@@ -764,10 +795,11 @@ End Sub
 
 Private Sub vbajson19()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson19"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson19: Test case needed."
 
@@ -778,10 +810,11 @@ End Sub
 
 Private Sub vbajson20()
 
-    Dim lib As New jsonlib
-    Dim o As Object
-
     Debug.Print "=> vbajson20"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
 
     Debug.Print , "vbajson20: Test case needed."
 
