@@ -8,6 +8,8 @@ Public Sub RunAllvbajsonErrorTests()
 'GoTo TEST:
     vbajson1_fail
     Debug.Print "=> vbajson1_fail Finished!" & vbCrLf
+    vbajson7_fail
+    Debug.Print "=> vbajson7_fail Finished!" & vbCrLf
     parse_error_001
     Debug.Print "=> parse_error_001 Finished!" & vbCrLf
     parse_error_002
@@ -81,6 +83,39 @@ Private Sub vbajson1_fail()
         o.Item("items").Item(1).Item("itx")
 
 PROC_EXIT:
+    Set o = Nothing
+    Set lib = Nothing
+
+End Sub
+
+Private Sub vbajson7_fail()
+
+    Debug.Print "=> vbajson7_fail"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
+    Dim strTest As String
+
+    strTest = "{""total_rows"":36778,""offset"":26220,""rows"":[" & _
+                "{""id"":""6b80c0b76"",""key"":""a@bbb.net"",""value"":{""entryid"":""81151F241C2500"",""subject"":""test subject"",""senton"":""2009-7-09 22:03:43""}}," & _
+                "{""id"":""b10ed9bee"",""key"":""b@bbb.net"",""value"":{""entryid"":A7C3CF74EA95C9F"",""subject"":""test subject2"",""senton"":""2009-4-21 10:18:26""}}]}"
+    Debug.Print "strTest=" & strTest
+
+    ' read the JSON into an object:
+    'lib.DebugState = True
+    Set o = lib.parse(strTest)
+   
+    ' get the parsed text back:
+    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+    End If
+
     Set o = Nothing
     Set lib = Nothing
 

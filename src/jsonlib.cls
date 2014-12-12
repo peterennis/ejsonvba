@@ -28,7 +28,9 @@ Private Const jsonlibVERSION_DATE As String = "December 11, 2014"
 Private pParseError As String
 Private pDebug As Boolean
 Private pDebugParseKey As Boolean
+Private pDebugParseNumber As Boolean
 Private pDebugParseObject As Boolean
+
 Private m_SDecimal As String
 Private m_SThousand As String
 Private m_StrLen As Long
@@ -39,6 +41,7 @@ Private Sub Class_Initialize()
     Debug.Print , "Class_Initialize"
     pDebugParseKey = False
     pDebugParseObject = False
+    pDebugParseNumber = False
     'Debug.Print , "jsonlibVERSION=" & jsonlibVERSION
     'Debug.Print , "jsonlibVERSION_DATE=" & jsonlibVERSION_DATE
 End Sub
@@ -309,7 +312,7 @@ Private Function parseValue(ByRef str As String, ByRef index As Long) As Variant
         Case "t", "f"
             parseValue = parseBoolean(str, index)
             If parseValue = "Error" Then
-                Debug.Print , "parseValue = ""Error""", index
+                Debug.Print , "parseValue Boolean = ""Error""", index
                 'Err.Raise vbObjectError + 1001, "jsonVBA.parseValue", "parseValue boolean error"
                 'Exit Function
             End If
@@ -317,6 +320,11 @@ Private Function parseValue(ByRef str As String, ByRef index As Long) As Variant
             parseValue = parseNull(str, index)
         Case Else
             parseValue = parseNumber(str, index)
+            If parseValue = "Error" Then
+                Debug.Print , "parseValue Number = ""Error""", index
+                'Err.Raise vbObjectError + 1001, "jsonVBA.parseValue", "parseValue boolean error"
+                'Exit Function
+            End If
     End Select
 
 PROC_EXIT:
@@ -409,6 +417,7 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
     
     Do While index > 0 And index <= Len(str)
         char = Mid(str, index, 1)
+        If pDebugParseNumber Then Debug.Print , "char=" & char
         If InStr("+-0123456789.eE", char) Then
             myValue = myValue & char
             index = index + 1
@@ -429,7 +438,19 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
 '            End If
 '
             Debug.Print , "myValue=" & myValue
-            parseNumber = CDec(myValue)
+            If IsNull(myValue) Or myValue = vbNullString Then
+                pParseError = pParseError & "Number expected at index " & index & " : " + Mid(str, index, 20) & vbCrLf
+                Debug.Print , "E9 parseBoolean: " & pParseError
+                'Stop
+                If pDebug Then
+                    Call charView(str)
+                    Debug.Print
+                End If
+                parseNumber = "Error"
+                index = Len(str)
+            Else
+                parseNumber = CDec(myValue)
+            End If
             Exit Function
         End If
     Loop
@@ -456,7 +477,7 @@ Private Function parseBoolean(ByRef str As String, ByRef index As Long) As Strin
     Else
         pParseError = pParseError & Err.Description & " - Invalid Boolean at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
-        Debug.Print , "E9 parseBoolean: " & pParseError
+        Debug.Print , "E10 parseBoolean: " & pParseError
         'Stop
         If pDebug Then
             Call charView(str)
@@ -492,7 +513,7 @@ Private Function parseNull(ByRef str As String, ByRef index As Long)
     Else
         pParseError = pParseError & Err.Description & " - Invalid Null value at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
-        Debug.Print , "E10 parseNull: " & pParseError
+        Debug.Print , "E11 parseNull: " & pParseError
         If pDebug Then
             Call charView(str)
             Debug.Print
@@ -524,7 +545,7 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                     If Mid(str, index, 1) <> ":" Then
                         pParseError = pParseError & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
-                    Debug.Print , "E11 parseKey: " & pParseError
+                    Debug.Print , "E12 parseKey: " & pParseError
                     If pDebug Then
                         Call charView(str)
                         Debug.Print
@@ -540,7 +561,7 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                     If Mid(str, index, 1) <> ":" Then
                         pParseError = pParseError & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
-                        Debug.Print , "E12 parseKey: " & pParseError
+                        Debug.Print , "E13 parseKey: " & pParseError
                         If pDebug Then
                             Call charView(str)
                             Debug.Print
