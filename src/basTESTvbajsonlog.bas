@@ -105,7 +105,7 @@ Option Private Module
     ' {"Cusip":[123,456,789],"Date":[1,2,3],"CloseType":["stock","bond","stock"]}
     'THIS IS MY JSON STRING
     'but when i try to parse(mystring)..I get back the same string
-'"vbajson8","Defect","New","Medium","","","Cannot convert a 2-d array to JSON","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=8
+'"vbajson8","Defect","FIXED","Medium","","","Cannot convert a 2-d array to JSON","Priority-Medium, Type-Defect",https://code.google.com/p/vba-json/issues/detail?id=8
     'Reported by mheber...@gmail.com, Jan 15, 2010
     '-What steps will reproduce the problem?
     '1. Create a 2-d array, such as:

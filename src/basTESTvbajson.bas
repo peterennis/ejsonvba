@@ -36,20 +36,18 @@ GoTo TEST:
     Debug.Print "=> vbajson6 Finished!" & vbCrLf
     vbajson7
     Debug.Print "=> vbajson7 Finished!" & vbCrLf
-TEST:
     vbajson7b
     Debug.Print "=> vbajson7b Finished!" & vbCrLf
-Exit Sub
-    vbajson8
-    Debug.Print "=> vbajson8 Finished!" & vbCrLf
     vbajson8b
     Debug.Print "=> vbajson8b Finished!" & vbCrLf
-'    vbajson8c
-'    Debug.Print "=> vbajson8c Finished!" & vbCrLf
-'    vbajson9
-'    Debug.Print "=> vbajson9 Finished!" & vbCrLf
-'    vbajson10
-'    Debug.Print "=> vbajson10 Finished!" & vbCrLf
+    vbajson8c
+    Debug.Print "=> vbajson8c Finished!" & vbCrLf
+    vbajson9
+    Debug.Print "=> vbajson9 Finished!" & vbCrLf
+TEST:
+    vbajson10
+    Debug.Print "=> vbajson10 Finished!" & vbCrLf
+Exit Sub
 '    vbajson10a
 '    Debug.Print "=> vbajson10a Finished!" & vbCrLf
 '    vbajson11
@@ -310,33 +308,12 @@ Private Sub vbajson7b()
     ' get the parsed text back:
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    Debug.Print , "VALIDATED"
-
-    Set o = Nothing
-    Set lib = Nothing
-
-End Sub
-
-Private Sub vbajson8()
-
-    Debug.Print "=> vbajson8"
-
-    Dim lib As jsonlib
-    Set lib = New jsonlib
-    Dim o As Object
-
-    ' Create a 2-d array, such as:
-    Dim arr(0 To 1, 0 To 1) As String
-    arr(0, 0) = "a"
-    arr(0, 1) = "b"
-    arr(1, 0) = "c"
-    arr(1, 1) = "d"
-
-    ' Try to convert to JSON with
-    ' Debug.Print lib.toString(arr)
-    ' Type Mismatch ERROR raised here: toString = Replace(obj, ",", ".")
-    
-    Debug.Print , "vbajson8: FAILED. - Not supported in this version of VBA-JSON"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+    End If
 
     Set o = Nothing
     Set lib = Nothing
@@ -357,9 +334,15 @@ Private Sub vbajson8b()
     arr(2) = "c"
     arr(3) = "d"
 
+    'lib.DebugState = True
     Debug.Print , "lib.toString(arr)=" & lib.toString(arr)
 
-    Debug.Print , "VALIDATED"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+    End If
 
     Set o = Nothing
     Set lib = Nothing
@@ -378,9 +361,15 @@ Private Sub vbajson8c()
     arr(1) = Array("a", "b")
     arr(2) = Array("c", "d")
 
+    'lib.DebugState = True
     Debug.Print , "lib.toString(arr)=" & lib.toString(arr)
 
-    Debug.Print , "VALIDATED"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+    End If
 
     Set o = Nothing
     Set lib = Nothing
@@ -390,15 +379,7 @@ End Sub
 Private Sub vbajson9()
 
     Debug.Print "=> vbajson9"
-
-    Dim lib As jsonlib
-    Set lib = New jsonlib
-    Dim o As Object
-
-    Debug.Print , "vbajson9: CLOSED."
-
-    Set o = Nothing
-    Set lib = Nothing
+    Debug.Print , "vbajson9: CLOSED. No Test needed."
 
 End Sub
 
@@ -417,40 +398,72 @@ Private Sub vbajson10()
     Set o = lib.parse(strTest)
 
     ' get the parsed text back:
+    'lib.DebugState = True
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    Debug.Print , "VALIDATED"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED BigNumber1"
+        GoTo PROC_EXIT
+    End If
 
+    Debug.Print
     strTest = "{""BigNumber2"":1234567890}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
     Set o = lib.parse(strTest)
 
     ' get the parsed text back:
+    'lib.DebugState = True
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    Debug.Print , "VALIDATED"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED BigNumber2"
+        GoTo PROC_EXIT
+    End If
 
+    Debug.Print
     strTest = "{""BigNumber3"":123456789012345678901}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
     Set o = lib.parse(strTest)
 
     ' get the parsed text back:
+    'lib.DebugState = True
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    Debug.Print , "VALIDATED WITH ROUNDING"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED WITH ROUNDING"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED BigNumber1"
+        GoTo PROC_EXIT
+    End If
 
+    Debug.Print
     strTest = "{""BigNumber4"":1234567890123456789012345678901234567890}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
     Set o = lib.parse(strTest)
 
     ' get the parsed text back:
+    'lib.DebugState = True
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    Debug.Print , "VALIDATED WITH e+39"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED WITH e+39"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED BigNumber1"
+        GoTo PROC_EXIT
+    End If
 
+PROC_EXIT:
     Set o = Nothing
     Set lib = Nothing
 

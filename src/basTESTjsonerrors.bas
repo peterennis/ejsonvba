@@ -10,6 +10,8 @@ Public Sub RunAllvbajsonErrorTests()
     Debug.Print "=> vbajson1_fail Finished!" & vbCrLf
     vbajson7_fail
     Debug.Print "=> vbajson7_fail Finished!" & vbCrLf
+    vbajson8_fail
+    Debug.Print "=> vbajson8_fail Finished!" & vbCrLf
     parse_error_001
     Debug.Print "=> parse_error_001 Finished!" & vbCrLf
     parse_error_002
@@ -115,6 +117,32 @@ Private Sub vbajson7_fail()
         Debug.Print , lib.GetParseError
         Debug.Print , "FAILED"
     End If
+
+    Set o = Nothing
+    Set lib = Nothing
+
+End Sub
+
+Private Sub vbajson8_fail()
+
+    Debug.Print "=> vbajson8_fail"
+
+    Dim lib As jsonlib
+    Set lib = New jsonlib
+    Dim o As Object
+
+    ' Create a 2-d array, such as:
+    Dim arr(0 To 1, 0 To 1) As String
+    arr(0, 0) = "a"
+    arr(0, 1) = "b"
+    arr(1, 0) = "c"
+    arr(1, 1) = "d"
+
+    ' Try to convert to JSON with
+    Debug.Print "lib.toString(arr)=" & lib.toString(arr)
+    ' Type Mismatch ERROR raised here: toString = Replace(obj, ",", ".")
+    
+    Debug.Print , "FAILED. - This array definition is not supported in the current version."
 
     Set o = Nothing
     Set lib = Nothing
