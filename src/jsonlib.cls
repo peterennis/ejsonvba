@@ -22,8 +22,8 @@ Option Compare Text
 
 Private Const INVALID_RPC_CALL  As Long = 7
 
-Private Const jsonlibVERSION As String = "0.1.4"
-Private Const jsonlibVERSION_DATE As String = "December 11, 2014"
+Private Const jsonlibVERSION As String = "0.1.5"
+Private Const jsonlibVERSION_DATE As String = "December 12, 2014"
 
 Private pParseError As String
 Private pDebug As Boolean
