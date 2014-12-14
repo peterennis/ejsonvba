@@ -106,8 +106,7 @@ Public Function parse(ByRef str As String) As Object
     '''On Error Resume Next
 
     Call skipChar(str, index)
-    Debug.Print , "Function parse", index, Mid(str, index, 1)
-
+    If pDebugParseKey Then Debug.Print , "Function parse", index, Mid(str, index, 1)
 
     Select Case Mid(str, index, 1)
     Case "{"

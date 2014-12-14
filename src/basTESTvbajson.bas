@@ -44,12 +44,12 @@ GoTo TEST:
     Debug.Print "=> vbajson8c Finished!" & vbCrLf
     vbajson9
     Debug.Print "=> vbajson9 Finished!" & vbCrLf
-TEST:
     vbajson10
     Debug.Print "=> vbajson10 Finished!" & vbCrLf
+TEST:
+    vbajson10a
+    Debug.Print "=> vbajson10a Finished!" & vbCrLf
 Exit Sub
-'    vbajson10a
-'    Debug.Print "=> vbajson10a Finished!" & vbCrLf
 '    vbajson11
 '    Debug.Print "=> vbajson11 Finished!" & vbCrLf
 '    vbajson12
@@ -484,40 +484,72 @@ Private Sub vbajson10a()
     Set o = lib.parse(strTest)
 
     ' get the parsed text back:
+    'lib.DebugState = True
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    Debug.Print , "VALIDATED"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED RealNumber1"
+        GoTo PROC_EXIT
+    End If
 
+    Debug.Print
     strTest = "{""RealNumber2"":0.1234567890}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
     Set o = lib.parse(strTest)
 
     ' get the parsed text back:
+    'lib.DebugState = True
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    Debug.Print , "VALIDATED"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED RealNumber2"
+        GoTo PROC_EXIT
+    End If
 
-    strTest = "{""RealNumber3"":1.23456789012345678901}"
+    Debug.Print
+    strTest = "{""RealNumber3"":1.123456789012345678901}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
     Set o = lib.parse(strTest)
 
     ' get the parsed text back:
+    'lib.DebugState = True
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    Debug.Print , "VALIDATED WITH ROUNDING TO 16 DECIMAL PLACES"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED WITH ROUNDING TO 16 DECIMAL PLACES"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED RealNumber3"
+        GoTo PROC_EXIT
+    End If
 
-    strTest = "{""RealNumber4"":-12345.67890123456789012345678901234567890}"
+    Debug.Print
+    strTest = "{""RealNumber4"":-12345.1234567890123456789012345678901234567890}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
     Set o = lib.parse(strTest)
 
     ' get the parsed text back:
+    'lib.DebugState = True
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
 
-    Debug.Print , "VALIDATED WITH ROUNDING TO 12 DECIMAL PLACES"
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED WITH ROUNDING TO 12 DECIMAL PLACES"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED RealNumber3"
+        GoTo PROC_EXIT
+    End If
 
+PROC_EXIT:
     Set o = Nothing
     Set lib = Nothing
 

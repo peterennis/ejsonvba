@@ -131,6 +131,8 @@ Private Sub vbajson8_fail()
     Set lib = New jsonlib
     Dim o As Object
 
+    On Error GoTo PROC_ERR
+
     ' Create a 2-d array, such as:
     Dim arr(0 To 1, 0 To 1) As String
     arr(0, 0) = "a"
@@ -144,8 +146,17 @@ Private Sub vbajson8_fail()
     
     Debug.Print , "FAILED. - This array definition is not supported in the current version."
 
+PROC_EXIT:
     Set o = Nothing
     Set lib = Nothing
+    Exit Sub
+
+PROC_ERR:
+    If Err = 13 Then
+        Resume Next
+    Else
+        Stop
+    End If
 
 End Sub
 
