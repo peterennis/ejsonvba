@@ -22,14 +22,16 @@ Option Compare Text
 
 Private Const INVALID_RPC_CALL  As Long = 7
 
-Private Const jsonlibVERSION As String = "0.1.5"
-Private Const jsonlibVERSION_DATE As String = "December 12, 2014"
+Private Const jsonlibVERSION As String = "0.1.6"
+Private Const jsonlibVERSION_DATE As String = "December 14, 2014"
 
 Private pParseError As String
-Private pDebug As Boolean
-Private pDebugParseKey As Boolean
-Private pDebugParseNumber As Boolean
-Private pDebugParseObject As Boolean
+Private bDebugEncode As Boolean
+Private bDebugState As Boolean
+Private bDebugParseKey As Boolean
+Private bDebugParseNumber As Boolean
+Private bDebugParseObject As Boolean
+Private bDebugParseString As Boolean
 
 Private m_SDecimal As String
 Private m_SThousand As String
@@ -39,9 +41,11 @@ Private m_Str() As Integer
 
 Private Sub Class_Initialize()
     Debug.Print , "Class_Initialize"
-    pDebugParseKey = False
-    pDebugParseObject = False
-    pDebugParseNumber = False
+    bDebugParseKey = False
+    bDebugParseNumber = False
+    bDebugParseObject = False
+    bDebugParseString = True
+    bDebugEncode = True
     'Debug.Print , "jsonlibVERSION=" & jsonlibVERSION
     'Debug.Print , "jsonlibVERSION_DATE=" & jsonlibVERSION_DATE
 End Sub
@@ -51,24 +55,24 @@ Private Sub Class_Terminate()
 End Sub
 
 Public Property Get GetParseError() As String
-    If pDebug Then Debug.Print ">>GetParseError"
+    If bDebugState Then Debug.Print ">>GetParseError"
     GetParseError = pParseError
 End Property
 
 Public Property Get ClearParseError() As String
-    If pDebug Then Debug.Print ">>ClearParseError"
+    If bDebugState Then Debug.Print ">>ClearParseError"
     pParseError = vbNullString
     ClearParseError = "pParseError = vbNullString"
 End Property
 
 Public Property Get DebugState() As Boolean
-    If pDebug Then Debug.Print ">>DebugState=" & pDebug
-    DebugState = pDebug
+    If bDebugState Then Debug.Print ">>DebugState=" & bDebugState
+    DebugState = bDebugState
 End Property
 
 Public Property Let DebugState(blnDebug As Boolean)
-    If pDebug Then Debug.Print ">>DebugState=" & pDebug
-    pDebug = blnDebug
+    If bDebugState Then Debug.Print ">>DebugState=" & bDebugState
+    bDebugState = blnDebug
 End Property
 
 Private Function charView(str As String) As Boolean
@@ -92,7 +96,7 @@ End Function
 '
 Public Function parse(ByRef str As String) As Object
 
-    If pDebug Then Debug.Print ">>parse"
+    If bDebugState Then Debug.Print ">>parse"
 
     m_SDecimal = GetSDecimal
     m_SThousand = GetSThousand
@@ -106,7 +110,7 @@ Public Function parse(ByRef str As String) As Object
     '''On Error Resume Next
 
     Call skipChar(str, index)
-    If pDebugParseKey Then Debug.Print , "Function parse", index, Mid(str, index, 1)
+    If bDebugParseKey Then Debug.Print , "Function parse", index, Mid(str, index, 1)
 
     Select Case Mid(str, index, 1)
     Case "{"
@@ -116,7 +120,7 @@ Public Function parse(ByRef str As String) As Object
     Case Else
         pParseError = "str=" & str & " index=" & index & " Invalid JSON"
         Debug.Print , "E1 parse: " & pParseError
-        If pDebug Then
+        If bDebugState Then
             Call charView(str)
             Debug.Print
         End If
@@ -127,7 +131,7 @@ End Function
 
 Private Sub generateStringArray(ByRef str As String)
 
-    If pDebug Then Debug.Print ">>GenerateStringArray"
+    If bDebugState Then Debug.Print ">>GenerateStringArray"
 
     Dim i As Long
 
@@ -147,7 +151,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 
     On Error GoTo PROC_ERR
 
-    If pDebug Then Debug.Print ">>parseObject"
+    If bDebugState Then Debug.Print ">>parseObject"
 
     Set parseObject = CreateObject("Scripting.Dictionary")
 
@@ -158,7 +162,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
     If Mid(str, index, 1) <> "{" Then
         pParseError = pParseError & "Invalid Object at position " & index & " : " & Mid(str, index)
         Debug.Print , "E2 parseObject: " & pParseError
-        If pDebug Then
+        If bDebugState Then
             Call charView(str)
             Debug.Print
         End If
@@ -167,12 +171,12 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
     End If
 
     index = index + 1
-    If pDebugParseObject Then Debug.Print , "Function parseObject", index, Mid(str, index, 1)
+    If bDebugParseObject Then Debug.Print , "Function parseObject", index, Mid(str, index, 1)
 
     Do
 
         Call skipChar(str, index)
-        If pDebugParseObject Then Debug.Print , "Function parseObject", index, Mid(str, index, 1)
+        If bDebugParseObject Then Debug.Print , "Function parseObject", index, Mid(str, index, 1)
 
         If "}" = Mid(str, index, 1) Then
             index = index + 1
@@ -183,7 +187,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
         ElseIf index > Len(str) Then
             pParseError = pParseError & "Missing '}' at index " & index
             Debug.Print , "E3 parseObject: " & pParseError
-            If pDebug Then
+            If bDebugState Then
                 Call charView(str)
                 Debug.Print
             End If
@@ -194,7 +198,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
             pParseError = pParseError & "Missing "" or ' at index " & index
             Debug.Print , "E4 parseObject: " & pParseError, Mid(str, 1, index)
             'Stop
-            If pDebug Then
+            If bDebugState Then
                 Call charView(str)
                 Debug.Print
             End If
@@ -203,7 +207,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
 
         ' add key/value pair
         sKey = parseKey(str, index)
-        If pDebugParseObject Then Debug.Print , "sKey=" & sKey, "index=" & index
+        If bDebugParseObject Then Debug.Print , "sKey=" & sKey, "index=" & index
         'Stop
         
         '''On Error Resume Next
@@ -212,7 +216,7 @@ Private Function parseObject(ByRef str As String, ByRef index As Long) As Object
         If Err.Number <> 0 Then
             pParseError = pParseError & Err.Description & ": " & sKey & vbCrLf
             Debug.Print , "E5 parseObject: " & pParseError
-            If pDebug Then
+            If bDebugState Then
                 Call charView(str)
                 Debug.Print
             End If
@@ -235,7 +239,7 @@ End Function
 '
 Private Function parseArray(ByRef str As String, ByRef index As Long) As Collection
 
-    If pDebug Then Debug.Print ">>parseArray"
+    If bDebugState Then Debug.Print ">>parseArray"
 
     Set parseArray = New Collection
 
@@ -244,7 +248,7 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
     If Mid(str, index, 1) <> "[" Then
         pParseError = pParseError & "Invalid Array at position " & index & " : " + Mid(str, index, 20) & vbCrLf
         Debug.Print , "E6 parseArray: " & pParseError
-        If pDebug Then
+        If bDebugState Then
             Call charView(str)
             Debug.Print
         End If
@@ -266,7 +270,7 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
         ElseIf index > Len(str) Then
             pParseError = pParseError & "Missing ']' at index " & index
             Debug.Print , "E7 parseArray: " & pParseError
-            If pDebug Then
+            If bDebugState Then
                 Call charView(str)
                 Debug.Print
             End If
@@ -279,7 +283,7 @@ Private Function parseArray(ByRef str As String, ByRef index As Long) As Collect
         If Err.Number <> 0 Then
             pParseError = pParseError & Err.Description & ": " & Mid(str, index, 20) & vbCrLf
             Debug.Print , "E8 parseArray: " & pParseError
-            If pDebug Then
+            If bDebugState Then
                 Call charView(str)
                 Debug.Print
             End If
@@ -295,7 +299,7 @@ End Function
 '
 Private Function parseValue(ByRef str As String, ByRef index As Long) As Variant
 
-    If pDebug Then Debug.Print ">>parseValue"
+    If bDebugState Then Debug.Print ">>parseValue"
 
     On Error GoTo PROC_EXIT
 
@@ -340,7 +344,7 @@ End Function
 '
 Private Function parseString(ByRef str As String, ByRef index As Long) As String
 
-    If pDebug Then Debug.Print ">>parseString"
+    If bDebugState Then Debug.Print ">>parseString"
 
     Dim quote As String
     Dim char As String
@@ -402,7 +406,7 @@ End Function
 '
 Private Function parseNumber(ByRef str As String, ByRef index As Long)
 
-    If pDebug Then Debug.Print ">>parseNumber"
+    If bDebugState Then Debug.Print ">>parseNumber"
 
     Dim myValue As String
     Dim char As String
@@ -416,7 +420,7 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
     
     Do While index > 0 And index <= Len(str)
         char = Mid(str, index, 1)
-        If pDebugParseNumber Then Debug.Print , "char=" & char
+        If bDebugParseNumber Then Debug.Print , "char=" & char
         If InStr("+-0123456789.eE", char) Then
             myValue = myValue & char
             index = index + 1
@@ -441,7 +445,7 @@ Private Function parseNumber(ByRef str As String, ByRef index As Long)
                 pParseError = pParseError & "Number expected at index " & index & " : " + Mid(str, index, 20) & vbCrLf
                 Debug.Print , "E9 parseBoolean: " & pParseError
                 'Stop
-                If pDebug Then
+                If bDebugState Then
                     Call charView(str)
                     Debug.Print
                 End If
@@ -461,7 +465,7 @@ End Function
 '
 Private Function parseBoolean(ByRef str As String, ByRef index As Long) As String
 
-    If pDebug Then Debug.Print ">>parseBoolean"
+    If bDebugState Then Debug.Print ">>parseBoolean"
 
     On Error GoTo PROC_ERR:
 
@@ -478,7 +482,7 @@ Private Function parseBoolean(ByRef str As String, ByRef index As Long) As Strin
                         " : " & Mid(str, index) & vbCrLf
         Debug.Print , "E10 parseBoolean: " & pParseError
         'Stop
-        If pDebug Then
+        If bDebugState Then
             Call charView(str)
             Debug.Print
         End If
@@ -502,7 +506,7 @@ End Function
 '
 Private Function parseNull(ByRef str As String, ByRef index As Long)
 
-    If pDebug Then Debug.Print ">>parseNull"
+    If bDebugState Then Debug.Print ">>parseNull"
 
     Call skipChar(str, index)
 
@@ -513,7 +517,7 @@ Private Function parseNull(ByRef str As String, ByRef index As Long)
         pParseError = pParseError & Err.Description & " - Invalid Null value at position " & index & _
                         " : " & Mid(str, index) & vbCrLf
         Debug.Print , "E11 parseNull: " & pParseError
-        If pDebug Then
+        If bDebugState Then
             Call charView(str)
             Debug.Print
         End If
@@ -524,7 +528,7 @@ End Function
 
 Private Function parseKey(ByRef str As String, ByRef index As Long) As String
 
-    If pDebug Then Debug.Print ">>parseKey"
+    If bDebugState Then Debug.Print ">>parseKey"
 
     Dim dquote As Boolean
     Dim squote As Boolean
@@ -534,7 +538,7 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
 
     Do While index > 0 And index <= Len(str)
         char = Mid(str, index, 1)
-        If pDebugParseKey Then Debug.Print , "Function parseKey=" & parseKey, index, char
+        If bDebugParseKey Then Debug.Print , "Function parseKey=" & parseKey, index, char
         Select Case (char)
             Case """"
                 dquote = Not dquote
@@ -545,7 +549,7 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                         pParseError = pParseError & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
                     Debug.Print , "E12 parseKey: " & pParseError
-                    If pDebug Then
+                    If bDebugState Then
                         Call charView(str)
                         Debug.Print
                     End If
@@ -561,7 +565,7 @@ Private Function parseKey(ByRef str As String, ByRef index As Long) As String
                         pParseError = pParseError & Err.Description & " - Invalid Key value at position " & index & _
                                     " : " & parseKey & vbCrLf
                         Debug.Print , "E13 parseKey: " & pParseError
-                        If pDebug Then
+                        If bDebugState Then
                             Call charView(str)
                             Debug.Print
                         End If
@@ -604,7 +608,7 @@ End Function
 'Public Sub skipChar(ByRef str As String, ByRef index As Long)
 Friend Sub skipChar(ByRef str As String, ByRef index As Long)
 
-    If pDebug Then Debug.Print ">>skipChar"
+    If bDebugState Then Debug.Print ">>skipChar"
 
     While index > 0 And index <= Len(str) And InStr(vbCrLf & vbCr & vbLf & vbTab & " ", Mid(str, index, 1))
         index = index + 1
@@ -664,7 +668,7 @@ End Sub
 
 Public Function toString(ByRef obj As Variant) As String
 
-    If pDebug Then Debug.Print ">>toString"
+    If bDebugState Then Debug.Print ">>toString"
 
     Select Case VarType(obj)
         Case vbNull
@@ -672,24 +676,26 @@ Public Function toString(ByRef obj As Variant) As String
         Case vbDate
             toString = """" & CStr(obj) & """"
         Case vbString
+            If bDebugParseString Then Debug.Print "toString vbString"
             toString = """" & encode(obj) & """"
         Case vbObject
-            Dim bFI, i
+            Dim bFI As Boolean
+            Dim i As Integer
             bFI = True
             If TypeName(obj) = "Dictionary" Then
                 toString = toString & "{"
-                Dim keys
+                Dim keys As Variant
                 keys = obj.keys
                 For i = 0 To obj.Count - 1
                     If bFI Then bFI = False Else toString = toString & ","
-                    Dim key
+                    Dim key As String
                     key = keys(i)
                     toString = toString & """" & key & """:" & toString(obj(key))
                 Next i
                 toString = toString & "}"
             ElseIf TypeName(obj) = "Collection" Then
                 toString = toString & "["
-                Dim myValue
+                Dim myValue As Variant
                 For Each myValue In obj
                     If bFI Then bFI = False Else toString = toString & ","
                     toString = toString & toString(myValue)
@@ -708,24 +714,29 @@ Public Function toString(ByRef obj As Variant) As String
 
 End Function
 
-Private Function encode(str) As String
+Private Function encode(str As Variant) As String
 
-    If pDebug Then Debug.Print ">>encode"
+    If bDebugState Then Debug.Print ">>encode"
 
     Dim i As Integer
     Dim j As Integer
     Dim aL1 As Variant
     Dim aL2 As Variant
+    Dim a As String
     Dim c As String
     Dim p As Boolean
 
     aL1 = Array(&H22, &H5C, &H2F, &H8, &HC, &HA, &HD, &H9)
+                '34,    92,   47,   8,  12,  10,  13,   9
+                ' ",     \,   /,   BS,  FF,  LF,  CR,  HT
+                ' Ref: http://www.ascii-code.com
     aL2 = Array(&H22, &H5C, &H2F, &H62, &H66, &H6E, &H72, &H74)
     For i = 1 To Len(str)
         p = True
         c = Mid(str, i, 1)
         For j = 0 To 7
             If c = Chr(aL1(j)) Then
+                If bDebugEncode Then Debug.Print , c;
                 encode = encode & "\" & Chr(aL2(j))
                 p = False
                 Exit For
@@ -733,7 +744,6 @@ Private Function encode(str) As String
         Next
 
         If p Then
-            Dim a
             a = AscW(c)
             If a > 31 And a < 127 Then
                 encode = encode & c
@@ -747,7 +757,7 @@ End Function
 
 Private Function multiArray(aBD, iBC, sPS, ByRef sPT)   ' Array BoDy, Integer BaseCount, String PoSition
 
-    If pDebug Then Debug.Print ">>multiArray"
+    If bDebugState Then Debug.Print ">>multiArray"
 
     Dim iDU As Integer  ' Integer DimensionUBound
     Dim iDL As Integer  ' Integer DimensionLBound
@@ -784,7 +794,7 @@ End Function
 
 Private Function jsonRpcCall(url As String, methName As String, args(), Optional user As String, Optional pwd As String) As Object
 
-    If pDebug Then Debug.Print ">>JsonRpcCall"
+    If bDebugState Then Debug.Print ">>JsonRpcCall"
 
     Dim r As Object
     Dim cli As Object
@@ -832,7 +842,7 @@ End Function
 
 Public Function toUnicode(str As String) As String
 
-    If pDebug Then Debug.Print ">>toUnicode"
+    If bDebugState Then Debug.Print ">>toUnicode"
 
 '    Dim x As Long
 '    Dim uStr As New cStringBuilder

@@ -46,24 +46,24 @@ GoTo TEST:
     Debug.Print "=> vbajson9 Finished!" & vbCrLf
     vbajson10
     Debug.Print "=> vbajson10 Finished!" & vbCrLf
-TEST:
     vbajson10a
     Debug.Print "=> vbajson10a Finished!" & vbCrLf
+TEST:
+    vbajson11
+    Debug.Print "=> vbajson11 Finished!" & vbCrLf
 Exit Sub
-'    vbajson11
-'    Debug.Print "=> vbajson11 Finished!" & vbCrLf
 '    vbajson12
 '    Debug.Print "=> vbajson12 Finished!" & vbCrLf
 '    vbajson13
 '    Debug.Print "=> vbajson13 Finished!" & vbCrLf
-    vbajson14
-    Debug.Print "=> vbajson14 Finished!" & vbCrLf
-    vbajson15
-    Debug.Print "=> vbajson15 Finished!" & vbCrLf
-    vbajson16
-    Debug.Print "=> vbajson16 Finished!" & vbCrLf
-    vbajson16a
-    Debug.Print "=> vbajson16a Finished!" & vbCrLf
+'    vbajson14
+'    Debug.Print "=> vbajson14 Finished!" & vbCrLf
+'    vbajson15
+'    Debug.Print "=> vbajson15 Finished!" & vbCrLf
+'    vbajson16
+'    Debug.Print "=> vbajson16 Finished!" & vbCrLf
+'    vbajson16a
+'    Debug.Print "=> vbajson16a Finished!" & vbCrLf
 Exit Sub
     vbajson17
     Debug.Print "=> vbajson17 Finished!" & vbCrLf
@@ -565,52 +565,96 @@ Private Sub vbajson11()
     Dim strTest As String
 
     strTest = "{""Path"":""C:\sample\sample.jpg""}"
-    Set o = lib.parse(strTest)
+    'lib.DebugState = True
     Debug.Print , "1. strTest=" & strTest
-    Debug.Assert Err.Number = 0
+    Set o = lib.parse(strTest)
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
-    Debug.Print , "VALIDATED"
-    Debug.Print
 
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+        GoTo PROC_EXIT
+    End If
+
+    Debug.Print
     strTest = "{""Path"":""C:\\sample\\sample.jpg""}"
+    'lib.DebugState = True
     Debug.Print , "2. strTest=" & strTest
     Set o = lib.parse(strTest)
-    Debug.Assert Err.Number = 0
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
-    Debug.Print , "VALIDATED"
-    Debug.Print
 
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+        GoTo PROC_EXIT
+    End If
+Exit Sub
+
+    Debug.Print
     strTest = "{""Path"":""C:\\\sample\\\sample.jpg""}"
+    'lib.DebugState = True
     Debug.Print , "3. strTest=" & strTest
     Set o = lib.parse(strTest)
-    Debug.Assert Err.Number = 0
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
-    Debug.Print , "VALIDATED"
-    Debug.Print
 
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+        GoTo PROC_EXIT
+    End If
+
+    Debug.Print
     strTest = "{""Path"":""C:\\\\sample\\\\sample.jpg""}"
+    'lib.DebugState = True
     Debug.Print , "4. strTest=" & strTest
     Set o = lib.parse(strTest)
-    Debug.Assert Err.Number = 0
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
-    Debug.Print , "VALIDATED"
-    Debug.Print
 
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+        GoTo PROC_EXIT
+    End If
+
+    Debug.Print
     strTest = "{""Path"":""C:\\\\\sample\\\\\sample.jpg""}"
+    'lib.DebugState = True
     Debug.Print , "5. strTest=" & strTest
     Set o = lib.parse(strTest)
-    Debug.Assert Err.Number = 0
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
-    Debug.Print , "VALIDATED"
-    Debug.Print
 
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+        GoTo PROC_EXIT
+    End If
+
+    Debug.Print
     strTest = "{""Path"":""C:\\\\\\sample\\\\\\sample.jpg""}"
+    'lib.DebugState = True
     Debug.Print , "6. strTest=" & strTest
     Set o = lib.parse(strTest)
-    Debug.Assert Err.Number = 0
     Debug.Print , "lib.toString(o)=" & lib.toString(o)
-    Debug.Print , "VALIDATED"
 
+    If lib.GetParseError = vbNullString Then
+        Debug.Print , "VALIDATED"
+    Else
+        Debug.Print , lib.GetParseError
+        Debug.Print , "FAILED"
+        GoTo PROC_EXIT
+    End If
+
+PROC_EXIT:
     Set o = Nothing
     Set lib = Nothing
 

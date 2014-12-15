@@ -317,8 +317,13 @@ Option Private Module
 '
 '=============================================================================================================================
 ' Tasks:
-' %005 -
-' %004 - Review http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf
+' %010 -
+' %009 -
+' %008 - Review Ref: https://tools.ietf.org/html/rfc7159 - Proposed Standard - obsoletes rfc7158
+' %007 - Review Ref: https://tools.ietf.org/html/rfc7158 - Proposed Standard - obsoletes rfc4627
+' %006 - Review Ref: https://tools.ietf.org/html/rfc4627 - Original spec from Douglas Crockford
+' %005 - Review Ref: http://bolinfest.com/essays/json.html - Json ES3 and ES5
+' %004 - Review Ref: http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf
 ' %002 - *** Ref: http://www.codeproject.com/Articles/720368/VB-JSON-Parser-Improved-Performance
 ' %001 - Have test result "VALIDATED" be verified automatically with online parser - TBD
 ' Issues:
@@ -329,6 +334,7 @@ Option Private Module
 ' #002 - vbajson2 still kills Excel
 '=============================================================================================================================
 
+' 20141214 - v016 - Use p for property variables and b for boolean
 ' 20141211 - v014 -
     ' FIXED - #001 - Run-time error '424' Object required in test vbajson1
     ' FIXED - #007 - parse_error_004 fails for the wrong reason
