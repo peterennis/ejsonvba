@@ -141,8 +141,8 @@ Private Sub vbajson8_fail()
     arr(1, 1) = "d"
 
     ' Try to convert to JSON with
-    Debug.Print "lib.toString(arr)=" & lib.toString(arr)
-    ' Type Mismatch ERROR raised here: toString = Replace(obj, ",", ".")
+    Debug.Print , "lib.toString(arr)=" & lib.toString(arr)
+    ' Run-time error 13 Type Mismatch ERROR raised here: toString = Replace(obj, ",", ".")
     
     Debug.Print , "FAILED. - This array definition is not supported in the current version."
 

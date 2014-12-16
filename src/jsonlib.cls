@@ -670,6 +670,8 @@ Public Function toString(ByRef obj As Variant) As String
 
     If bDebugState Then Debug.Print ">>toString"
 
+    On Error GoTo PROC_ERR
+
     Select Case VarType(obj)
         Case vbNull
             toString = "null"
@@ -711,6 +713,17 @@ Public Function toString(ByRef obj As Variant) As String
             Debug.Print obj
             toString = Replace(obj, ",", ".")
     End Select
+
+PROC_EXIT:
+    Exit Function
+
+PROC_ERR:
+    If Err = 13 Then
+        toString = "Error"
+        Resume PROC_EXIT
+    Else
+        MsgBox "Err=" & Err & " " & Err.Description, vbCritical, "toString Unexpected Error"
+    End If
 
 End Function
 
