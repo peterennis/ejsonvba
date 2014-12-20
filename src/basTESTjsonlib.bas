@@ -5,7 +5,6 @@ Option Private Module
 
 Public Sub RunAlljsonlibTests()
 
-'GoTo TEST:
     toString_test1
     Debug.Print "=> toString_test1 Finished!" & vbCrLf
     toString_test2
@@ -14,10 +13,8 @@ Public Sub RunAlljsonlibTests()
     Debug.Print "=> parse_test1 Finished!" & vbCrLf
     parse_test2
     Debug.Print "=> parse_test2 Finished!" & vbCrLf
-'TEST:
     parse_test3
     Debug.Print "=> parse_test3 Finished!" & vbCrLf
-'Exit Sub
     parse_test3a
     Debug.Print "=> parse_test3a Finished!" & vbCrLf
     parse_test4

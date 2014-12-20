@@ -3,7 +3,7 @@ Option Explicit
 Option Compare Text
 Option Private Module
 
-Private Const SOURCEROOT = "C:\ae\eJsonVBA\src"
+Private Const SOURCEROOT = "C:\ae\ejsonvba\src"
 
 ' Default Usage:
 ' The following folders are used if no custom configuration is provided:

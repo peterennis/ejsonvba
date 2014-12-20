@@ -145,7 +145,6 @@ Private Function aeDocumentTheExcelCode(Optional ByVal varDebug As Variant) As B
     Dim strSourceWorkbook As String
     Dim strExportPath As String
     Dim strFileName As String
-    Dim blnDebug As Boolean
 
     'MsgBox "aeDocumentTheExcelCode"
     On Error GoTo PROC_ERR
@@ -155,11 +154,9 @@ Private Function aeDocumentTheExcelCode(Optional ByVal varDebug As Variant) As B
 
     Debug.Print "aeDocumentTheExcelCode"
     If IsMissing(varDebug) Then
-        blnDebug = False
         Debug.Print , "varDebug IS missing so blnDebug of aeDocumentTheExcelCode is set to False"
         Debug.Print , "DEBUGGING IS OFF"
     Else
-        blnDebug = True
         Debug.Print , "varDebug IS NOT missing so blnDebug of aeDocumentTheExcelCode is set to True"
         Debug.Print , "NOW DEBUGGING..."
     End If
