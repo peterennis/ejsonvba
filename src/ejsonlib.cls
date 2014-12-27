@@ -30,6 +30,10 @@ Option Compare Text
 ' GitHub:   https://github.com/peterennis/ejsonvba
 '=======================================================================
 
+Private Const ejsonlibVERSION As String = "0.0.0"
+Private Const ejsonlibVERSION_DATE As String = "December 26, 2014"
+'
+
 Private Sub Class_Initialize()
     On Error GoTo 0
     Debug.Print "Class_Initialize"
