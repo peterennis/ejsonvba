@@ -3,7 +3,7 @@ Option Explicit
 Option Compare Text
 Option Private Module
 
-Public Sub RunAllvbajsonErrorTests()
+Public Sub RunAllejsonvbaErrorTests()
 
 'GoTo TEST:
     vbajson1_fail
@@ -53,7 +53,7 @@ Private Sub vbajson1_fail()
     Debug.Print , "EXPECTING STRING"
     
     'lib.DebugState = True
-    Set o = lib.parse(strJson)
+    Set o = lib.Parse(strJson)
 
 ' Use Online JSON Validator to get the following validated:
 '{
@@ -70,12 +70,12 @@ Private Sub vbajson1_fail()
 '}
 
     ' get the parsed text back:
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -106,15 +106,15 @@ Private Sub vbajson7_fail()
 
     ' read the JSON into an object:
     'lib.DebugState = True
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
    
     ' get the parsed text back:
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -141,8 +141,8 @@ Private Sub vbajson8_fail()
     arr(1, 1) = "d"
 
     ' Try to convert to JSON with
-    Debug.Print , "lib.toString(arr)=" & lib.toString(arr)
-    ' Run-time error 13 Type Mismatch ERROR raised here: toString = Replace(obj, ",", ".")
+    Debug.Print , "lib.ToString(arr)=" & lib.ToString(arr)
+    ' Run-time error 13 Type Mismatch ERROR raised here: ToString = Replace(obj, ",", ".")
     
     Debug.Print , "FAILED. - This array definition is not supported in the current version."
 
@@ -173,11 +173,11 @@ Private Sub parse_error_001()
     Debug.Print , "parseString=" & parseString
 
     'lib.DebugState = True
-    Set json = lib.parse(parseString)
-    If lib.GetParseError = vbNullString Then
+    Set json = lib.Parse(parseString)
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED {}"
     End If
 
@@ -199,11 +199,11 @@ Private Sub parse_error_002()
     Debug.Print , "parseString=" & parseString
 
     'lib.DebugState = True
-    Set json = lib.parse(parseString)
-    If lib.GetParseError = "" Then
+    Set json = lib.Parse(parseString)
+    If lib.ParseError = "" Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED []"
     End If
 
@@ -225,8 +225,8 @@ Private Sub parse_error_003()
     Debug.Print , "parseString=" & parseString
 
     'lib.DebugState = True
-    Set json = lib.parse(parseString)
-    If lib.GetParseError = vbNullString Then
+    Set json = lib.Parse(parseString)
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
         Debug.Print , "FAILED"
@@ -250,13 +250,13 @@ Private Sub parse_test3_fail()
     Debug.Print , "strEmbed=" & strEmbed
 
     'lib.DebugState = True
-    Set json = lib.parse(" " & vbCrLf & vbTab & strEmbed)
+    Set json = lib.Parse(" " & vbCrLf & vbTab & strEmbed)
 
-    Debug.Print , "lib.toString(json)=" & lib.toString(json)
-    If lib.GetParseError = vbNullString Then
+    Debug.Print , "lib.ToString(json)=" & lib.ToString(json)
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -278,8 +278,8 @@ Private Sub parse_error_004()
     Debug.Print , "parseString=" & parseString
 
     'lib.DebugState = True
-    Set json = lib.parse(parseString)
-    If lib.GetParseError = vbNullString Then
+    Set json = lib.Parse(parseString)
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
         Debug.Print , "FAILED"
@@ -303,8 +303,8 @@ Private Sub parse_error_005()
     Debug.Print , "parseString=" & parseString
 
     'lib.DebugState = True
-    Set json = lib.parse(parseString)
-    If lib.GetParseError = vbNullString Then
+    Set json = lib.Parse(parseString)
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
         Debug.Print , "FAILED"

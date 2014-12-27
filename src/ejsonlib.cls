@@ -30,3 +30,38 @@ Option Compare Text
 ' GitHub:   https://github.com/peterennis/ejsonvba
 '=======================================================================
 
+Private Sub Class_Initialize()
+    On Error GoTo 0
+    Debug.Print "Class_Initialize"
+End Sub
+
+Private Sub Class_Terminate()
+    On Error GoTo 0
+    Debug.Print "Class_Terminate"
+End Sub
+
+Public Property Get Parse(strVBA As String) As Object
+    On Error GoTo 0
+    Debug.Print "Get Parse"
+End Property
+
+Public Property Get ParseError() As String
+    On Error GoTo 0
+    Debug.Print "Get ParseError"
+End Property
+
+Public Property Get ToString(v As Variant) As String
+    On Error GoTo 0
+    Debug.Print "Get ToString"
+End Property
+
+Public Property Get WhiteSpace(str As String) As String
+    On Error GoTo 0
+    Debug.Print "Get WhiteSpace"
+End Property
+
+Public Function SkipChar(str As String, ind As Long) As Boolean
+    On Error GoTo 0
+    Debug.Print "Function SkipChar"
+End Function
+

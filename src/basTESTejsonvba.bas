@@ -17,7 +17,7 @@ Option Private Module
 ' *** http://www.ist.rit.edu/~jxs/services/JSON/ (JSON Explorer)
 ' *** http://json-ld.org/ ***
 
-Public Sub RunAllvbajsonTests()
+Public Sub RunAllejsonvbaTests()
 
 GoTo TEST:
     vbajson1
@@ -91,15 +91,15 @@ Private Sub vbajson1()
     Debug.Print , "EXPECTING STRING"
 
     'lib.DebugState = True
-    Set o = lib.parse(strJson)
+    Set o = lib.Parse(strJson)
 
     ' get the parsed text back:
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -129,15 +129,15 @@ Private Sub vbajson1a()
     Debug.Print , "EXPECTING STRING"
 
     'lib.DebugState = True
-    Set o = lib.parse(strJson)
+    Set o = lib.Parse(strJson)
 
     ' get the parsed text back:
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -166,10 +166,10 @@ Exit Sub
 
     ' read the JSON into an object:
     'lib.DebugState = True
-    Set o = lib.parse("{bla:'hi I'm a single quote!'"", items: [{it:1,itx:2},{i3:'x'}] }")
+    Set o = lib.Parse("{bla:'hi I'm a single quote!'"", items: [{it:1,itx:2},{i3:'x'}] }")
 
     ' get the parsed text back:
-    Debug.Print lib.toString(o)
+    Debug.Print lib.ToString(o)
 
     ' get data from arrays etc.:
     Debug.Print "Bla: " & o.Item("bla") & " - Items: " & _
@@ -239,15 +239,15 @@ Private Sub vbajson6()
 
     ' read the JSON into an object:
     'lib.DebugState = True
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
    
     ' get the parsed text back:
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -272,15 +272,15 @@ Private Sub vbajson7()
 
     ' read the JSON into an object:
     'lib.DebugState = True
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
    
     ' get the parsed text back:
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -303,15 +303,15 @@ Private Sub vbajson7b()
 
     ' read the JSON into an object:
     'lib.DebugState = True
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
    
     ' get the parsed text back:
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -335,12 +335,12 @@ Private Sub vbajson8b()
     arr(3) = "d"
 
     'lib.DebugState = True
-    Debug.Print , "lib.toString(arr)=" & lib.toString(arr)
+    Debug.Print , "lib.ToString(arr)=" & lib.ToString(arr)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -362,12 +362,12 @@ Private Sub vbajson8c()
     arr(2) = Array("c", "d")
 
     'lib.DebugState = True
-    Debug.Print , "lib.toString(arr)=" & lib.toString(arr)
+    Debug.Print , "lib.ToString(arr)=" & lib.ToString(arr)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -395,16 +395,16 @@ Private Sub vbajson10()
     strTest = "{""BigNumber1"":32769}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
 
     ' get the parsed text back:
     'lib.DebugState = True
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED BigNumber1"
         GoTo PROC_EXIT
     End If
@@ -413,16 +413,16 @@ Private Sub vbajson10()
     strTest = "{""BigNumber2"":1234567890}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
 
     ' get the parsed text back:
     'lib.DebugState = True
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED BigNumber2"
         GoTo PROC_EXIT
     End If
@@ -431,16 +431,16 @@ Private Sub vbajson10()
     strTest = "{""BigNumber3"":123456789012345678901}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
 
     ' get the parsed text back:
     'lib.DebugState = True
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED WITH ROUNDING"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED BigNumber1"
         GoTo PROC_EXIT
     End If
@@ -449,16 +449,16 @@ Private Sub vbajson10()
     strTest = "{""BigNumber4"":1234567890123456789012345678901234567890}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
 
     ' get the parsed text back:
     'lib.DebugState = True
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED WITH e+39"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED BigNumber1"
         GoTo PROC_EXIT
     End If
@@ -481,16 +481,16 @@ Private Sub vbajson10a()
     strTest = "{""RealNumber1"":32.769}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
 
     ' get the parsed text back:
     'lib.DebugState = True
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED RealNumber1"
         GoTo PROC_EXIT
     End If
@@ -499,16 +499,16 @@ Private Sub vbajson10a()
     strTest = "{""RealNumber2"":0.1234567890}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
 
     ' get the parsed text back:
     'lib.DebugState = True
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED RealNumber2"
         GoTo PROC_EXIT
     End If
@@ -517,16 +517,16 @@ Private Sub vbajson10a()
     strTest = "{""RealNumber3"":1.123456789012345678901}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
 
     ' get the parsed text back:
     'lib.DebugState = True
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED WITH ROUNDING TO 16 DECIMAL PLACES"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED RealNumber3"
         GoTo PROC_EXIT
     End If
@@ -535,16 +535,16 @@ Private Sub vbajson10a()
     strTest = "{""RealNumber4"":-12345.1234567890123456789012345678901234567890}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
 
     ' get the parsed text back:
     'lib.DebugState = True
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED WITH ROUNDING TO 12 DECIMAL PLACES"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED RealNumber3"
         GoTo PROC_EXIT
     End If
@@ -567,13 +567,13 @@ Private Sub vbajson11()
     strTest = "{""Path"":""C:\sample\sample.jpg""}"
     'lib.DebugState = True
     Debug.Print , "1. strTest=" & strTest
-    Set o = lib.parse(strTest)
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Set o = lib.Parse(strTest)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -582,13 +582,13 @@ Private Sub vbajson11()
     strTest = "{""Path"":""C:\\sample\\sample.jpg""}"
     'lib.DebugState = True
     Debug.Print , "2. strTest=" & strTest
-    Set o = lib.parse(strTest)
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Set o = lib.Parse(strTest)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -598,13 +598,13 @@ Exit Sub
     strTest = "{""Path"":""C:\\\sample\\\sample.jpg""}"
     'lib.DebugState = True
     Debug.Print , "3. strTest=" & strTest
-    Set o = lib.parse(strTest)
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Set o = lib.Parse(strTest)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -613,13 +613,13 @@ Exit Sub
     strTest = "{""Path"":""C:\\\\sample\\\\sample.jpg""}"
     'lib.DebugState = True
     Debug.Print , "4. strTest=" & strTest
-    Set o = lib.parse(strTest)
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Set o = lib.Parse(strTest)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -628,13 +628,13 @@ Exit Sub
     strTest = "{""Path"":""C:\\\\\sample\\\\\sample.jpg""}"
     'lib.DebugState = True
     Debug.Print , "5. strTest=" & strTest
-    Set o = lib.parse(strTest)
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Set o = lib.Parse(strTest)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -643,13 +643,13 @@ Exit Sub
     strTest = "{""Path"":""C:\\\\\\sample\\\\\\sample.jpg""}"
     'lib.DebugState = True
     Debug.Print , "6. strTest=" & strTest
-    Set o = lib.parse(strTest)
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Set o = lib.Parse(strTest)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
@@ -670,10 +670,10 @@ Private Sub vbajson12()
     Dim strTest As String
 
     strTest = "{""ListsState"":{""MenuLocation"":[""Kelim"",""ChecklistTools""],""CurentLoadedChecklist"":""ToolsConfig"",""InnerDoc"":{""DapiotRegel"":{""ClassName"":""White"",""CHLTitle"":""???? ???"",""Fields"":{}},""ToolsConfig"":{""ClassName"":""White"",""CHLTitle"":""??????"",""Fields"":{""ToolsConfigHeliID"":""036"",""ToolsConfigCrewSize"":""3"",""ToolsConfigOperativeWgt"":""1,500"",""ToolsConfigNumOf669"":""0"",""ToolsConfigNumOf669Doc"":""0"",""ToolsConfigNumOf669Med"":""0"",""ToolsConfigNumOf669Equip"":""0"",""ToolsConfigNumOfSol"":""0"",""ToolsConfigNumOfPax"":""0"",""ToolsConfigCargo"":""0"",""ToolsConfigCar"":""0"",""ToolsConfigFuelExtTanks"":""0"",""ToolsConfigFuelTotal"":""0"",""ToolsConfigCarUnits_Save"":""?\\?""}}}}}"
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
     Debug.Print , "strTest=" & strTest
     Debug.Assert Err.Number = 0
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
     Debug.Print , "VALIDATED BUT INTERNATIONAL CHARACTERS NOT DISPLAYED - NEED APPROPRIATE LOCALE SETUP"
 
     Set o = Nothing
@@ -717,10 +717,10 @@ Private Sub vbajson13()
 
     strTest = str1 & str2 & str3 & str4 & str5 & str6 & str7 & str8
 
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
     Debug.Print , "strTest=" & strTest
     Debug.Assert Err.Number = 0
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
     Debug.Print , "VALIDATED - WATCH OUT FOR LINE WRAP WITH C&P TO JSONLint"
 
     Set o = Nothing
@@ -755,14 +755,14 @@ Private Sub vbajson14()
     strEmbed = "[{""ty:pe"":""t1"",""title"":""データ1"",""attr"":[""1-1"",""1-2""]},{""type"":""t2"",""title"":""データ2"",""attr"":[""2-1"",""2-2""]}]"""
     Debug.Print , "strEmbed=" & strEmbed
 
-    Set o = lib.parse(strEmbed)
+    Set o = lib.Parse(strEmbed)
 
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
     'Debug.Assert Err.Number = 0
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -795,24 +795,21 @@ Private Sub vbajson16()
     Dim o As Object
     Dim strTest As String
 
-    Debug.Print , "m_SDecimal= " & GetSDecimal
-    Debug.Print , "m_SThousand= " & GetSThousand
-
     strTest = "{""InternationalNumber1"":32769.05}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
 
-    If lib.GetParseError <> vbNullString Then
-        Debug.Print , "lib.GetParserError=" & lib.GetParseError
+    If lib.ParseError <> vbNullString Then
+        Debug.Print , "lib.GetParserError=" & lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
 
     ' get the parsed text back:
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     End If
 
@@ -831,24 +828,21 @@ Private Sub vbajson16a()
     Dim o As Object
     Dim strTest As String
 
-    Debug.Print , "m_SDecimal= " & GetSDecimal
-    Debug.Print , "m_SThousand= " & GetSThousand
-
     strTest = "{""InternationalNumber2"":-1234567.89}"
     Debug.Print , "strTest=" & strTest
     ' read the JSON into an object:
-    Set o = lib.parse(strTest)
+    Set o = lib.Parse(strTest)
 
-    If lib.GetParseError <> vbNullString Then
-        Debug.Print , "lib.GetParseError=" & lib.GetParseError
+    If lib.ParseError <> vbNullString Then
+        Debug.Print , "lib.ParseError=" & lib.ParseError
         Debug.Print , "FAILED"
         GoTo PROC_EXIT
     End If
 
     ' get the parsed text back:
-    Debug.Print , "lib.toString(o)=" & lib.toString(o)
+    Debug.Print , "lib.ToString(o)=" & lib.ToString(o)
 
-    If lib.GetParseError = vbNullString Then
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     End If
 

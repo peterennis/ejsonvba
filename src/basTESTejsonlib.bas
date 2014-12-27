@@ -5,10 +5,10 @@ Option Private Module
 
 Public Sub RunAllejsonlibTests()
 
-    toString_test1
-    Debug.Print "=> toString_test1 Finished!" & vbCrLf
-    toString_test2
-    Debug.Print "=> toString_test2 Finished!" & vbCrLf
+    ToString_test1
+    Debug.Print "=> ToString_test1 Finished!" & vbCrLf
+    ToString_test2
+    Debug.Print "=> ToString_test2 Finished!" & vbCrLf
     parse_test1
     Debug.Print "=> parse_test1 Finished!" & vbCrLf
     parse_test2
@@ -27,24 +27,24 @@ Public Sub RunAllejsonlibTests()
 End Sub
 
 '
-'   ejsonlib.toString tests
+'   ejsonlib.ToString tests
 '
-Private Sub toString_test1()
+Private Sub ToString_test1()
 
     Dim lib As ejsonlib
     Set lib = New ejsonlib
     Dim a As String
     Dim b As Date
 
-    Debug.Print "=> toString_test1"
+    Debug.Print "=> ToString_test1"
 
     b = Now()
 
-    Debug.Print , "toString_test1=" & lib.toString(Array("a", "b", Array(1, b, "3")))
-    If lib.GetParseError = vbNullString Then
+    Debug.Print , "ToString_test1=" & lib.ToString(Array("a", "b", Array(1, b, "3")))
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -52,7 +52,7 @@ Private Sub toString_test1()
 
 End Sub
 
-Private Sub toString_test2()
+Private Sub ToString_test2()
 
     Dim lib As ejsonlib
     Set lib = New ejsonlib
@@ -60,7 +60,7 @@ Private Sub toString_test2()
     Dim b As Object
     Dim c As New Collection
 
-    Debug.Print "=> toString_test2"
+    Debug.Print "=> ToString_test2"
 
     Set a = CreateObject("Scripting.Dictionary")
     Set b = CreateObject("Scripting.Dictionary")
@@ -72,11 +72,11 @@ Private Sub toString_test2()
     c.Add "ghi"
     c.Add 999
 
-    Debug.Print , "lib.toString(a)=" & lib.toString(a)
-    If lib.GetParseError = vbNullString Then
+    Debug.Print , "lib.ToString(a)=" & lib.ToString(a)
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -102,11 +102,11 @@ Private Sub parse_test1()
     Debug.Print , "parseString=" & parseString
 
     'lib.DebugState = True
-    Set json = lib.parse(parseString)
-    If lib.GetParseError = vbNullString Then
+    Set json = lib.Parse(parseString)
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED {}"
         GoTo PROC_EXIT
     End If
@@ -119,11 +119,11 @@ Private Sub parse_test1()
     Debug.Print , "parseString=" & parseString
 
     'lib.DebugState = True
-    Set json = lib.parse(parseString)
-    If lib.GetParseError = "" Then
+    Set json = lib.Parse(parseString)
+    If lib.ParseError = "" Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED []"
         GoTo PROC_EXIT
     End If
@@ -149,13 +149,13 @@ Private Sub parse_test2()
     Debug.Print , "parseString=" & parseString
 
     'lib.DebugState = True
-    Set json = lib.parse(parseString)
+    Set json = lib.Parse(parseString)
 
-    Debug.Print , "lib.toString(json)=" & lib.toString(json)
-    If lib.GetParseError = vbNullString Then
+    Debug.Print , "lib.ToString(json)=" & lib.ToString(json)
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -178,13 +178,13 @@ Private Sub parse_test3()
     Debug.Print , "strEmbed=" & strEmbed
 
     'lib.DebugState = True
-    Set json = lib.parse(" " & vbCrLf & vbTab & strEmbed)
+    Set json = lib.Parse(" " & vbCrLf & vbTab & strEmbed)
 
-    Debug.Print , "lib.toString(json)=" & lib.toString(json)
-    If lib.GetParseError = vbNullString Then
+    Debug.Print , "lib.ToString(json)=" & lib.ToString(json)
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -206,13 +206,13 @@ Private Sub parse_test3a()
     strEmbedValid = " [[], {""test1"":""v1"", ""test2"":""v222"", ""test3"":""v33333""}, null , ""test"", 123, 567.8910, 4.7e+10, true,  false]"
     Debug.Print , "strEmbedValid=" & strEmbedValid
 
-    Set json = lib.parse(" " & vbCrLf & vbTab & strEmbedValid)
+    Set json = lib.Parse(" " & vbCrLf & vbTab & strEmbedValid)
 
-    Debug.Print , "lib.toString(json)=" & lib.toString(json)
-    If lib.GetParseError = vbNullString Then
+    Debug.Print , "lib.ToString(json)=" & lib.ToString(json)
+    If lib.ParseError = vbNullString Then
         Debug.Print , "VALIDATED"
     Else
-        Debug.Print , lib.GetParseError
+        Debug.Print , lib.ParseError
         Debug.Print , "FAILED"
     End If
 
@@ -233,10 +233,10 @@ Private Sub parse_test4()
     strEmbed = "[{""type"":""t1"",""title"":""データ1"",""attr"":[""1-1"",""1-2""]},{""type"":""t2"",""title"":""データ2"",""attr"":[""2-1"",""2-2""]}]"""
     Debug.Print , "strEmbed=" & strEmbed
 
-    Set json = lib.parse("[{""type"":""t1"",""title"":""データ1"",""attr"":[""1-1"",""1-2""]},{""type"":""t2"",""title"":""データ2"",""attr"":[""2-1"",""2-2""]}]")
+    Set json = lib.Parse("[{""type"":""t1"",""title"":""データ1"",""attr"":[""1-1"",""1-2""]},{""type"":""t2"",""title"":""データ2"",""attr"":[""2-1"",""2-2""]}]")
 
-    Debug.Print , "lib.toString(json)=" & lib.toString(json)
-    errString = lib.GetParseError
+    Debug.Print , "lib.ToString(json)=" & lib.ToString(json)
+    errString = lib.ParseError
     If errString = "" Then
         Debug.Print , "VALIDATED"
     Else
@@ -271,15 +271,15 @@ Private Sub parse_test5()
 
     Debug.Print , "text=" & text
 
-    Set json = lib.parse(text)
+    Set json = lib.Parse(text)
     Debug.Assert Err.Number = 0
-    res1 = lib.toString(json)
+    res1 = lib.ToString(json)
 
-    Set json = lib.parse(lib.toString(json))
+    Set json = lib.Parse(lib.ToString(json))
     Debug.Assert Err.Number = 0
-    res2 = lib.toString(json)
+    res2 = lib.ToString(json)
 
-    errString = lib.GetParseError
+    errString = lib.ParseError
     If errString = "" Then
         Debug.Print , res1
         Debug.Print , res2
@@ -313,7 +313,7 @@ Private Sub skip_test()
     str = vbCrLf & vbCr & vbLf & " " & "abc"
     index = 1
 
-    lib.skipChar str, index
+    lib.SkipChar str, index
     Debug.Assert index = 6
 
     Debug.Print , "index=" & index, "Mid(str, index, 1)=" & Mid(str, index, 1)

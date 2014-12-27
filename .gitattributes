@@ -1,3 +1,5 @@
+core.autocrlf false
+
 ###################
 ## Ref: http://stackoverflow.com/questions/5046032/git-says-binary-files-a-and-b-differ-on-for-reg-files
 ## github was not showing diff on qry file
