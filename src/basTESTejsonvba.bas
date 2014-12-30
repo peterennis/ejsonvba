@@ -19,6 +19,8 @@ Option Private Module
 
 Public Sub RunAllejsonvbaTests()
 
+Debug.Print "=> Bypass RunAllejsonvbaTests!" & vbCrLf
+Exit Sub
 GoTo TEST:
     vbajson1
     Debug.Print "=> vbajson1 Finished!" & vbCrLf
@@ -48,9 +50,9 @@ GoTo TEST:
     Debug.Print "=> vbajson10 Finished!" & vbCrLf
     vbajson10a
     Debug.Print "=> vbajson10a Finished!" & vbCrLf
-TEST:
     vbajson11
     Debug.Print "=> vbajson11 Finished!" & vbCrLf
+TEST:
 Exit Sub
 '    vbajson12
 '    Debug.Print "=> vbajson12 Finished!" & vbCrLf

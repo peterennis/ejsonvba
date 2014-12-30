@@ -5,6 +5,7 @@ Option Private Module
 
 Public Sub RUN_ALL_TESTS()
 
+    RunTDDejsonvbaTests
     RunAllejsonlibTests
     RunAllejsonvbaTests
     RunAllejsonvbaErrorTests

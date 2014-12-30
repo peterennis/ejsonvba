@@ -5,6 +5,8 @@ Option Private Module
 
 Public Sub RunAllejsonvbaErrorTests()
 
+Debug.Print "=> Bypass RunAllejsonvbaErrorTests!" & vbCrLf
+Exit Sub
 'GoTo TEST:
     vbajson1_fail
     Debug.Print "=> vbajson1_fail Finished!" & vbCrLf
